@@ -6,14 +6,14 @@ public class Translate : MonoBehaviour
 {
     public float animSpeed;
 
-    private Vector2 originPos;
+    private Vector2 m_originPos;
     private Vector2 m_offset;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        originPos = transform.position;
+        m_originPos = transform.position;
     }
 
     // Update is called once per frame
@@ -44,7 +44,7 @@ public class Translate : MonoBehaviour
                 //先做机关判断
 
                 //瞬时回到原来位置
-                transform.position = new Vector3(originPos.x, originPos.y, transform.position.z);
+                transform.position = new Vector3(m_originPos.x, m_originPos.y, transform.position.z);
                 //过渡回到原来位置
             }
         }
@@ -73,6 +73,6 @@ public class Translate : MonoBehaviour
     /// </summary>
     private void OnMouseUp()
     {
-        transform.position = new Vector3(originPos.x, originPos.y, transform.position.z);
+        transform.position = new Vector3(m_originPos.x, m_originPos.y, transform.position.z);
     }
 }

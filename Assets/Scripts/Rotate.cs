@@ -28,13 +28,35 @@ public class Rotate : MonoBehaviour
             Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             m_preDirection = m_firstDirection= touchPos - (Vector2)(transform.position);
         }
+
+        if (Input.touchCount == 1)
+        {
+            //m_firstDirection = transform.ro
+            Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.touches[0].position);
+            m_preDirection = m_firstDirection = touchPos - (Vector2)(transform.position);
+        }
     }
 
     private void OnMouseDrag()
     {
+        
+        bool canUsed = false;
+        Vector2 touchPos = (Vector2)(transform.position);
+        //PC端输入
         if (Input.GetMouseButton(0))
         {
-            Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            canUsed = true;
+        }
+        //PC端输入
+        if (Input.touchCount == 1)
+        {
+            touchPos = Camera.main.ScreenToWorldPoint(Input.touches[0].position);
+            canUsed = true;
+        }
+
+        if(canUsed)
+        {
             Vector2 currDirection = touchPos - (Vector2)(transform.position);
 
             Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
@@ -44,11 +66,14 @@ public class Rotate : MonoBehaviour
             Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
             //计算顺时针还是逆时针
             angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
-            transform.Rotate(new Vector3(0,0,angle));
+            transform.Rotate(new Vector3(0, 0, angle));
             m_preDirection = currDirection;
         }
     }
 
+    /// <summary>
+    /// PC端与Android端通用
+    /// </summary>
     private void OnMouseUp()
     {
         Vector3 firstDirectionVec3 = new Vector3(m_firstDirection.x, m_firstDirection.y, transform.position.z).normalized;
