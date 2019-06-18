@@ -13,6 +13,10 @@ public class CameraController : MonoBehaviour
         m_colorAdjustEffect = m_camera.GetComponent<ColorAdjustEffect>();
         //m_colorAdjustEffect = m_camera.GetComponent("Color Adjust Effect") as ColorAdjustEffect;
         m_colorAdjustEffect.brightness = 3.0f;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
