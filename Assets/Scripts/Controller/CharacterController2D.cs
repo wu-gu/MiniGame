@@ -2,21 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MiniGame
-{
+namespace MiniGame {
 
-
-    [RequireComponent(typeof(Rigidbody2D))]
-    [RequireComponent(typeof(Collider2D))]
-    public class RubyController : MonoBehaviour
+    public class CharacterController2D : MonoBehaviour
     {
         [Tooltip("The Layers which represent gameobjects that the Character Controller can be grounded on.")]
         public LayerMask groundedLayerMask;
 
         public float speed = 3.0f;//x方向移动速率
         public float groundedRaycastDistance = 50f;
-
-        //private CharacterController m_characterController;
 
         private Rigidbody2D m_rigidbody2D;
         private CapsuleCollider2D m_capsule;
@@ -51,6 +45,10 @@ namespace MiniGame
                     m_destPos = touch.position;
                 }
             }
+            //控制动画播放
+
+            //控制人物转向
+
         }
 
         void FixedUpdate()
@@ -60,7 +58,7 @@ namespace MiniGame
             Vector2 nextPos = Vector2.MoveTowards(m_rigidbody2D.position, m_destPos, speed * Time.deltaTime);
             RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
             //地面检测
-            if (Physics2D.Raycast(nextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance)>0)
+            if (Physics2D.Raycast(nextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
             {
                 //修正y方向位置
                 Debug.Log(hitBuffer[0].collider.gameObject.name);
@@ -73,4 +71,5 @@ namespace MiniGame
             }
         }
     }
+
 }
