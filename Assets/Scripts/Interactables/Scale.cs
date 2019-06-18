@@ -17,6 +17,7 @@ public class Scale : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //PC端
         if(Input.GetAxis("Mouse ScrollWheel")!=0)
         {
 
