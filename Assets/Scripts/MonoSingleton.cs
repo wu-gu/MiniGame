@@ -6,18 +6,18 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
 {
     #region 单例
 
-    private static T instance;
+    protected static T s_Instance;
 
     public static T Instance
     {
         get
         {
-            if (instance == null)
-            {
-                GameObject obj = new GameObject(typeof(T).Name);
-                instance = obj.AddComponent<T>();
-            }
-            return instance;
+            if (s_Instance != null)
+                return s_Instance;
+
+            s_Instance = FindObjectOfType<T>();
+
+            return s_Instance;
         }
     }
 
@@ -25,6 +25,6 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
      //可以重写的Awake虚方法，用于实例化对象
      protected virtual void Awake()
     {
-        instance = this as T;
+        s_Instance = this as T;
     }
 }
