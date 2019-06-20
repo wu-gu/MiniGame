@@ -233,6 +233,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39535daf4b38d8841977936ba565bb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundedLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  groundedRaycastDistance: 0
 --- !u!50 &213961346
 Rigidbody2D:
   serializedVersion: 4
@@ -354,7 +358,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 367425215}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b276ea79c7325b48a621451c6e8ebb0, type: 3}
   m_Name: 
@@ -1274,6 +1278,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a67243cc378348d489515baebae1ded3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundedLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!4 &2079702808
 Transform:
   m_ObjectHideFlags: 0

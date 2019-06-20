@@ -62,9 +62,9 @@ namespace _Ecin
             if (scaleOffset.magnitude > 0)
                 this.GetComponent<CircleCollider2D>().enabled = false;
 
-            if (scaleOffset.x + currentScale.x <= 2f || scaleOffset.y + currentScale.y <= 2f || scaleOffset.z + currentScale.z <= 2f)
+            if (scaleOffset.x + currentScale.x <= originalScale.x || scaleOffset.y + currentScale.y <= originalScale.y || scaleOffset.z + currentScale.z <= originalScale.z)
             {
-                this.transform.localScale = new Vector3(2f, 2f, 2f);
+                this.transform.localScale = originalScale;
                 return;
             }
             else

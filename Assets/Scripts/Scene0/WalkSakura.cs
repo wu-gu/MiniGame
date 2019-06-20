@@ -38,14 +38,6 @@ namespace _Ecin
                 SakuraRenderer.enabled = false;
                 this.enabled = false;
             }
-
-            // Animation end time detect - old version
-            //if (SakuraRenderer.sprite.name == "1_2")
-            //{
-            //    Debug.Log("Reach anim end");
-            //    anim.SetBool(clicked, false);
-            //    SakuraRenderer.enabled = false;
-            //}
         }
 
         public void SetSakura(Vector3 sakuraPos)
@@ -58,8 +50,6 @@ namespace _Ecin
 
             anim.Play("Sakura", 0, 0f);
             anim.Update(0);
-
-            
         }
     }
 }
