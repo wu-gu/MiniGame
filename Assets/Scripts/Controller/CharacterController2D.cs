@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace MiniGame {
 
+    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Collider2D))]
     public class CharacterController2D : MonoBehaviour
     {
         [Tooltip("The Layers which represent gameobjects that the Character Controller can be grounded on.")]
@@ -15,7 +17,7 @@ namespace MiniGame {
         private Rigidbody2D m_rigidbody2D;
         private CapsuleCollider2D m_capsule;
         private ContactFilter2D m_contactFilter;
-        private Vector2 m_destPos;
+        private Vector2 m_destPos;//目标点
 
         private void Start()
         {
@@ -28,7 +30,7 @@ namespace MiniGame {
             m_destPos = m_rigidbody2D.position;
         }
 
-        void Update()
+        public void OnUpdate()
         {
             //PC端鼠标左键点击
             if (Input.GetMouseButtonDown(0))
@@ -53,7 +55,8 @@ namespace MiniGame {
 
         void FixedUpdate()
         {
-
+            if (m_destPos == m_rigidbody2D.position)
+                return;
             //人物不设重力，手动控制人物与地形之间的关系
             Vector2 nextPos = Vector2.MoveTowards(m_rigidbody2D.position, m_destPos, speed * Time.deltaTime);
             RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
@@ -68,6 +71,15 @@ namespace MiniGame {
                 Debug.Log("hitPos:" + hitPos);
                 nextPos.y = hitPos.y + m_capsule.size.y / 2;
                 m_rigidbody2D.MovePosition(nextPos);
+            }
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            //遇到障碍物则无法往前走
+            if (collision.gameObject.CompareTag("obstacle"))
+            {
+                m_destPos = m_rigidbody2D.position;
             }
         }
     }
