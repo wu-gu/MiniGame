@@ -2,40 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestController : MonoBehaviour
+public class QuestController : MonoSingleton<QuestController>
 {
     //string为gameobject的name
     private Dictionary<string, QuestBehavior> m_questBehaviorDict = new Dictionary<string, QuestBehavior>();
     //可以考虑机关之间的关系
-
-    protected static QuestController instance;
-
-    public static QuestController Instance
-    {
-        get
-        {
-            if (instance != null)
-                return instance;
-
-            instance = FindObjectOfType<QuestController>();
-
-            if (instance != null)
-                return instance;
-
-            Create();
-
-            return instance;
-        }
-    }
-
-    public static QuestController Create()
-    {
-        GameObject gameControllerGameObject = new GameObject("QuestController");
-        instance = gameControllerGameObject.AddComponent<QuestController>();
-
-        return instance;
-    }
-
 
     void Awake()
     {
@@ -44,7 +15,6 @@ public class QuestController : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        DontDestroyOnLoad(gameObject);
     }
 
 

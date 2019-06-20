@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace _Ecin
+namespace MiniGame
 {
     // This script controls the effect of door open: in fact is the scale of door-shape sprite mask
     // This script is only enabled when ScaleMask script end trigger detected

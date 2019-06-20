@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace _Ecin
+namespace MiniGame
 {
     // Sakura effect on player movement touches(except tricks, can also serves as a kind of trick hint)
     public class WalkSakura : MonoBehaviour

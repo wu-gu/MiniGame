@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace _Ecin
+namespace MiniGame
 {
     // This script is used for transition ending, as a flag of transition destination point
     public class TransitionDestination : MonoBehaviour

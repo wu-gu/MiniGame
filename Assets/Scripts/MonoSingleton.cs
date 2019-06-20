@@ -17,14 +17,17 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
 
             s_Instance = FindObjectOfType<T>();
 
+            if (s_Instance != null)
+                return s_Instance;
+
             return s_Instance;
         }
     }
 
     #endregion
-     //可以重写的Awake虚方法，用于实例化对象
-     protected virtual void Awake()
-    {
-        s_Instance = this as T;
-    }
+    // //可以重写的Awake虚方法，用于实例化对象
+    // protected virtual void Awake()
+    //{
+    //    s_Instance = this as T;
+    //}
 }

@@ -35,7 +35,6 @@ namespace MiniGame
 
         void Awake ()
         {
-            base.Awake();
             // If there's already a player...
             if (Instance != null && Instance != this)
             {

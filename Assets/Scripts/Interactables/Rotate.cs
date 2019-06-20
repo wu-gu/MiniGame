@@ -48,7 +48,7 @@ public class Rotate : MonoBehaviour
             touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             canUsed = true;
         }
-        //PC端输入
+        //Android端输入
         if (Input.touchCount == 1)
         {
             touchPos = Camera.main.ScreenToWorldPoint(Input.touches[0].position);

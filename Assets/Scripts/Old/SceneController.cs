@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace _Ecin
+namespace MiniGame
 {
     // This script is used to control transition between scenes.
     // Stable version, possiblly no need to refine current functions, may have future new needs to add

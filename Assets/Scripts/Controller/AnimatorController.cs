@@ -9,7 +9,6 @@ public class AnimatorController : MonoSingleton<AnimatorController>
     /// </summary>
     void Awake()
     {
-        base.Awake();
         DontDestroyOnLoad(gameObject);
     }
 

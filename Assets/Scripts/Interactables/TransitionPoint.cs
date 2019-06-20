@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace _Ecin
+namespace MiniGame
 {
     // This script is used to detect transition need: collider triggered/external called(currently used)
     [RequireComponent(typeof(Collider2D))]
@@ -55,10 +55,10 @@ namespace _Ecin
                 m_TransitioningGameObjectPresent = true;
 
                 // No ScreenFader for now
-                // if (ScreenFader.IsFading || SceneController.Transitioning)
+                // if (ScreenFader.IsFading || GameController.Transitioning)
                 // return;
 
-                if (SceneController.Transitioning)
+                if (GameController.Transitioning)
                     return;
 
                 if (transitionWhen == TransitionWhen.OnTriggerEnter)
@@ -75,10 +75,10 @@ namespace _Ecin
         // Update is called once per frame
         void Update()
         {
-            // No ScreenFader and SceneController for now
-            // if(ScreenFader.IsFading || SceneController.Transitioning)
+            // No ScreenFader and GameController for now
+            // if(ScreenFader.IsFading || GameController.Transitioning)
             // return;
-            if (SceneController.Transitioning)
+            if (GameController.Transitioning)
                 return;
 
             if (!m_TransitioningGameObjectPresent)
@@ -108,9 +108,9 @@ namespace _Ecin
             // }
             // else
             // {
-                // SceneController.TransitionToScene(this);
+                // GameController.TransitionToScene(this);
             // }
-            SceneController.TransitionToScene(this);
+            GameController.TransitionToScene(this);
         }
 
         public void Transition()

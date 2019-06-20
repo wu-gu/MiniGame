@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace _Ecin
+namespace MiniGame
 {
     // This script controls the scale of window-shape sprite mask
     // This script is enabled only after player reached blocked point(control by PlayerController, should be seperate into TriggerController in later devlopment)
