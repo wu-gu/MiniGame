@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 
 namespace MiniGame
 {
-    public class AudioMgr : MonoSingleton<AudioMgr>
+    public class AudioController : MonoSingleton<AudioController>
     {
         //用于播放音效的音乐源
         [Header("Music Settings")]
@@ -27,7 +27,7 @@ namespace MiniGame
         protected AudioSource m_AmbientAudioSource;
 
         protected bool m_TransferMusicTime, m_TransferAmbientTime;
-        protected AudioMgr m_OldInstanceToDestroy = null;
+        protected AudioController m_OldInstanceToDestroy = null;
 
         //每一个栈中音频剪辑都会被播放，并在播放后弹出
         //音频剪辑通过PushClip方法压入栈，这个方法也是提供给开发者调用的接口

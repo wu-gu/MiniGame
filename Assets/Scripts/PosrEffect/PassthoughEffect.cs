@@ -7,7 +7,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PassthoughEffect : PostEffectBase
+public class PassthoughEffect : PostEffectsBase
 {
 
     //收缩强度
