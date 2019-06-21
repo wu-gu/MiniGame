@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using MiniGame;
 
 public class buttonscript : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class buttonscript : MonoBehaviour
     mycanvas1 com1;
     mycanvas2 com2;
     mycanvas2 com3;
+    WalkSakura sakura;
+    Vector3 point;
     public ParticleSystem par;
 
 
@@ -21,15 +24,20 @@ public class buttonscript : MonoBehaviour
         com1 = GameObject.Find("start").GetComponent<mycanvas1>();
         com2 = GameObject.Find("set").GetComponent<mycanvas2>();
         com3 = GameObject.Find("endshow").GetComponent<mycanvas2>();
-       
-        
+
+        sakura = GameObject.Find("OnClickSakura").GetComponent<WalkSakura>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetMouseButtonDown(0))
+        {
+            point = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 4f);//获得鼠标点击点
+            point = Camera.main.ScreenToWorldPoint(point);//从屏幕空间转换到世界空间
+            sakura.SetSakura(point);
+        }
     }
 
     public void OnClickStar()
