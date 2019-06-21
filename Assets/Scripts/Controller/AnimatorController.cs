@@ -13,10 +13,22 @@ public class AnimatorController : MonoSingleton<AnimatorController>
     }
 
     /// <summary>
-    /// 创建动画控制委托，后面创建播放动画方法，然后调用就可以直接用委托的对象来调用
-    /// 例如:animationHandler = xxx
+    /// 定义GameObject数组
     /// </summary>
-    public delegate void AnimatorHandler();
+    public GameObject[] gameObjects;
+
+    /// <summary>
+    /// 寻找场景中所有的GameObject
+    /// </summary>
+    private void FindAllGameObjectsInScene()
+    {
+        //关键代码，获取所有gameObject元素给数组
+        gameObjects = FindObjectsOfType(typeof(GameObject)) as GameObject[];
+        //foreach(GameObject obj in gameObjects)
+        //{
+        //    Debug.Log(obj.gameObject.name);
+        //}
+    }
 
     /// <summary>
     /// 创建动画对象
@@ -26,35 +38,62 @@ public class AnimatorController : MonoSingleton<AnimatorController>
     /// <summary>
     /// 创建各个动画
     /// </summary>
-    public List<RuntimeAnimatorController> animatorClips;
-
-    /// <summary>
-    /// 实例化委托
-    /// </summary>
-    public AnimatorHandler animatorHandler;
+    public List<Animator> animators;
 
     /// <summary>
     /// 添加动画，这个给开发者用
     /// </summary>
-    public void AddAnimator(RuntimeAnimatorController controller)
+    public void AddAnimator()
     {
-        animatorClips.Add(controller);
+        foreach (GameObject obj in gameObjects)
+        {
+            if(obj.GetComponent<Animator>() != null)
+            {
+                animators.Add(obj.GetComponent<Animator>());
+            }
+        }
     }
 
     /// <summary>
-    /// 判断是否存在指定动画
+    /// 判断是否存在指定动画控制器
     /// </summary>
-    public bool ContainAnimatorClip(RuntimeAnimatorController controller)
+    public bool ContainAnimatorClip(Animator controller)
     {
-        return animatorClips.Contains(controller);
+        return animators.Contains(controller);
+    }
+
+    public void FindAnimator(string animatorName)
+    {
+        for (int i = 0; i < animators.Count; i++)
+        {
+            if (animators[i].name == animatorName) animator = animators[i];
+        }
     }
 
     /// <summary>
     /// 播放动画
     /// </summary>
-    public void PlayAnimator(string animatorName)
+    public void PlayAnimation(string animatorName, string animationClipName)
     {
-        animator.Play(animatorName);
+        FindAnimator(animatorName);
+        animator.SetBool(animationClipName, true);
+    }
+
+    /// <summary>
+    /// 停止动画
+    /// </summary>
+    public void StopAnimation(string animatorName, string animationClipName)
+    {
+        FindAnimator(animatorName);
+        animator.SetBool(animationClipName, false);
+    }
+
+    /// <summary>
+    /// 混合动画用
+    /// </summary>
+    public void SetLayerWeight(int layer, float weight)
+    {
+        animator.SetLayerWeight(layer, weight);
     }
 
     /// <summary>
@@ -62,9 +101,15 @@ public class AnimatorController : MonoSingleton<AnimatorController>
     /// </summary>
     private void Update()
     {
-        if (animatorHandler != null)
-        {
-            animatorHandler();
-        }
+        //if (animatorHandler != null)
+        //{
+        //    animatorHandler();
+        //}
+    }
+
+    private void Start()
+    {
+        FindAllGameObjectsInScene();
+        AddAnimator();
     }
 }
