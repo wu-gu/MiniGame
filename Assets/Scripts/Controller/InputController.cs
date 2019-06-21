@@ -29,12 +29,13 @@ namespace MiniGame
                 RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero, questRaycastDistance, questLayerMask.value);
                 if (hit.collider != null)
                 {
-                    Debug.Log("点击机关");
+                    //Debug.Log("点击机关");
+                    //Debug.Log(hit.collider.gameObject.ToString());
                     QuestController.Instance.FireQuestBehavior(hit.collider.gameObject.ToString());
                 }
                 else
                 {
-                    Debug.Log("没有点击机关");
+                    //Debug.Log("没有点击机关");
                     //没有点击机关，则进入人物行走判断
                     PlayerController.Instance.OnUpdate();
                 }
@@ -42,18 +43,18 @@ namespace MiniGame
 
             if (Input.touchCount>0)
             {
-                Debug.Log("点击");
+                //Debug.Log("点击");
                 //先判断是否触摸某个机关
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.touches[0].position);
                 RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero, questRaycastDistance, questLayerMask.value);
                 if (hit.collider != null)
                 {
-                    Debug.Log("点击机关");
+                    //Debug.Log("点击机关");
                     QuestController.Instance.FireQuestBehavior(hit.collider.gameObject.ToString());
                 }
                 else
                 {
-                    Debug.Log("没有点击机关");
+                    //Debug.Log("没有点击机关");
                     //没有点击机关，则进入人物行走判断
                     PlayerController.Instance.OnUpdate();
                 }

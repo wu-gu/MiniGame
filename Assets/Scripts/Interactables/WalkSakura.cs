@@ -33,7 +33,7 @@ namespace MiniGame
 
             if ((animatorInfo.normalizedTime > 1.0f) && (animatorInfo.IsName("Sakura")))
             {
-                Debug.Log("Sakura animation end detected");
+                //Debug.Log("Sakura animation end detected");
                 anim.SetBool(clicked, false);
                 SakuraRenderer.enabled = false;
                 this.enabled = false;
@@ -46,7 +46,7 @@ namespace MiniGame
             this.transform.position = sakuraPos;
             anim.SetBool(clicked, true);
             SakuraRenderer.enabled = true;
-            anim.speed = 1.0f;
+            anim.speed = 0.7f;
 
             anim.Play("Sakura", 0, 0f);
             anim.Update(0);

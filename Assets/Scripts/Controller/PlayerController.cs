@@ -41,7 +41,7 @@ namespace MiniGame
 
             m_destPos = m_rigidbody2D.position;
             touchThreshold = m_capsule.bounds.max.y- m_capsule.bounds.min.y + 0.8f;
-            Debug.Log("touchThreold" + touchThreshold);
+            //Debug.Log("touchThreold" + touchThreshold);
 
             RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
             if(Physics2D.Raycast(m_rigidbody2D.position, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
@@ -101,7 +101,7 @@ namespace MiniGame
                 //Debug.Log(hitBuffer[0].collider.gameObject.name);
 
                 Vector2 hitPos = hitBuffer[0].point;
-                Debug.DrawLine(nextPos, hitPos, Color.red);
+                //Debug.DrawLine(nextPos, hitPos, Color.red);
                 nextPos.y = hitPos.y + m_centerHeight;
                 m_rigidbody2D.MovePosition(nextPos);
             }
@@ -111,7 +111,7 @@ namespace MiniGame
         {
             if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Quest"))
             {
-                Debug.Log("blocked");
+                //Debug.Log("blocked");
                 m_destPos = m_rigidbody2D.position;
             }
         }

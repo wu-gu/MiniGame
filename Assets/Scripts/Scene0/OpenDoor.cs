@@ -6,18 +6,23 @@ namespace MiniGame
 {
     // This script controls the effect of door open: in fact is the scale of door-shape sprite mask
     // This script is only enabled when ScaleMask script end trigger detected
-    public class OpenDoor : MonoBehaviour
+    public class OpenDoor : MonoBehaviour, QuestBehavior
     {
         private Camera cam;
         private Renderer doorRenderer;
         float scaleFactor = 0.15f;
 
+        void Awake()
+        {
+            QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
+            cam = Camera.main;
+            doorRenderer = GetComponent<Renderer>();
+        }
+
         // Start is called before the first frame update
         void Start()
         {
             this.transform.localScale = Vector3.one;
-            cam = Camera.main;
-            doorRenderer = GetComponent<Renderer>();
         }
 
         // Update is called once per frame
@@ -42,15 +47,23 @@ namespace MiniGame
             Vector3 camCentral = cam.transform.position;
             Vector3 camMax = new Vector3(camCentral.x + orthoHorizontal, camCentral.y + orthoVertical, camCentral.z);
             Vector3 camMin = new Vector3(camCentral.x - orthoHorizontal, camCentral.y - orthoVertical, camCentral.z);
-            
+
             // Transition trigger: door mask outreach camera viewport, transition start
             if (doorRadius >= Vector3.Distance(camMax, doorCentral) && doorRadius >= Vector3.Distance(camMin, doorCentral))
             {
-                Debug.Log("Transition timing reached");
+                //Debug.Log("Transition timing reached");
                 scaleFactor = 0f;
+                QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+                this.enabled = false;
                 GameObject.Find("TransitionStart").GetComponent<TransitionPoint>().Transition(); // External call usage of  transition
             }
-            
+
+        }
+
+        public void OnUpdate()
+        {
+            doorRenderer.enabled = true;
+            this.enabled = true;
         }
     }
 }

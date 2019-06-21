@@ -24,7 +24,7 @@ public class Translate : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("点击物体");
+        //Debug.Log("点击物体");
         //Android端
         if (Input.touchCount == 1)
         {
@@ -59,7 +59,7 @@ public class Translate : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        Debug.Log("拖拽物体");
+        //Debug.Log("拖拽物体");
         if (Input.GetMouseButton(0))
         {
             Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
