@@ -51,8 +51,10 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
         else
         {
             if (currState >= 4)
-                GetComponent<BoxCollider2D>().enabled = false;
-            QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+            {
+                GetComponent<CircleCollider2D>().enabled = false;
+                QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+            }
             this.enabled = false;
         }
     }
