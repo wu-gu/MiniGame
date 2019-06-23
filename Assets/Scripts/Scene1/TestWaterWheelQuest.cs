@@ -8,14 +8,16 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
     Vector2 curr;
     private Vector2 m_firstDirection;
     private Vector2 m_preDirection;
-    private GameObject shadow1, shadow2, shadow3;
+    private float angleCounter;
+    private int currState;
+    private ChangeShadows changeShadows;
 
     void Awake()
     {
         QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
-        shadow1 = GameObject.Find("Shadow1");
-        shadow2 = GameObject.Find("Shadow2");
-        shadow3 = GameObject.Find("Shadow3");
+        angleCounter = 0f;
+        currState = 0;
+        changeShadows = GameObject.Find("Shadows").GetComponent<ChangeShadows>();
     }
 
     // Update is called once per frame
@@ -35,10 +37,22 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
             //计算顺时针还是逆时针
             angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
             transform.Rotate(new Vector3(0, 0, angle));
-            m_preDirection = currDirection;     
+            m_preDirection = currDirection;
+
+            angleCounter += angle;
+            int state = (int)(Mathf.Abs(angleCounter) / 360);
+            if (state != currState)
+            {
+                currState = state;
+                changeShadows.SetUpNewShadowState(state);
+            }
+            
         }
         else
         {
+            if (currState >= 4)
+                GetComponent<BoxCollider2D>().enabled = false;
+            QuestController.Instance.UnRegisterQuest(gameObject.ToString());
             this.enabled = false;
         }
     }
