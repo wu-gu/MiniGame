@@ -12,7 +12,7 @@ namespace MiniGame
         [Tooltip("The Layers which represent gameobjects that the Character Controller can be grounded on.")]
         public LayerMask groundedLayerMask;
 
-        public float speed = 3.0f;//x方向移动速率
+        public float speed = 2.5f;//x方向移动速率
         public float groundedRaycastDistance = 50f;
         private float touchThreshold;
 
@@ -21,6 +21,10 @@ namespace MiniGame
         private ContactFilter2D m_contactFilter;
         private Vector2 m_destPos;//目标点
         private float m_centerHeight;
+        private SpriteRenderer m_renderer;
+        private Animator m_animator;
+        private int IsWalking;
+        private bool forwardable;
 
         private WalkSakura sakura;//点击反馈
 
@@ -32,6 +36,10 @@ namespace MiniGame
                 return;
             }
 
+            forwardable = true;
+            m_renderer = GetComponent<SpriteRenderer>();
+            m_animator = GetComponent<Animator>();
+            IsWalking = Animator.StringToHash("IsWalking");
             m_capsule = GetComponent<CapsuleCollider2D>();
             m_rigidbody2D = GetComponent<Rigidbody2D>();
             m_contactFilter.layerMask = groundedLayerMask;
@@ -84,16 +92,23 @@ namespace MiniGame
             //控制动画播放
 
             //控制人物转向
-
+            if (m_destPos.x < m_rigidbody2D.position.x)
+                m_renderer.flipX = true;
+            else
+                m_renderer.flipX = false;
         }
 
         void FixedUpdate()
         {
-            if (m_destPos == m_rigidbody2D.position)
+            if (Mathf.Abs(m_rigidbody2D.position.x - m_destPos.x) < 0.01f || (m_destPos.x > m_rigidbody2D.position.x && !forwardable))
+            {
+                m_animator.SetBool(IsWalking, false);
                 return;
+            }
             //人物不设重力，手动控制人物与地形之间的关系
             Vector2 nextPos = Vector2.MoveTowards(m_rigidbody2D.position, m_destPos, speed * Time.deltaTime);
             RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
+   
             //地面检测
             if (Physics2D.Raycast(nextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
             {
@@ -103,17 +118,28 @@ namespace MiniGame
                 Vector2 hitPos = hitBuffer[0].point;
                 //Debug.DrawLine(nextPos, hitPos, Color.red);
                 nextPos.y = hitPos.y + m_centerHeight;
+                m_animator.SetBool(IsWalking, true);
                 m_rigidbody2D.MovePosition(nextPos);
             }
         }
 
         public void OnCollisionEnter2D(Collision2D collision)
         {
+            // 判断是否撞到quest层物体，撞到代表不可继续前进，在FixedUpdate中对前进的判定直接返回
+
             if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Quest"))
             {
-                //Debug.Log("blocked");
                 m_destPos = m_rigidbody2D.position;
+                forwardable = false;
             }
+        }
+
+        public void OnCollisionExit2D(Collision2D collision)
+        {
+            // 离开quest层物体：往回走/机关完成（机关完成取消collider的情况），恢复前进判定
+
+            if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Quest"))
+                forwardable = true;
         }
     }
 }
