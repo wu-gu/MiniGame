@@ -9,7 +9,7 @@ namespace MiniGame
         // Start is called before the first frame update
         void Start()
         {
-
+            Camera.main.aspect = 16.0f/9;
         }
 
         // Update is called once per frame

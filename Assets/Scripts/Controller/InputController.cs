@@ -26,11 +26,12 @@ namespace MiniGame
             {
                 //先判断是否触摸某个机关
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Debug.Log("touchPos: " + touchPos);
                 RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero, questRaycastDistance, questLayerMask.value);
                 if (hit.collider != null)
                 {
-                    //Debug.Log("点击机关");
-                    //Debug.Log(hit.collider.gameObject.ToString());
+                    Debug.Log("点击机关");
+                    Debug.Log(hit.collider.gameObject.ToString());
                     QuestController.Instance.FireQuestBehavior(hit.collider.gameObject.ToString());
                 }
                 else
