@@ -34,9 +34,12 @@ namespace MiniGame
 
         public void OnUpdate()
         {
+
             if (m_canWork)
             {
                 this.enabled = true;
+                GetComponent<ParticleSystem>().Stop();
+                GetComponent<ParticleSystem>().Clear();
                 character.GetComponent<Animator>().enabled = true;
                 Debug.Log(character.transform.Find("Boy").ToString());
                 character.transform.Find("Boy").GetComponent<Animator>().SetBool("isWalking", true);
@@ -45,7 +48,7 @@ namespace MiniGame
 
         public void DoWorking()
         {
-            GetComponent<SpriteRenderer>().enabled = true;
+            GetComponent<ParticleSystem>().Play();
             m_canWork = true;
         }
 

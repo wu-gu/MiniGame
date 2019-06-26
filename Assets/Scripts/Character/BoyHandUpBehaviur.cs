@@ -15,6 +15,7 @@ public class BoyHandUpBehaviur : StateMachineBehaviour
     {
         if (stateInfo.normalizedTime > 1.0f)
         {
+            animator.SetBool("isWalking", false);
             animator.SetBool("isHandUp", false);
         }
     }
