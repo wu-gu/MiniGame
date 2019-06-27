@@ -1410,7 +1410,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.868317, y: -0.6218809}
@@ -1537,18 +1537,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1775527180}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1559293264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1559293260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a735352d8237b464686685c3c19a85c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1559293265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1934,7 +1922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ping: 0.3
-  m_magpieAudioClip: {fileID: 8300000, guid: 567694d9bd6b24749a05db6752b6b0e3, type: 3}
+  m_magpieAudioClip: {fileID: 8300000, guid: 4afb66465c8619743b113d11a7eca07d, type: 3}
 --- !u!114 &2719393594333772595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1944,19 +1932,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2719393594333772588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4449d32eac4cafd48b83582107fd4353, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2719393594333772596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2719393594333772588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f7629fe804595a4fa03a9a8fdac35c2, type: 3}
+  m_Script: {fileID: 11500000, guid: aeeb661efc7a8f242b9c290834dc6af1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!70 &2719393594333772597
