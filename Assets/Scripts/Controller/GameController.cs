@@ -12,17 +12,26 @@ namespace MiniGame
 
         protected Scene m_CurrentZoneScene;
         //private List<AnimationClip> animationClips;
-        public AnimationClip[] scenesAnimationClips = new AnimationClip[5];
-        public RuntimeAnimatorController[] scenesAnimatorControllers = new RuntimeAnimatorController[5];
-        private SelfMonoBehaviour[] selfMonoBehaviours;
+        //public AnimationClip[] scenesAnimationClips = new AnimationClip[5];
+        //public RuntimeAnimatorController[] scenesAnimatorControllers = new RuntimeAnimatorController[5];
+        //private SelfMonoBehaviour[] selfMonoBehaviours;
 
-        public TransitionDestination initialSceneTransitionDestination;
+        //public TransitionDestination initialSceneTransitionDestination;
         protected TransitionDestination.DestinationTag m_ZoneRestartDestinationTag;
         protected bool m_Transitioning;
         public static bool Transitioning
         {
             get { return Instance.m_Transitioning; }
         }
+
+
+        //与画面相关
+        [Tooltip("是否动态加载场景")]
+        public bool m_IsSetupDynamicLoad = false;
+
+        private GameObjectStageContainer m_currStageContainer;
+        private GameObjectStageContainer m_nextStageContainer;
+
 
         void Awake()
         {
@@ -35,6 +44,10 @@ namespace MiniGame
             DontDestroyOnLoad(gameObject);
 
             m_CurrentZoneScene = SceneManager.GetActiveScene();
+
+            //加载该关卡的开始画面
+            LoadFirstStageGameObjects();
+
 
             //switch (m_CurrentZoneScene.name)
             //{
@@ -90,27 +103,32 @@ namespace MiniGame
         {
             m_Transitioning = true;
 
-            yield return SceneManager.LoadSceneAsync(newSceneName); //等待场景加载完毕后，再向下执行;异步加载，方式：附加
-            TransitionDestination entrance = GetDestination(destinationTag);
-            SetEnteringGameObjectLocation(entrance);
+            yield return SceneManager.LoadSceneAsync(newSceneName); //异步加载新场景
+            TransitionDestination entrance = GetDestination(destinationTag);//获取新场景中人物传送目的地
+            SetEnteringGameObjectLocation(entrance);//设置新场景人物初始位置
             SetupNewScene(transitionType, entrance); //设置场景为活动场景
             if (entrance != null)
                 entrance.onReachDestination.Invoke();
 
+            //加载该关卡的开始画面
+            LoadFirstStageGameObjects();
+
             m_Transitioning = false;           
         }
 
-
+        //重新加载当前场景
         public static void RestartZone()
         {
             Instance.StartCoroutine(Instance.Transition(Instance.m_CurrentZoneScene.name, false, Instance.m_ZoneRestartDestinationTag, TransitionPoint.TransitionType.DifferentZone));
         }
 
+        //根据传送点信息传送到下个场景中
         public static void TransitionToScene(TransitionPoint transitionPoint)
         {
             Instance.StartCoroutine(Instance.Transition(transitionPoint.newSceneName, transitionPoint.resetInputValuesOnTransition, transitionPoint.transitionDestinationTag, transitionPoint.transitionType));
         }
 
+        //获取场景中的传送目的地
         protected TransitionDestination GetDestination(TransitionDestination.DestinationTag destinationTag)
         {
             TransitionDestination[] entrances = FindObjectsOfType<TransitionDestination>();
@@ -123,6 +141,7 @@ namespace MiniGame
             return null;
         }
 
+        //设置人物的初始化位置
         protected void SetEnteringGameObjectLocation(TransitionDestination entrance)
         {
             if (entrance == null)
@@ -152,6 +171,47 @@ namespace MiniGame
         {
             m_CurrentZoneScene = entrance.gameObject.scene;
             m_ZoneRestartDestinationTag = entrance.destinationTag;
+        }
+
+        /// <summary>
+        /// 加载Scene初始画面的GameObjects
+        /// </summary>
+        public void LoadFirstStageGameObjects()
+        {
+            if (m_IsSetupDynamicLoad)
+            {
+                //加载该关卡的开始画面
+                GameObject startStagePoint = GameObject.Find("StartStagePoint");
+                string initStageName = startStagePoint.GetComponent<LoadNextStageQuest>().nextStageName;
+                if (initStageName != null)
+                {
+                    m_currStageContainer = LoadManager.Instance.LoadStageGameObject(initStageName);
+                }
+                else
+                {
+                    Debug.Log("不存在初始画面的checkPoint或者stageName不正确");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 加载场景中下一个stage的物体
+        /// </summary>
+        /// <param name="stageName"></param>
+        public void LoadNextStageGameObjects(string stageName)
+        {
+            GameObjectStageContainer newStageContainer = LoadManager.Instance.LoadStageGameObject(stageName);
+            m_nextStageContainer = newStageContainer;
+        }
+
+        /// <summary>
+        /// 卸载上一个Stage的物体
+        /// </summary>
+        public void UnloadPreStageGameobjects()
+        {
+            m_currStageContainer.DestoryAll();
+            m_currStageContainer = m_nextStageContainer;
+            m_nextStageContainer = null;
         }
     }
 

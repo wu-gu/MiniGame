@@ -57,7 +57,11 @@ public class QuestController : MonoSingleton<QuestController>
     /// <param name="gameobjectName"></param>
     public void FireQuestBehavior(string gameobjectName)
     {
-        m_questBehaviorDict[gameobjectName].OnUpdate();
+        if (m_questBehaviorDict.ContainsKey(gameobjectName))
+        {
+            m_questBehaviorDict[gameobjectName].OnUpdate();
+        }
+
     }
 
 

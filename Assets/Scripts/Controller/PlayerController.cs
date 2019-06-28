@@ -71,6 +71,17 @@ namespace MiniGame
                 {
                     m_destPos = touchPos;
                     sakura.SetSakura(m_destPos);
+                    //控制人物转向
+                    if (m_destPos.x < m_rigidbody2D.position.x)
+                    {
+                        Debug.Log("左转");
+                        m_renderer.flipX = true;
+                    }
+                    else
+                    {
+                        Debug.Log("右转");
+                        m_renderer.flipX = false;
+                    }
                 }
             }
 
@@ -91,13 +102,7 @@ namespace MiniGame
             }
 
             Debug.Log("更新目的地，目的地为:" + m_destPos);
-            //控制动画播放
-
-            //控制人物转向
-            if (m_destPos.x < m_rigidbody2D.position.x)
-                m_renderer.flipX = true;
-            else
-                m_renderer.flipX = false;
+            //控制动画播放                
         }
 
         void FixedUpdate()
@@ -105,6 +110,7 @@ namespace MiniGame
             if (Mathf.Abs(m_rigidbody2D.position.x - m_destPos.x) < 0.01f || (m_destPos.x > m_rigidbody2D.position.x && !forwardable))
             {
                 m_animator.SetBool(IsWalking, false);
+                m_destPos = m_rigidbody2D.position;
                 return;
             }
             //人物不设重力，手动控制人物与地形之间的关系
