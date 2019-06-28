@@ -7,7 +7,7 @@ namespace MiniGame
 {
     // This script controls the scale of window-shape sprite mask
     // This script is enabled only after player reached blocked point(control by PlayerController, should be seperate into TriggerController in later devlopment)
-    public class ScaleMask : MonoBehaviour,QuestBehavior
+    public class ScaleMask : MonoBehaviour, QuestBehavior
     {
         // pre1, and pre2 are used to record previous touch points, used to calculate and judge scale downwards/upwards
         // Continuously update per frame
@@ -38,9 +38,9 @@ namespace MiniGame
             else
                 //Debug.Log("Center on point");
 
-            originalScale = this.transform.localScale;
+                originalScale = this.transform.localScale;
             circleCollider2D = GetComponent<CircleCollider2D>();
-            
+
         }
 
         // Update is called once per frame
@@ -81,6 +81,10 @@ namespace MiniGame
             //    this.transform.localScale = originalScale;
             //    circleCollider2D.enabled = true;
             //    this.gameObject.layer = LayerMask.NameToLayer("Quest");
+            //    if (Input.touchCount == 1)
+            //        this.gameObject.layer = LayerMask.NameToLayer("Outline");
+            //    else
+            //        this.enabled = false; // No touchCount(--At least not consistent on mask)
             //    return;
             //}
             //else

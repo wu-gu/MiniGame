@@ -11,6 +11,7 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
     private float angleCounter;
     private int currState;
     private ChangeShadows changeShadows;
+    private ParticleSystem m_clearSign;
 
     void Awake()
     {
@@ -18,6 +19,7 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
         angleCounter = 0f;
         currState = 0;
         changeShadows = GameObject.Find("Shadows").GetComponent<ChangeShadows>();
+        m_clearSign = GameObject.Find("Clear Sign").GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -40,7 +42,7 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
             m_preDirection = currDirection;
 
             angleCounter += angle;
-            int state = (int)(Mathf.Abs(angleCounter) / 360);
+            int state = (int)(Mathf.Abs(angleCounter) / 720);
             if (state != currState)
             {
                 currState = state;
@@ -54,6 +56,7 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
             {
                 GetComponent<CircleCollider2D>().enabled = false;
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+                m_clearSign.Play();
             }
             this.enabled = false;
         }
