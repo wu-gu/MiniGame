@@ -44,7 +44,7 @@ namespace MiniGame
             m_rigidbody2D = GetComponent<Rigidbody2D>();
             m_contactFilter.layerMask = groundedLayerMask;
             m_contactFilter.useLayerMask = true;
-            m_contactFilter.useTriggers = false;
+            m_contactFilter.useTriggers = true;
             sakura = GameObject.Find("OnClickSakura").GetComponent<WalkSakura>();
 
             m_destPos = m_rigidbody2D.position;
@@ -124,7 +124,7 @@ namespace MiniGame
                 //Debug.Log(hitBuffer[0].collider.gameObject.name);
 
                 Vector2 hitPos = hitBuffer[0].point;
-                //Debug.DrawLine(nextPos, hitPos, Color.red);
+                Debug.DrawLine(nextPos, hitPos, Color.red);
                 nextPos.y = hitPos.y + m_centerHeight;
                 m_animator.SetBool(IsWalking, true);
                 m_rigidbody2D.MovePosition(nextPos);

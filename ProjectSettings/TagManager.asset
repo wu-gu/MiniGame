@@ -43,3 +43,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: test
+    uniqueID: 1997590481
+    locked: 0
