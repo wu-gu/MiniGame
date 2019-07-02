@@ -7,117 +7,125 @@ namespace MiniGame
     public class BridgeQuest : MonoBehaviour, QuestBehavior
     {
         //业务变量
-        private bool m_isSuccess = false;
-        /// <summary>
-        /// 机关音效
-        /// </summary>
-        public AudioClip m_moonAndSunAudioClip;
-        /// <summary>
-        /// 缩放业务变量
-        /// </summary>
-        public float rotationUnit = 0.3f;
-        private Vector2 m_oldVector;
-        private Quaternion m_originRotation;
-        private int m_clockwise = -1;
-        public Vector3 threshold = new Vector3(3.0f, 3.0f, 1.0f);
+        Vector2 pre;
+        Vector2 curr;
+        private Vector2 m_firstDirection;
+        private Vector2 m_preDirection;
+        private bool m_success;
 
-        private GameObject m_mainCamera;
-        private GameObject m_flyingMagpie;
+        private GameObject m_bridge;
+        private bool m_angleCounter;
 
-        private GameObject m_magpiesBridge;
-
-        /// <summary>
-        /// 注册机关
-        /// </summary>
         void Awake()
         {
-            QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
+            m_success = false;
         }
 
-        /// <summary>
-        /// 初始化比例系数
-        /// </summary>
         void Start()
         {
-            m_originRotation = transform.localRotation;
-            m_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-            m_flyingMagpie = GameObject.Find("FlyingMagpie");
-            m_magpiesBridge = GameObject.Find("BuildingBridgeMagpies");
+            QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
+            m_bridge = GameObject.Find("Bridge");
+            m_angleCounter
+            //this.enabled = false;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            // PC --stable
+            if (Input.GetMouseButton(0))
+            {
+                Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
+                if (bounds.Contains(mousePoint))
+                {
+                    Vector2 touchPos = (Vector2)(transform.position);
+                    touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Vector2 currDirection = touchPos - (Vector2)(transform.position);
+
+                    Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
+                    Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
+
+                    float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
+                    Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
+
+                    //计算顺时针还是逆时针
+                    angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
+                    //transform.Rotate(new Vector3(0, 0, angle));
+                    transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
+                    m_preDirection = currDirection;
+                    if (Mathf.Abs(angle) > 100)
+                    {
+                        m_success = true;
+                    }
+                }
+                    
+            }
+            //Android--stable
+            if (Input.touchCount > 0)
+            {
+                Vector2 touchPoint = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
+                if (bounds.Contains(touchPoint))
+                {
+                    Touch currTouch = Input.GetTouch(0);
+                    Vector2 touchPos = (Vector2)(transform.position);
+                    touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+                    Vector2 currDirection = touchPos - (Vector2)(transform.position);
+
+                    if (currTouch.phase == TouchPhase.Moved)
+                    {
+                        Debug.Log("Moved");
+                        Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
+                        Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
+
+                        Debug.Log("PreDirection" + preDirectionVec3);
+                        Debug.Log("CurrDirection" + currDirectionVec3);
+
+                        float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
+                        Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
+
+                        //计算顺时针还是逆时针
+                        angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
+                        Debug.Log(angle);
+                        transform.Rotate(new Vector3(0, 0, angle));
+                        m_preDirection = currDirection;
+                        if (Mathf.Abs(angle) > 100)
+                        {
+                            m_success = true;
+                        }
+                    }
+                }
+            }
+            Debug.Log("旋转到位没？" + m_success);
+            if (m_success)
+            {
+                m_success = false;
+                Debug.Log("旋转到位就执行");
+                transform.Rotate(new Vector3(0, 0, 180));
+                gameObject.GetComponent<Collider2D>().enabled = false;
+                m_bridge.GetComponent<Collider2D>().enabled = true;
+                QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+            }
+            //this.enabled = false;
         }
 
         public void OnUpdate()
         {
+            Vector2 touchPos = (Vector2)(transform.position);
 
-            if (Input.touchCount == 2)
-            {
-                Touch touch1 = Input.GetTouch(0);
-                Touch touch2 = Input.GetTouch(1);
+            //Android--stable
+            //Touch currTouch = Input.GetTouch(0);
+            //touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
 
-                //第二个接触点落下，计算初始两触点距离
-                if (touch2.phase == TouchPhase.Began)
-                {
-                    m_oldVector = new Vector2(touch1.position.x - touch2.position.x, touch1.position.y - touch2.position.y);
-                    return;
-                }
+            // PC --stable
+            Vector2 currTouch = (Vector2)Input.mousePosition;
+            touchPos = Camera.main.ScreenToWorldPoint(currTouch);
 
-                if (touch1.phase == TouchPhase.Moved && touch2.phase == TouchPhase.Moved)
-                {
-                    Vector2 newVector = new Vector2(touch1.position.x - touch2.position.x, touch1.position.y - touch2.position.y);
-                    //计算缩放比例，并更新物体缩放系数
-                    float newRotation = Vector2.Dot(newVector, m_oldVector) / (Vector2.SqrMagnitude(newVector) * Vector2.SqrMagnitude(m_oldVector));
-                    if (newVector.x - m_oldVector.x > 0)
-                    {
-                        m_clockwise = 1;
-                    }
-                    else
-                    {
-                        m_clockwise = -1;
-                    }
-                    transform.eulerAngles = new Vector3(m_clockwise * newRotation, m_clockwise * newRotation, 0.0f);
-                    //transform.Rotate(m_clockwise * newRotation, m_clockwise * newRotation, 0.0f);
-                    m_oldVector = newVector;
-                }
-
-                //机关触发判断，如果不触发，恢复原来大小
-                if (touch1.phase == TouchPhase.Ended || touch2.phase == TouchPhase.Ended)
-                {
-                    //float originScale = m_oldDistance / newDistance * scaleUnit;
-                    //transform.localScale.Scale(new Vector3(originScale, originScale, 1));
-                    transform.localRotation = m_originRotation;
-                }
-            }
-            else
-            {
-                //PC端
-                if (Input.GetMouseButtonDown(0))
-                {
-                    //成功动画触发
-                    transform.localEulerAngles = new Vector3(0.0f, 0.0f, 180.0f);
-                    Debug.Log("相机名字" + m_mainCamera.name);
-                    m_mainCamera.GetComponent<Animator>().enabled = true;
-                    m_flyingMagpie.GetComponent<Animator>().enabled = true;
-                    Debug.Log("相机动画" + m_mainCamera.GetComponent<Animator>().name);
-
-                    gameObject.GetComponent<Collider2D>().enabled = false;
-                    AudioController.Instance.PushClip(m_moonAndSunAudioClip);
-                    //注销机关
-                    QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-                    m_magpiesBridge.GetComponent<Collider2D>().enabled = true;
-                }
-            }
-        }
-
-        void Update()
-        {
-            OnUpdate();
-            if (transform.localRotation.x > threshold.x && transform.localRotation.y > threshold.y)
-            {
-                m_isSuccess = true;
-                gameObject.GetComponent<Collider2D>().enabled = false;
-                AudioController.Instance.PushClip(m_moonAndSunAudioClip);
-                //注销机关
-                QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-            }
+            Vector2 currDirection = touchPos - (Vector2)(transform.position);
+            m_preDirection = currDirection;
+            Debug.Log("Began");
+            this.enabled = true;
         }
     }
 }

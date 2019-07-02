@@ -19,10 +19,9 @@ namespace MiniGame
         private Renderer windowRenderer;
         private CircleCollider2D circleCollider2D;
 
-        void Awake()
+        void Start()
         {
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
-
             // Make sure OpenDoor script of door-shape sprite mask is disabled at start(Should be seperated in later development)
             door = GameObject.Find("Door");
             doorRenderer = door.GetComponent<Renderer>();
@@ -36,11 +35,12 @@ namespace MiniGame
                 this.transform.Translate(doorRenderer.bounds.center - windowRenderer.bounds.center);
             }
             else
+            {
                 //Debug.Log("Center on point");
-
                 originalScale = this.transform.localScale;
+            }
             circleCollider2D = GetComponent<CircleCollider2D>();
-
+            this.enabled = false;
         }
 
         // Update is called once per frame

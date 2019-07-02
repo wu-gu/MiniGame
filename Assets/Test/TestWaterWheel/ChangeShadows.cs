@@ -11,7 +11,7 @@ public class ChangeShadows : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         shadowState = Animator.StringToHash("ShadowState");
-        anim.speed = 0.8f;
+        anim.speed = 1.0f;
     }
 
     public void SetUpNewShadowState(int state)

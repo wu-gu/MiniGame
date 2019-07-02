@@ -24,8 +24,6 @@ namespace MiniGame
         private GameObject m_mainCamera;
         private GameObject m_flyingMagpie;
 
-        private GameObject m_magpiesBridge;
-
         /// <summary>
         /// 注册机关
         /// </summary>
@@ -42,7 +40,6 @@ namespace MiniGame
             m_originRotation = transform.localRotation;
             m_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             m_flyingMagpie = GameObject.Find("FlyingMagpie");
-            m_magpiesBridge = GameObject.Find("BuildingBridgeMagpies");
         }
 
         public void OnUpdate()
@@ -112,7 +109,6 @@ namespace MiniGame
                     AudioController.Instance.PushClip(m_moonAndSunAudioClip);
                     //注销机关
                     QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-                    m_magpiesBridge.GetComponent<Collider2D>().enabled = true;
 
                 }
             }
