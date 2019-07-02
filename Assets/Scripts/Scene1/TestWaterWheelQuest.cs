@@ -73,7 +73,7 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
         //    touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
         //    Vector2 currDirection = touchPos - (Vector2)(transform.position);
 
-        //    if(currTouch.phase == TouchPhase.Moved)
+        //    if (currTouch.phase == TouchPhase.Moved)
         //    {
         //        Debug.Log("Moved");
         //        Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
@@ -84,7 +84,7 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
 
         //        float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
         //        Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
-        //
+
         //        //计算顺时针还是逆时针
         //        angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
         //        Debug.Log(angle);
@@ -92,14 +92,14 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
         //        m_preDirection = currDirection;
 
         //        angleCounter += angle;
-        //        int state = (int)(Mathf.Abs(angleCounter) / 720);
+        //        int state = (int)(Mathf.Abs(angleCounter) / 360);
         //        if (state != currState)
         //        {
         //            currState = state;
         //            changeShadows.SetUpNewShadowState(state);
         //        }
         //    }
-        //} 
+        //}
 
         else
         {

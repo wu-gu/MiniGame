@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Formal/Level0.unity
     guid: 525e2c07e1d215d4d9a98657dabdfc41
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Formal/Level1.unity
     guid: a98e0834b648c4447b10cd50d5e9feb4
   - enabled: 0

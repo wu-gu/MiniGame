@@ -51,13 +51,13 @@ namespace MiniGame
             touchThreshold = m_capsule.bounds.max.y- m_capsule.bounds.min.y + 0.8f;
             //Debug.Log("touchThreold" + touchThreshold);
 
-            RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
-            if(Physics2D.Raycast(m_rigidbody2D.position, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
-            {
-                Vector2 hitPos = hitBuffer[0].point;
-                m_centerHeight = (m_rigidbody2D.position - hitPos).y;
-            }
+            //因为人的包围盒的中心与Transform的中心不一样
+            UpdateCenterHeight();
+        }
 
+        private void OnEnable()
+        {
+            SelfDestination();UpdateCenterHeight();
         }
 
         public void OnUpdate()
@@ -149,6 +149,27 @@ namespace MiniGame
 
             if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Quest"))
                 forwardable = true;
+        }
+
+        /// <summary>
+        /// 人物每次缩放后都需要重新调用此接口修正人物身高
+        /// </summary>
+        public void UpdateCenterHeight()
+        {
+            RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
+            if (Physics2D.Raycast(m_rigidbody2D.position, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
+            {
+                Vector2 hitPos = hitBuffer[0].point;
+                m_centerHeight = (m_rigidbody2D.position - hitPos).y;
+            }
+        }
+
+        /// <summary>
+        /// 当PlayerController临时停用后恢复调用时，使用此接口重置位置
+        /// </summary>
+        public void SelfDestination()
+        {
+            m_destPos = m_rigidbody2D.position;
         }
     }
 }

@@ -37,7 +37,8 @@ namespace MiniGame
                 GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Animator>().enabled = true;
                 //转场
                 //GameObject.Find("TransitionStart").GetComponent<TransitionPoint>().Transition();
-                this.enabled = false;
+                //this.enabled = false;
+                Destroy(this);
             }
         }
 

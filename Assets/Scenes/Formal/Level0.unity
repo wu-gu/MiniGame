@@ -1394,7 +1394,7 @@ PrefabInstance:
     - target: {fileID: 4586934740109669062, guid: 2f30189d97983b74fb243cbfbd90784b,
         type: 3}
       propertyPath: newSceneName
-      value: Level0
+      value: Level1
       objectReference: {fileID: 0}
     - target: {fileID: 4586934740109669062, guid: 2f30189d97983b74fb243cbfbd90784b,
         type: 3}
@@ -1404,7 +1404,7 @@ PrefabInstance:
     - target: {fileID: 4586934740109669062, guid: 2f30189d97983b74fb243cbfbd90784b,
         type: 3}
       propertyPath: newSceneName
-      value: Level0
+      value: Level1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f30189d97983b74fb243cbfbd90784b, type: 3}
