@@ -39,6 +39,7 @@ public class QuestController : MonoSingleton<QuestController>
     {
         if (!m_questBehaviorDict.ContainsKey(gameobjectName))
         {
+            Debug.Log("机关注册，机关名字为:"+gameobjectName);
             m_questBehaviorDict.Add(gameobjectName, questBehavior);
         }
     }

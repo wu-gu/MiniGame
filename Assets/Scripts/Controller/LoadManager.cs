@@ -13,6 +13,11 @@ public class LoadManager: MonoSingleton<LoadManager>
         }
     }
 
+    /// <summary>
+    /// 加载某一个画面的物体
+    /// </summary>
+    /// <param name="stageName">画面名</param>
+    /// <returns>画面物体容器</returns>
     public  GameObjectStageContainer LoadStageGameObject(string stageName)
     {
         Debug.Log("Loading stage " + stageName);
@@ -21,10 +26,10 @@ public class LoadManager: MonoSingleton<LoadManager>
         GameObject[] gameObjects = Resources.LoadAll<GameObject>(stageName);
         foreach(var obj in gameObjects)
         {
-            GameObject instance =  GameObject.Instantiate(obj);
+            GameObject instance =  Instantiate(obj);
+            //修改实例化物体的名字为预制件的名字
             instance.name = obj.name;
             container.AddGameobject(instance);
-            //m_container = container;
         }
         container.StageName = stageName;
         Debug.Log("Loading stage " + stageName + " success");

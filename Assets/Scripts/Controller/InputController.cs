@@ -30,12 +30,12 @@ namespace MiniGame
                 if (hit.collider != null)
                 {
                     //Debug.Log("点击机关");
-                    //Debug.Log(hit.collider.gameObject.ToString());
+                    Debug.Log("点击机关: "+hit.collider.gameObject.ToString());
                     QuestController.Instance.FireQuestBehavior(hit.collider.gameObject.ToString());
                 }
                 else
                 {
-                    //Debug.Log("没有点击机关");
+                    Debug.Log("没有点击机关");
                     //没有点击机关，则进入人物行走判断
                     PlayerController.Instance.OnUpdate();
                 }

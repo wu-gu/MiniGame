@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 827596058746313160}
   - component: {fileID: -1245950133122179756}
   - component: {fileID: -5100453747705306506}
+  - component: {fileID: 173836838}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -47,7 +48,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
-  m_IsSetupDynamicLoad: 0
+  allLevelName: []
+  highestProgress: 0
+  m_IsSetupDynamicLoad: 1
 --- !u!114 &827596058746313160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,3 +91,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac5f0e24624a3f14295bad4e542962a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &173836838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827596058746313165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6766fbe2bae5e124b90ca79b793f9a6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicAudioClip: {fileID: 0}
+  musicOutput: {fileID: 0}
+  musicPlayOnAwake: 1
+  musicVolume: 1
+  ambientAudioClip: {fileID: 0}
+  ambientOutput: {fileID: 0}
+  ambientPlayOnAwake: 1
+  ambientVolume: 1
