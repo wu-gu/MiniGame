@@ -12,17 +12,13 @@ namespace MiniGame
         private Renderer doorRenderer;
         float scaleFactor = 0.15f;
 
-        void Awake()
+        // Start is called before the first frame update
+        void Start()
         {
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
             cam = Camera.main;
             doorRenderer = GetComponent<Renderer>();
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            this.transform.localScale = Vector3.one;
+            this.enabled = false;
         }
 
         // Update is called once per frame
@@ -30,7 +26,7 @@ namespace MiniGame
         {
             // Door open action, execute with no start trigger: controlled by dynamic script enable and disable
             Vector3 localScale = transform.localScale;
-            transform.localScale = new Vector3(localScale.x + scaleFactor, localScale.y + scaleFactor, localScale.z + scaleFactor);
+            transform.localScale = new Vector3(localScale.x + scaleFactor * 2, localScale.y + scaleFactor, localScale.z + scaleFactor);
 
             // Detect the need of scene transition
             // doorMax, doorMin, doorRadius, doorCentral: the maximal point, minimal point, mask radius, and central position of the door-shape sprite mask
@@ -62,8 +58,9 @@ namespace MiniGame
 
         public void OnUpdate()
         {
-            doorRenderer.enabled = true;
             this.enabled = true;
+            this.transform.localScale = Vector3.one;
+            doorRenderer.enabled = true;
         }
     }
 }
