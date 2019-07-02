@@ -14,16 +14,24 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
     private ParticleSystem m_clearSign;
     private CircleCollider2D m_clearSignCollider;
     private SelfRotate m_selfRotate;
+    private GameObject m_block;
 
     void Awake()
     {
-        QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
         angleCounter = 0f;
-        currState = 0;
+        currState = 0;       
+    }
+
+    void Start()
+    {
+        QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
         changeShadows = GameObject.Find("Shadows").GetComponent<ChangeShadows>();
         m_clearSign = GameObject.Find("Clear Sign").GetComponent<ParticleSystem>();
         m_clearSignCollider = GameObject.Find("Clear Sign").GetComponent<CircleCollider2D>();
         m_selfRotate = GetComponent<SelfRotate>();
+        m_block = GameObject.Find("Block");
+
+        this.enabled = false;
     }
 
     // Update is called once per frame
@@ -48,7 +56,7 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
             m_preDirection = currDirection;
 
             angleCounter += angle;
-            int state = (int)(Mathf.Abs(angleCounter) / 720);
+            int state = (int)(Mathf.Abs(angleCounter) / 360);
             if (state != currState)
             {
                 currState = state;
@@ -98,19 +106,20 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
             if (currState >= 4)
             {
                 GetComponent<CircleCollider2D>().enabled = false;
+                Destroy(m_block);
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                 m_clearSign.Play();
                 m_clearSignCollider.enabled = true;
             }
-            m_selfRotate.enabled = true;
+            m_selfRotate.Restart();
             this.enabled = false;
         }
     }
 
     public void OnUpdate()
     {
-        m_selfRotate.enabled = false;
-        this.enabled = true;
+        m_selfRotate.StopSelfRotate();
+        
 
         Vector2 touchPos = (Vector2)(transform.position);
 
@@ -125,6 +134,7 @@ public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
         Vector2 currDirection = touchPos - (Vector2)(transform.position);
         m_preDirection = currDirection;
         Debug.Log("Began");
+        this.enabled = true;
     }
 
 }
