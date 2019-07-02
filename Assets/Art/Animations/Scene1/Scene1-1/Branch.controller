@@ -37,10 +37,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -3014020285533124002}
-    m_Position: {x: 260, y: 90, z: 0}
+    m_Position: {x: 270, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1582996018293028141}
-    m_Position: {x: 270, y: 170, z: 0}
+    m_Position: {x: 270, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8404266198754726045}
     m_Position: {x: 340, y: 300, z: 0}
@@ -113,7 +113,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tree
+  m_Name: Branch
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: shouldHide
