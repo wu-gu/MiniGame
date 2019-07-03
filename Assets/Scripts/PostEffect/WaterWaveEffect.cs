@@ -18,6 +18,7 @@ public class WaterWaveEffect : PostEffectBase
 
     private float waveStartTime;
     private Vector4 startPos = new Vector4(0.5f, 0.5f, 0, 0);
+    private bool wave = false;
 
 
     void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -43,6 +44,17 @@ public class WaterWaveEffect : PostEffectBase
             startPos = new Vector4(mousePos.x / Screen.width, mousePos.y / Screen.height, 0, 0);
             waveStartTime = Time.time;
         }
+        else if(wave)
+        {
+            startPos = new Vector4(0.7681976000f, 0.1879815000f, 0.0000000000f, 0.0000000000f);
+            waveStartTime = Time.time;
+            wave = false;
+        }
 
+    }
+
+    public void SetWave()
+    {
+        wave = true;
     }
 }

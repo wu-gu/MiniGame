@@ -19,6 +19,7 @@ namespace MiniGame
         
         void Update()
         {
+            OnUpdate();
             if (ping > 0 && m_lastTime > 0 && Time.time - m_lastTime > ping)
             {
                 m_isSuccess = true;

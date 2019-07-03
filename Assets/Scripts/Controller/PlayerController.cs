@@ -12,7 +12,7 @@ namespace MiniGame
         [Tooltip("The Layers which represent gameobjects that the Character Controller can be grounded on.")]
         public LayerMask groundedLayerMask;
 
-        public float speed = 2.5f;//x方向移动速率
+        public float speed = 1f;//x方向移动速率
         public float groundedRaycastDistance = 50f;
         private float touchThreshold;
 
@@ -27,6 +27,9 @@ namespace MiniGame
         private bool forwardable;
 
         private WalkSakura sakura;//点击反馈
+
+        private float m_nowTouchTime;
+        private float m_oldTouchTime;
 
         void Awake()
         {
@@ -57,7 +60,6 @@ namespace MiniGame
                 Vector2 hitPos = hitBuffer[0].point;
                 m_centerHeight = (m_rigidbody2D.position - hitPos).y;
             }
-
         }
 
         public void OnUpdate()
@@ -143,6 +145,11 @@ namespace MiniGame
 
             if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Quest"))
                 forwardable = true;
+        }
+
+        public void SetDestPos(Vector3 destPos)
+        {
+            m_destPos = destPos;
         }
     }
 }

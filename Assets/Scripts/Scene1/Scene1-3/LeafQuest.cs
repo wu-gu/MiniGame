@@ -36,7 +36,8 @@ namespace MiniGame
         /// </summary>
         void Start()
         {
-            m_originScale = transform.localScale;
+            //m_originScale = transform.localScale;
+            m_originScale = new Vector2(0.5F, 0.5F);
             m_willow = GameObject.Find("Willow");
             m_boat = GameObject.Find("Boat");
         }

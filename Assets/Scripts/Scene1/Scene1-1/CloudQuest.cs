@@ -33,12 +33,13 @@ public class CloudQuest : MonoBehaviour, QuestBehavior
 
         if (Input.touchCount == 1)
         {
-            m_animator.enabled = false;
+            
 
             Touch touch = Input.touches[0];
             Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (touch.phase == TouchPhase.Began)
             {
+                m_animator.enabled = false;
                 m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
             }
             if (touch.phase == TouchPhase.Moved)

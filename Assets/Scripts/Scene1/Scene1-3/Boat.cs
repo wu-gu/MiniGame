@@ -37,6 +37,7 @@ namespace MiniGame
                 //collider.gameObject.transform.SetParent(transform.parent);
                 GetComponent<Collider2D>().enabled = false;
                 PlayerController.Instance.enabled = true;
+                PlayerController.Instance.SetDestPos(this.transform.position);
             }
         }
 
