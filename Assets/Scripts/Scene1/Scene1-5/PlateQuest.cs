@@ -28,6 +28,7 @@ namespace MiniGame
         public float m_speed = 0.05f;
 
         private bool m_canFollow = false;
+        private bool m_isSlideBack = false;
 
         void Start()
         {
@@ -105,13 +106,19 @@ namespace MiniGame
                         //瞬时回到原来位置
                         m_animator.enabled = false;
                         transform.position = new Vector3(m_originPos.x, m_originPos.y, transform.position.z);
-                        m_camera.transform.position = m_cameraOriPos;
-                        //过渡回到原来位置
-                        //m_camera.GetComponent<FollowObjectCamera>().enabled = false;
-                        
-                        this.enabled = false;
+                        //m_camera.transform.position = m_cameraOriPos;
+                        ////过渡回到原来位置
+                        ////m_camera.GetComponent<FollowObjectCamera>().enabled = false;
+
+                        //this.enabled = false;
+                        m_isSlideBack = true;
                     }
                 }
+            }
+
+            if(m_isSlideBack)
+            {
+                SlidBackOriPos();
             }
         }
 
@@ -167,14 +174,26 @@ namespace MiniGame
                 //瞬时回到原来位置
                 transform.position = new Vector3(m_originPos.x, m_originPos.y, transform.position.z);
                 m_animator.enabled = false;
-                m_camera.transform.position = m_cameraOriPos;
+                //m_camera.transform.position = m_cameraOriPos;
+                //this.enabled = false;
                 //过渡回到原来位置
                 //m_camera.GetComponent<FollowObjectCamera>().enabled = false;
-                
-                this.enabled = false;
+                m_isSlideBack = true;
+
             }
         }
 
+        private void SlidBackOriPos()
+        {
+            float destY = Mathf.MoveTowards(m_camera.transform.position.y, m_cameraOriPos.y, 0.1f);
+            m_camera.transform.position = new Vector3(m_camera.transform.position.x, destY, m_camera.transform.position.z);
+            if(m_camera.transform.position == m_cameraOriPos)
+            {
+                m_isSlideBack = false;
+                this.enabled = false;
+            }
+            
+        }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
