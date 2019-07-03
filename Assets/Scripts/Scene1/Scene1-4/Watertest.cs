@@ -34,13 +34,14 @@ public class Watertest : PostEffectBase
         Graphics.Blit(source, destination, _Material);
     }
 
-    public void starwaterwave(Vector3 positon)
+    public void starwaterwave()
     {
-        startPos = new Vector4(positon.x / Screen.width, positon.y / Screen.height, 0, 0);
+        startPos = new Vector4(0.5f, 0.2f, 0, 0);
         waveStartTime = Time.time;
     }
     public void OnEnable()
     {
         this.enabled = true;
+        starwaterwave();
     }
 }

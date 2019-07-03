@@ -10,21 +10,32 @@ namespace MiniGame
     {
         private Touch pre1;
         private Touch pre2;
-        private Vector3 originalScale;
-        private Renderer windowRenderer;
+        private Vector3 m_originalScale;
+        private SpriteRenderer m_sprite;
         public LayerMask questLayerMask;
         public float questRaycastDistance = 0.1f;
         private Vector2 m_originPos;//原来位置
         private Vector2 m_offset;//触摸位置与物体中心点的偏移
         public GameObject destGameobject;//关联机关，此处为树枝
         private bool m_isSuccess = false;//此处机关是否成功破解
-        private float OLDOFFSET;
-        private float NEWOFFSET;
+        private float m_oldOffset;
+        private float m_newOffset;
         public float destscale;
+        public float origiscale;
+        public float scalespeed;
+        public float scaleOffset;
+        public float xOffset;
+        public float yOffset;
         public float destx;
         public float desty;
+        public float alphaspeed;
+        private SpriteRenderer m_door;
         Watertest mytest;
         private bool next=false;
+        private float m_originalpha;
+        private float m_newalpha;
+        private Collider2D m_collider2D;
+        private Collider2D door_collider2D;
 
 
 
@@ -33,9 +44,13 @@ namespace MiniGame
         {
             m_originPos = transform.position;
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
-            windowRenderer = this.GetComponent<Renderer>();
-            originalScale = this.transform.localScale;
+            m_sprite = this.GetComponent<SpriteRenderer>();
+            m_originalScale = this.transform.localScale;
             mytest = GameObject.Find("Main Camera").GetComponent<Watertest>();
+            m_door = GameObject.Find("door1").GetComponent<SpriteRenderer>();
+            m_originalpha = m_sprite.color.a;
+            m_collider2D = this.GetComponent<Collider2D>();
+            door_collider2D= GameObject.Find("door1").GetComponent<Collider2D>();
 
         }
 
@@ -60,12 +75,25 @@ namespace MiniGame
             }
             if (m_isSuccess)
             {
-                transform.position = Vector3.Lerp(transform.position, new Vector3(destx, desty, 0), Time.deltaTime*5);
-                this.transform.localScale = Vector3.Lerp(this.transform.localScale, new Vector3(destscale, destscale, destscale), Time.deltaTime*5);
-                if (transform.position == new Vector3(destx, desty, 0) && this.transform.localScale == new Vector3(destscale, destscale, destscale))
+                Debug.Log("成功了");
+                transform.position = Vector3.Lerp(transform.position, new Vector3(destx, desty, 0), Time.deltaTime * 5);
+                this.transform.localScale = Vector3.Lerp(this.transform.localScale, new Vector3(destscale , destscale, 0), Time.deltaTime * 5);
+                if (Mathf.Abs(this.transform.localScale.x-destscale)<scaleOffset && Mathf.Abs( transform.position .x-destx)<xOffset&& Mathf.Abs(transform.position.y - desty) < yOffset)
                 {
+                    transform.position = new Vector3(destx, desty, 0);
+                    this.transform.localScale = new Vector3(destscale, destscale, 0);
+                    
+                    m_collider2D.enabled = false;
+                    door_collider2D.enabled = true;
                     this.enabled = false;
+
                 }
+                //if (destscale-this.transform.localScale.x <0.01)
+                //{
+                //transform.position = new Vector3(destx, desty, 0);
+                //this.transform.localScale = new Vector3(destscale, destscale, 0);
+                // this.enabled = false;
+                //}
             }
 
             /*
@@ -73,9 +101,9 @@ namespace MiniGame
             Vector3 currentScale = this.transform.localScale;
 
 
-            if (scaleOffset.x + currentScale.x <= originalScale.x || scaleOffset.y + currentScale.y <= originalScale.y || scaleOffset.z + currentScale.z <= originalScale.z)
+            if (scaleOffset.x + currentScale.x <= m_originalScale.x || scaleOffset.y + currentScale.y <= m_originalScale.y || scaleOffset.z + currentScale.z <= m_originalScale.z)
             {
-                this.transform.localScale = originalScale;
+                this.transform.localScale = m_originalScale;
                 return;
             }
             else
@@ -117,32 +145,32 @@ namespace MiniGame
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 currPos = touchPos + m_offset;
                 transform.position = new Vector3(currPos.x, currPos.y, transform.position.z);
-                NEWOFFSET = (m_originPos.y - currPos.y)/100;
-                //Debug.Log(m_originPos.y - currPos.y);
+                m_newOffset = m_originalScale.y+scalespeed * (destscale-m_originalScale.y)*(m_originPos.y - currPos.y)/ (m_originPos.y - desty);
+                m_newalpha = m_originalpha + alphaspeed * (1 - m_originalpha) * (m_originPos.y - currPos.y) / (m_originPos.y - desty);
                 //Debug.Log(currPos.y);
-                if (NEWOFFSET != OLDOFFSET&& currPos.y< m_originPos.y)
+                if (m_originalScale.y <= m_newOffset && m_newOffset <= destscale)
                 {
-                    
-                    if (NEWOFFSET > OLDOFFSET)
+                    if (m_newalpha >= 1)
                     {
-                        if (this.transform.localScale.x < 0.6f)
-                        {
-                            Vector3 scaleOffset = new Vector3(NEWOFFSET, NEWOFFSET, NEWOFFSET);
-                            this.transform.localScale += scaleOffset;
-                            OLDOFFSET = NEWOFFSET;
-                        }
+                        m_sprite.color = new Color(m_sprite.material.color.r, m_sprite.material.color.g, m_sprite.material.color.b, 1.0f);
+                        m_door.color = m_sprite.color;
                     }
-                    else if(NEWOFFSET<OLDOFFSET)
+                    else
                     {
-                        if (this.transform.localScale.x > 0.05f)
-                        {
-                            Vector3 scaleOffset = new Vector3(OLDOFFSET, OLDOFFSET, OLDOFFSET);
-                            this.transform.localScale -= scaleOffset;
-                            OLDOFFSET = NEWOFFSET;
-                        }
+                        m_sprite.color = new Color(m_sprite.material.color.r, m_sprite.material.color.g, m_sprite.material.color.b, m_newalpha);
+                        m_door.color = m_sprite.color;
+                    }
+                    if (m_newOffset >= destscale)
+                    {
+                        this.transform.localScale = new Vector3(destscale, destscale, 0);
 
                     }
+                    else
+                    {
+                        this.transform.localScale = new Vector3(m_newOffset, m_newOffset, 0);
+                    }
                 }
+                
 
                 
 
@@ -159,19 +187,22 @@ namespace MiniGame
             if (m_isSuccess)
             {
 
-                this.gameObject.layer = LayerMask.NameToLayer("Quest");
+                this.gameObject.layer = LayerMask.NameToLayer("Default");
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
 
 
             }
             else
             {
+                Debug.Log("回去");
                 //瞬时回到原来位置
                 transform.position = new Vector3(m_originPos.x, m_originPos.y, transform.position.z);
                 this.gameObject.layer = LayerMask.NameToLayer("Quest");
-                this.transform.localScale = originalScale;
-                NEWOFFSET = 0;
-                OLDOFFSET = 0;
+                this.transform.localScale = m_originalScale;
+                m_sprite.color = new Color(m_sprite.material.color.r, m_sprite.material.color.g, m_sprite.material.color.b, m_originalpha);
+                m_door.color = m_sprite.color;
+                m_newOffset = 0;
+                m_oldOffset = 0;
                 //this.enabled = false;
                 //过渡回到原来位置
             }
@@ -191,7 +222,7 @@ namespace MiniGame
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.gameObject.Equals(destGameobject))
+            if (!m_isSuccess&&collision.gameObject.Equals(destGameobject))
             {
                 m_isSuccess = false;
             }
@@ -216,28 +247,28 @@ namespace MiniGame
                 {
                     Vector2 currPos = touchPos + m_offset;
                     transform.position = new Vector3(currPos.x, currPos.y, transform.position.z);
-                    NEWOFFSET = (m_originPos.y - currPos.y) / 100;
+                    m_newOffset = (m_originPos.y - currPos.y) / 100;
                     //Debug.Log(m_originPos.y - currPos.y);
                     //Debug.Log(currPos.y);
-                    if (NEWOFFSET != OLDOFFSET && currPos.y < m_originPos.y)
+                    if (m_newOffset != m_oldOffset && currPos.y < m_originPos.y)
                     {
 
-                        if (NEWOFFSET > OLDOFFSET)
+                        if (m_newOffset > m_oldOffset)
                         {
                             if (this.transform.localScale.x < 0.6f)
                             {
-                                Vector3 scaleOffset = new Vector3(NEWOFFSET, NEWOFFSET, NEWOFFSET);
+                                Vector3 scaleOffset = new Vector3(m_newOffset, m_newOffset, 0);
                                 this.transform.localScale += scaleOffset;
-                                OLDOFFSET = NEWOFFSET;
+                                m_oldOffset = m_newOffset;
                             }
                         }
-                        else if (NEWOFFSET < OLDOFFSET)
+                        else if (m_newOffset < m_oldOffset)
                         {
                             if (this.transform.localScale.x > 0.05f)
                             {
-                                Vector3 scaleOffset = new Vector3(OLDOFFSET, OLDOFFSET, OLDOFFSET);
+                                Vector3 scaleOffset = new Vector3(m_oldOffset, m_oldOffset, 0);
                                 this.transform.localScale -= scaleOffset;
-                                OLDOFFSET = NEWOFFSET;
+                                m_oldOffset = m_newOffset;
                             }
 
                         }
@@ -255,9 +286,9 @@ namespace MiniGame
                         //瞬时回到原来位置
                         transform.position = new Vector3(m_originPos.x, m_originPos.y, transform.position.z);
                         this.gameObject.layer = LayerMask.NameToLayer("Quest");
-                        this.transform.localScale = originalScale;
-                        NEWOFFSET = 0;
-                        OLDOFFSET = 0;
+                        this.transform.localScale = m_originalScale;
+                        m_newOffset = 0;
+                        m_oldOffset = 0;
                         //this.enabled = false;
                         //过渡回到原来位置
                     }
