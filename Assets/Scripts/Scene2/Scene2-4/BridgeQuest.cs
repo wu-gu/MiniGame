@@ -12,9 +12,12 @@ namespace MiniGame
         private Vector2 m_firstDirection;
         private Vector2 m_preDirection;
         private bool m_success;
+        private bool m_firstTouch;
+        private CapsuleCollider2D m_downEdge;
+        private Renderer m_firstMagpie;
 
         private GameObject m_bridge;
-        private bool m_angleCounter;
+        private float m_angleCounter;
 
         void Awake()
         {
@@ -25,19 +28,39 @@ namespace MiniGame
         {
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
             m_bridge = GameObject.Find("Bridge");
-            m_angleCounter
-            //this.enabled = false;
+            m_angleCounter = 0f;
+            m_firstTouch = true;
+            m_downEdge = GameObject.Find("Down Edge").GetComponent<CapsuleCollider2D>();
+            m_firstMagpie = GameObject.Find("FlyingMagpie (15)").GetComponent<Renderer>();
+            this.enabled = false;
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector2 touchPos = (Vector2)(transform.position);
+
+                //Android--stable
+                //Touch currTouch = Input.GetTouch(0);
+                //touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+
+                // PC --stable
+                Vector2 currTouch = (Vector2)Input.mousePosition;
+                touchPos = Camera.main.ScreenToWorldPoint(currTouch);
+
+                Vector2 currDirection = touchPos - (Vector2)(transform.position);
+                m_preDirection = currDirection;
+            }
+
             // PC --stable
             if (Input.GetMouseButton(0))
             {
                 Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
-                if (bounds.Contains(mousePoint))
+
+                if (bounds.Contains(mousePoint) && !m_downEdge.bounds.Contains(mousePoint))
                 {
                     Vector2 touchPos = (Vector2)(transform.position);
                     touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -51,13 +74,29 @@ namespace MiniGame
 
                     //计算顺时针还是逆时针
                     angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
-                    //transform.Rotate(new Vector3(0, 0, angle));
-                    transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);
-                    m_preDirection = currDirection;
-                    if (Mathf.Abs(angle) > 100)
+
+                    if (m_angleCounter > 180)
                     {
                         m_success = true;
                     }
+                    if (angle < 0)
+                    {
+                        m_angleCounter += Mathf.Abs(angle);
+                        transform.Rotate(new Vector3(0, 0, angle));
+                    }
+                    //transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);                    
+                    m_preDirection = currDirection;
+
+                }
+
+                else
+                {
+                    Vector2 touchPos = (Vector2)(transform.position);
+                    Vector2 currTouch = (Vector2)Input.mousePosition;
+                    touchPos = Camera.main.ScreenToWorldPoint(currTouch);
+
+                    Vector2 currDirection = touchPos - (Vector2)(transform.position);
+                    m_preDirection = currDirection;
                 }
                     
             }
@@ -102,16 +141,19 @@ namespace MiniGame
             {
                 m_success = false;
                 Debug.Log("旋转到位就执行");
-                transform.Rotate(new Vector3(0, 0, 180));
+                transform.localRotation = new Quaternion(0, 0, 180f, 0);
                 gameObject.GetComponent<Collider2D>().enabled = false;
                 m_bridge.GetComponent<Collider2D>().enabled = true;
+                Destroy(m_downEdge.gameObject);
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
             }
-            //this.enabled = false;
+            
         }
 
         public void OnUpdate()
         {
+           
+
             Vector2 touchPos = (Vector2)(transform.position);
 
             //Android--stable
@@ -122,6 +164,13 @@ namespace MiniGame
             Vector2 currTouch = (Vector2)Input.mousePosition;
             touchPos = Camera.main.ScreenToWorldPoint(currTouch);
 
+            if (m_firstTouch)
+            {
+                if (!m_firstMagpie.bounds.Contains(touchPos))
+                    return;
+            }
+
+            m_firstTouch = false;
             Vector2 currDirection = touchPos - (Vector2)(transform.position);
             m_preDirection = currDirection;
             Debug.Log("Began");

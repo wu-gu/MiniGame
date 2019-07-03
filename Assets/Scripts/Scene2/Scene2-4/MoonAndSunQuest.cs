@@ -89,27 +89,25 @@ namespace MiniGame
                 if (Input.GetMouseButtonDown(0))
                 {
 
-                    //Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    //Debug.Log("点击!!!" + mousePoint);
-                    //Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
-                    //Debug.Log("点击!!!" + mousePoint + bounds.Contains(mousePoint));
-                    //if (bounds.Contains(mousePoint))
-                    //{
+                    Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Debug.Log("点击!!!" + mousePoint);
+                    Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
+                    Debug.Log("点击!!!" + mousePoint + bounds.Contains(mousePoint));
+                    if (bounds.Contains(mousePoint))
+                    {
+                        Debug.Log("点击到位，触发事件");
+                        //成功动画触发
+                        transform.localEulerAngles = new Vector3(0.0f, 0.0f, 180.0f);
+                        Debug.Log("相机名字" + m_mainCamera.name);
+                        m_mainCamera.GetComponent<Animator>().enabled = true;
+                        m_flyingMagpie.GetComponent<Animator>().enabled = true;
+                        Debug.Log("相机动画" + m_mainCamera.GetComponent<Animator>().name);
 
-                    //}
-                    Debug.Log("点击到位，触发事件");
-                    //成功动画触发
-                    transform.localEulerAngles = new Vector3(0.0f, 0.0f, 180.0f);
-                    Debug.Log("相机名字" + m_mainCamera.name);
-                    m_mainCamera.GetComponent<Animator>().enabled = true;
-                    m_flyingMagpie.GetComponent<Animator>().enabled = true;
-                    Debug.Log("相机动画" + m_mainCamera.GetComponent<Animator>().name);
-
-                    gameObject.GetComponent<Collider2D>().enabled = false;
-                    AudioController.Instance.PushClip(m_moonAndSunAudioClip);
-                    //注销机关
-                    QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-
+                        gameObject.GetComponent<Collider2D>().enabled = false;
+                        AudioController.Instance.PushClip(m_moonAndSunAudioClip);
+                        //注销机关
+                        QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+                    }
                 }
             }
         }
