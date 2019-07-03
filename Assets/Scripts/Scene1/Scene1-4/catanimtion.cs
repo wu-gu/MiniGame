@@ -8,7 +8,6 @@ namespace MiniGame
     {
         public GameObject destGameobject;
         private Animator m_animator;
-        SpriteRenderer CatRenderer;
         pavilionscale mypavi;
         Collider2D cl2d;
 
@@ -25,7 +24,6 @@ namespace MiniGame
         {
             m_animator = GetComponent<Animator>();
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
-            CatRenderer = GetComponent<SpriteRenderer>();
             mypavi = GameObject.Find("Pavilion").GetComponent<pavilionscale>();
             cl2d = GetComponent<Collider2D>();
         }
@@ -39,10 +37,8 @@ namespace MiniGame
             if ((animatorInfo.normalizedTime > 1.0f) )
             {
                 m_animator.enabled = false;
-                CatRenderer.enabled = false;
                 cl2d.enabled = false;
-                QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-               
+                QuestController.Instance.UnRegisterQuest(gameObject.ToString());         
                 mypavi.settrue();
                 Destroy(gameObject);
             }

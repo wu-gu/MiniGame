@@ -35,20 +35,30 @@ public class CameraController : MonoBehaviour
     {
         if (backgroundL != null && backgroundR != null)
         {
-            Debug.DrawRay(new Vector3(minX, m_mainCam.transform.position.y, m_mainCam.transform.position.z), Vector3.down, Color.blue);
-            Debug.DrawRay(new Vector3(maxX, m_mainCam.transform.position.y, m_mainCam.transform.position.z), Vector3.down, Color.green);
+            Debug.DrawRay(new Vector3(minX, m_mainCam.transform.position.y, m_mainCam.transform.position.z), Vector3.down,Color.blue);
+            Debug.DrawRay(new Vector3(maxX, m_mainCam.transform.position.y, m_mainCam.transform.position.z), Vector3.down,Color.green);
+            //重新计算相机目标位置
             float destX = Mathf.Clamp(m_player.transform.position.x, minX, maxX);
+            //镜头随着人慢慢移动，看人的速度与followSpeed
             float nextX = Mathf.MoveTowards(m_mainCam.transform.position.x, destX, followSpeed);
             m_mainCam.transform.position = new Vector3(nextX, m_mainCam.transform.position.y, m_mainCam.transform.position.z);
         }
     }
 
+    /// <summary>
+    /// 更新相机位置左边界
+    /// </summary>
+    /// <param name="left"></param>
     public void UpdateBackgounrdLeft(GameObject left)
     {
         backgroundL = left;
         minX = backgroundL.transform.position.x + orthoHorizontal;
     }
 
+    /// <summary>
+    /// 更新相机位置右边界
+    /// </summary>
+    /// <param name="right"></param>
     public void UpdateBackgounrdRight(GameObject right)
     {
         backgroundR = right;

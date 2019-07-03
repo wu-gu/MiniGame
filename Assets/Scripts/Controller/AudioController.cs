@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Audio;
 
 namespace MiniGame
@@ -27,7 +28,7 @@ namespace MiniGame
         protected AudioSource m_AmbientAudioSource;
 
         protected bool m_TransferMusicTime, m_TransferAmbientTime;
-        protected AudioController m_OldInstanceToDestroy = null;
+        //protected AudioController m_OldInstanceToDestroy = null;
 
         //每一个栈中音频剪辑都会被播放，并在播放后弹出
         //音频剪辑通过PushClip方法压入栈，这个方法也是提供给开发者调用的接口
@@ -35,26 +36,34 @@ namespace MiniGame
 
         void Awake ()
         {
-            // If there's already a player...
-            if (Instance != null && Instance != this)
+            //// If there's already a player...
+            //if (Instance != null && Instance != this)
+            //{
+            //    //...if it use the same music clip, we set the audio source to be at the same position, so music don't restart
+            //    if(Instance.musicAudioClip == musicAudioClip)
+            //    {
+            //        m_TransferMusicTime = true;
+            //    }
+
+            //    //...if it use the same ambient clip, we set the audio source to be at the same position, so ambient don't restart
+            //    if (Instance.ambientAudioClip == ambientAudioClip)
+            //    {
+            //        m_TransferAmbientTime = true;
+            //    }
+
+            //    // 销毁之前的管理器
+            //    m_OldInstanceToDestroy = Instance;
+            //}
+            if (Instance != this)
             {
-                //...if it use the same music clip, we set the audio source to be at the same position, so music don't restart
-                if(Instance.musicAudioClip == musicAudioClip)
-                {
-                    m_TransferMusicTime = true;
-                }
-
-                //...if it use the same ambient clip, we set the audio source to be at the same position, so ambient don't restart
-                if (Instance.ambientAudioClip == ambientAudioClip)
-                {
-                    m_TransferAmbientTime = true;
-                }
-
-                // 销毁之前的管理器
-                m_OldInstanceToDestroy = Instance;
+                Destroy(gameObject);
+                return;
             }
 
-            DontDestroyOnLoad (gameObject);
+            //DontDestroyOnLoad (gameObject);
+
+
+
             //实例化音乐源
             m_MusicAudioSource = gameObject.AddComponent<AudioSource> ();
             m_MusicAudioSource.clip = musicAudioClip;
@@ -62,17 +71,18 @@ namespace MiniGame
             m_MusicAudioSource.loop = true;
             m_MusicAudioSource.volume = musicVolume; //音量大小
 
-            if (musicPlayOnAwake)
-            {
-                m_MusicAudioSource.time = 0f;
-                m_MusicAudioSource.Play();
-            }
-
             m_AmbientAudioSource = gameObject.AddComponent<AudioSource>();
             m_AmbientAudioSource.clip = ambientAudioClip;
             m_AmbientAudioSource.outputAudioMixerGroup = ambientOutput;
             m_AmbientAudioSource.loop = true;
             m_AmbientAudioSource.volume = ambientVolume;
+
+
+            if (musicPlayOnAwake)
+            {
+                m_MusicAudioSource.time = 0f;
+                m_MusicAudioSource.Play();
+            }
 
             if (ambientPlayOnAwake)
             {
@@ -81,17 +91,17 @@ namespace MiniGame
             }
         }
 
-        private void Start()
-        {
-            //if delete & trasnfer time only in Start so we avoid the small gap that doing everything at the same time in Awake would create 
-            if (m_OldInstanceToDestroy != null)
-            {
-                if (m_TransferAmbientTime) m_AmbientAudioSource.timeSamples = m_OldInstanceToDestroy.m_AmbientAudioSource.timeSamples;
-                if (m_TransferMusicTime) m_MusicAudioSource.timeSamples = m_OldInstanceToDestroy.m_MusicAudioSource.timeSamples;
-                m_OldInstanceToDestroy.Stop();
-                Destroy(m_OldInstanceToDestroy.gameObject);
-            }
-        }
+        //private void Start()
+        //{
+        //    //if delete & trasnfer time only in Start so we avoid the small gap that doing everything at the same time in Awake would create 
+        //    if (m_OldInstanceToDestroy != null)
+        //    {
+        //        if (m_TransferAmbientTime) m_AmbientAudioSource.timeSamples = m_OldInstanceToDestroy.m_AmbientAudioSource.timeSamples;
+        //        if (m_TransferMusicTime) m_MusicAudioSource.timeSamples = m_OldInstanceToDestroy.m_MusicAudioSource.timeSamples;
+        //        m_OldInstanceToDestroy.Stop();
+        //        Destroy(m_OldInstanceToDestroy.gameObject);
+        //    }
+        //}
 
         private void Update()
         {
@@ -353,6 +363,20 @@ namespace MiniGame
         public void PlayEffect(AudioType.Events effectName, bool defAudio = true, float volume = 1f)
         {
             PlayEffectBase(effectName, defAudio, volume);
+        }
+
+        //调节背景音乐音量
+        public void AmbientMusicVolumeChanged(Slider slider)
+        {
+            ambientVolume = slider.value;
+            UnmuteJustAmbient();
+        }
+
+        //调节音效音乐音量
+        public void EffectMusicVolumeChanged(Slider slider)
+        {
+           musicVolume = slider.value;
+           UnmuteJustMustic();
         }
     }
 }
