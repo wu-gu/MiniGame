@@ -21,6 +21,7 @@ namespace MiniGame
         private AnimatorStateInfo m_animatorInfo;
         private GameObject m_willow;
         private GameObject m_boat;
+        private GameObject m_shield;
         public Vector3 threshold = new Vector3(3.0f,3.0f,1.0f);
 
         /// <summary>
@@ -36,9 +37,11 @@ namespace MiniGame
         /// </summary>
         void Start()
         {
-            m_originScale = transform.localScale;
+            //m_originScale = transform.localScale;
+            m_originScale = new Vector2(0.5F, 0.5F);
             m_willow = GameObject.Find("Willow");
             m_boat = GameObject.Find("Boat");
+            m_shield = GameObject.Find("Shield");
         }
 
         public void OnUpdate()
@@ -56,6 +59,7 @@ namespace MiniGame
                 m_willow.GetComponent<Animator>().SetBool("LeafQuestFired", true);
                 m_willow.GetComponent<Animator>().Play("LeafHide");
                 m_boat.GetComponent<Animator>().enabled = true;
+                GameObject.Destroy(m_shield);
                 //注销机关
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
             }

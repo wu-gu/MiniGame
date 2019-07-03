@@ -12,13 +12,14 @@ namespace MiniGame
         public float ping;
         public AudioClip m_magpieAudioClip;
 
-        void Awake()
+        void Start()
         {
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
         }
         
         void Update()
         {
+            OnUpdate();
             if (ping > 0 && m_lastTime > 0 && Time.time - m_lastTime > ping)
             {
                 m_isSuccess = true;
@@ -53,14 +54,45 @@ namespace MiniGame
             else
             {
                 //PC端
+                
                 if (Input.GetMouseButtonDown(0))
                 {
+                    //Debug.Log("进来PC");
+                    Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
+                    
+                    if (bounds.Contains(mousePoint))
+                    {
+                        //Debug.Log("进来没" + bounds.Contains(mousePoint));
+                        //成功动画触发
+                        gameObject.GetComponent<Animator>().SetBool("MagpieQuestFired", true);
+                        AudioController.Instance.PushClip(m_magpieAudioClip);
+                    }
+                    
+                }
+            }
+        }
+
+        private void OnMouseDown()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Debug.Log("进来PC");
+                Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
+                Debug.Log("进来没" + bounds.Contains(mousePoint));
+                if (bounds.Contains(mousePoint))
+                {
+                    //Debug.Log("进来没yyyy" + bounds.Contains(mousePoint));
                     //成功动画触发
                     gameObject.GetComponent<Animator>().SetBool("MagpieQuestFired", true);
                     AudioController.Instance.PushClip(m_magpieAudioClip);
                 }
+
             }
         }
     }
+
+    
 }
 

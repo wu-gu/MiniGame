@@ -35,6 +35,16 @@ public class CloudQuest : MonoBehaviour, QuestBehavior
 
     public void OnUpdate()
     {
+        if (Input.touchCount == 1)
+        {
+            Touch touch = Input.touches[0];
+            Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (touch.phase == TouchPhase.Began)
+            {
+                m_animator.enabled = false;
+                m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
+            }
+        }
         this.enabled = true;
     }
 
@@ -47,11 +57,6 @@ public class CloudQuest : MonoBehaviour, QuestBehavior
 
             Touch touch = Input.touches[0];
             Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (touch.phase == TouchPhase.Began)
-            {
-                m_animator.enabled = false;
-                m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
-            }
             if (touch.phase == TouchPhase.Moved)
             {
                 Vector2 currPos = touchPos + m_offset;

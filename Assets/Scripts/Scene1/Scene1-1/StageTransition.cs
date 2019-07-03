@@ -31,11 +31,11 @@ namespace MiniGame
                 mainCamera.transform.GetChild(0).gameObject.SetActive(true);
 
                 //加载Stage1-2
-                GameController.Instance.LoadNextStageGameObjects("stage1-2");
+                GameController.Instance.LoadNextStageGameObjects("Stage1-2");
                 //卸载Stage1-1
                 GameController.Instance.UnloadPreStageGameobjects();
 
-                //播放动画
+                //播放镜头拉远动画
                 mainCamera.GetComponent<Animator>().SetBool("transitionToStage2", true);
                 GameObject.FindGameObjectWithTag("Player").transform.parent.gameObject.GetComponent<Animator>().SetTrigger("MakeBoyBigger");
 
@@ -50,6 +50,10 @@ namespace MiniGame
 
                 PlayerController.Instance.enabled = true;
                 GetComponent<Animator>().enabled = false;
+
+                //调整摄像机边界限定，要注意和摄像机动画的冲突
+                Camera.main.gameObject.GetComponent<CameraController>().UpdateBackgounrdLeft(GameObject.Find("Stage1-2-L"));
+                Camera.main.gameObject.GetComponent<CameraController>().UpdateBackgounrdRight(GameObject.Find("Stage1-2-R"));
                 Destroy(this);
             }
 
