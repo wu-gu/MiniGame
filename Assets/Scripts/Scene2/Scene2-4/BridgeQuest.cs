@@ -25,7 +25,6 @@ namespace MiniGame
         {
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
             m_bridge = GameObject.Find("Bridge");
-            m_angleCounter
             //this.enabled = false;
         }
 

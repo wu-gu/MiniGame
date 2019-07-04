@@ -10,6 +10,8 @@ namespace MiniGame
 
         public float questRaycastDistance = 0.1f;
 
+        private bool m_canMovePlayer = true;//是否可以手动控制人物
+
 
         void Awake()
         {
@@ -22,6 +24,7 @@ namespace MiniGame
 
         public void OnUpdate()
         {
+
             if (Input.GetMouseButtonDown(0))
             {
                 //先判断是否触摸某个机关
@@ -30,14 +33,17 @@ namespace MiniGame
                 if (hit.collider != null)
                 {
                     //Debug.Log("点击机关");
-                    //Debug.Log(hit.collider.gameObject.ToString());
+                    Debug.Log("点击机关: " + hit.collider.gameObject.ToString());
                     QuestController.Instance.FireQuestBehavior(hit.collider.gameObject.ToString());
                 }
                 else
                 {
-                    //Debug.Log("没有点击机关");
+                    Debug.Log("没有点击机关");
                     //没有点击机关，则进入人物行走判断
-                    PlayerController.Instance.OnUpdate();
+                    if (m_canMovePlayer)
+                    {
+                        PlayerController.Instance.OnUpdate();
+                    }
                 }
             }
 
@@ -56,9 +62,17 @@ namespace MiniGame
                 {
                     //Debug.Log("没有点击机关");
                     //没有点击机关，则进入人物行走判断
-                    PlayerController.Instance.OnUpdate();
+                    if (m_canMovePlayer)
+                    {
+                        PlayerController.Instance.OnUpdate();
+                    }
                 }
             }
+        }
+
+        public void SetPlayerCanMove(bool canMove)
+        {
+            m_canMovePlayer = canMove;
         }
     }
 }
