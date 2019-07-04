@@ -14,7 +14,14 @@ namespace MiniGame
         // Start is called before the first frame update
         private void Awake()
         {
+
+        }
+
+        void Start()
+        {
+            character = GameObject.Find("Character");
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
+            this.enabled = false;
         }
 
         public void Update()
@@ -26,9 +33,12 @@ namespace MiniGame
                 //人物停止行走动画
                 character.transform.Find("Boy").GetComponent<Animator>().SetBool("isWalking", false);
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+                //摄像机镜头拉近
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Animator>().enabled = true;
                 //转场
                 //GameObject.Find("TransitionStart").GetComponent<TransitionPoint>().Transition();
-                this.enabled = false;
+                //this.enabled = false;
+                Destroy(this);
             }
         }
 
@@ -40,14 +50,16 @@ namespace MiniGame
                 this.enabled = true;
                 GetComponent<ParticleSystem>().Stop();
                 GetComponent<ParticleSystem>().Clear();
-                character.GetComponent<Animator>().enabled = true;
-                Debug.Log(character.transform.Find("Boy").ToString());
+                Debug.Log("男主前进");
+                character.GetComponent<Animator>().enabled = true;//男主按照设定路线行进
+                //Debug.Log(character.transform.Find("Boy").ToString());
                 character.transform.Find("Boy").GetComponent<Animator>().SetBool("isWalking", true);
             }
         }
 
         public void DoWorking()
         {
+            Debug.Log("提示光圈出现");
             GetComponent<ParticleSystem>().Play();
             m_canWork = true;
         }

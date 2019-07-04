@@ -16,6 +16,10 @@ namespace MiniGame {
                 if (nextStageName != null)
                 {
                     GameController.Instance.LoadNextStageGameObjects(nextStageName);
+                    //调整摄像机边界限定
+                    //Camera.main.gameObject.GetComponent<CameraController>().UpdateBackgounrdLeft(GameObject.Find(nextStageName+"-L"));
+                    //加载时调整右边，卸载时调整左边
+                    Camera.main.gameObject.GetComponent<CameraController>().UpdateBackgounrdRight(GameObject.Find(nextStageName + "-R"));
                     Destroy(this);
                 }
             }

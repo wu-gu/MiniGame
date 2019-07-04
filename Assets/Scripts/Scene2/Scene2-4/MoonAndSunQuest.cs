@@ -23,6 +23,13 @@ namespace MiniGame
 
         private GameObject m_mainCamera;
         private GameObject m_flyingMagpie;
+        //日月跟随
+        private GameObject m_girl;
+        private Vector3 m_offset;
+        private Vector3 m_nowPosition;
+
+        //恢复初始角度
+        private bool m_isSlidBack = false;
 
         /// <summary>
         /// 注册机关
@@ -40,6 +47,8 @@ namespace MiniGame
             m_originRotation = transform.localRotation;
             m_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             m_flyingMagpie = GameObject.Find("FlyingMagpie");
+            m_girl = GameObject.Find("Girl");
+            m_offset = transform.position - m_girl.transform.position;
         }
 
         public void OnUpdate()
@@ -75,12 +84,15 @@ namespace MiniGame
                     m_oldVector = newVector;
                 }
 
-                //机关触发判断，如果不触发，恢复原来大小
+                //机关触发判断，如果不触发，恢复原来位置
                 if (touch1.phase == TouchPhase.Ended || touch2.phase == TouchPhase.Ended)
                 {
                     //float originScale = m_oldDistance / newDistance * scaleUnit;
                     //transform.localScale.Scale(new Vector3(originScale, originScale, 1));
-                    transform.localRotation = m_originRotation;
+                    //立刻恢复
+                    //transform.localRotation = m_originRotation;
+                    //缓缓恢复
+                    m_isSlidBack = true;
                 }
             }
             else
@@ -89,27 +101,25 @@ namespace MiniGame
                 if (Input.GetMouseButtonDown(0))
                 {
 
-                    //Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    //Debug.Log("点击!!!" + mousePoint);
-                    //Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
-                    //Debug.Log("点击!!!" + mousePoint + bounds.Contains(mousePoint));
-                    //if (bounds.Contains(mousePoint))
-                    //{
+                    Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Debug.Log("点击!!!" + mousePoint);
+                    Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
+                    Debug.Log("点击!!!" + mousePoint + bounds.Contains(mousePoint));
+                    if (bounds.Contains(mousePoint))
+                    {
+                        Debug.Log("点击到位，触发事件");
+                        //成功动画触发
+                        transform.localEulerAngles = new Vector3(0.0f, 0.0f, 180.0f);
+                        Debug.Log("相机名字" + m_mainCamera.name);
+                        m_mainCamera.GetComponent<Animator>().enabled = true;
+                        m_flyingMagpie.GetComponent<Animator>().enabled = true;
+                        Debug.Log("相机动画" + m_mainCamera.GetComponent<Animator>().name);
 
-                    //}
-                    Debug.Log("点击到位，触发事件");
-                    //成功动画触发
-                    transform.localEulerAngles = new Vector3(0.0f, 0.0f, 180.0f);
-                    Debug.Log("相机名字" + m_mainCamera.name);
-                    m_mainCamera.GetComponent<Animator>().enabled = true;
-                    m_flyingMagpie.GetComponent<Animator>().enabled = true;
-                    Debug.Log("相机动画" + m_mainCamera.GetComponent<Animator>().name);
-
-                    gameObject.GetComponent<Collider2D>().enabled = false;
-                    AudioController.Instance.PushClip(m_moonAndSunAudioClip);
-                    //注销机关
-                    QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-
+                        gameObject.GetComponent<Collider2D>().enabled = false;
+                        AudioController.Instance.PushClip(m_moonAndSunAudioClip);
+                        //注销机关
+                        QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+                    }
                 }
             }
         }
@@ -118,6 +128,10 @@ namespace MiniGame
         {
             //OnUpdate放置在Update中会导致在屏幕任何一处点击都会触发事件，移动端待检验
             OnUpdate();
+            if (m_isSlidBack)
+            {
+                SlidBackOriPos();
+            }
             if (transform.localRotation.x > threshold.x && transform.localRotation.y > threshold.y)
             {
                 m_isSuccess = true;
@@ -125,6 +139,22 @@ namespace MiniGame
                 AudioController.Instance.PushClip(m_moonAndSunAudioClip);
                 //注销机关
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+            }
+        }
+        void LateUpdate()
+        {
+            m_nowPosition = m_girl.transform.position - m_offset;
+            m_nowPosition.x = Mathf.MoveTowards(transform.position.x, m_nowPosition.x, 0.1f);
+            transform.position = new Vector3(m_nowPosition.x, transform.position.y, transform.position.z);
+        }
+
+        void SlidBackOriPos()
+        {
+            float destAngle = Mathf.MoveTowards(transform.rotation.z, m_originRotation.z, 0.1f);
+            transform.Rotate(new Vector3(m_originRotation.x, m_originRotation.y, destAngle));
+            if (transform.rotation == m_originRotation)
+            {
+                m_isSlidBack = false;
             }
         }
     }

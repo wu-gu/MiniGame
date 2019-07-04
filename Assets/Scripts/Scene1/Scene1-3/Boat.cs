@@ -6,20 +6,27 @@ namespace MiniGame
 {
     public class Boat : MonoBehaviour
     {
-        public GameObject character;
+        private GameObject m_character;
         private Vector2 m_offset;
         private Vector2 m_nowPosition;
         private Vector2 m_oldPosition;
         private bool m_playerInBoat = false;
         private GameObject m_boat;
+        private GameObject m_camera;
         //private AnimatorStateInfo m_animatorInfo;
-        
+
+        private void Start()
+        {
+            m_character = GameObject.Find("Boy");
+            m_camera = GameObject.Find("Additional Camera");
+        }
+
         void OnTriggerEnter2D(Collider2D collider)
         {
             Debug.Log("enter");
             if (collider.gameObject.name == "Boy")
             {
-                m_oldPosition = character.transform.position;
+                m_oldPosition = m_character.transform.position;
                 PlayerController.Instance.enabled = false;
                 m_playerInBoat = true;
                 Debug.Log("people enter");
@@ -28,6 +35,7 @@ namespace MiniGame
 
                 m_boat = GameObject.Find("Boat");
                 m_boat.GetComponent<Animator>().SetBool("PlayerOnBoatTriggerFired", true);
+                m_camera.GetComponent<Animator>().enabled = true;
                 //collider.gameObject.transform.SetParent(transform);
             }
             if (collider.gameObject.name == "Embankment1")
@@ -37,7 +45,6 @@ namespace MiniGame
                 //collider.gameObject.transform.SetParent(transform.parent);
                 GetComponent<Collider2D>().enabled = false;
                 PlayerController.Instance.enabled = true;
-                PlayerController.Instance.SetDestPos(this.transform.position);
             }
         }
 
@@ -46,7 +53,7 @@ namespace MiniGame
             if (m_playerInBoat)
             {
                 m_nowPosition = (Vector2)transform.position - m_offset;
-                character.transform.position = new Vector3(m_nowPosition.x, m_nowPosition.y, 0.0f);
+                m_character.transform.position = new Vector3(m_nowPosition.x, m_nowPosition.y, 0.0f);
             }
             
             //m_animatorInfo = m_boat.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);

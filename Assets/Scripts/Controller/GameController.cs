@@ -11,6 +11,10 @@ namespace MiniGame
         public Camera mainCamera;
 
         protected Scene m_CurrentZoneScene;
+        //用于选择关卡时
+        public List<string> allLevelName = new List<string>();//一关对应一个名字
+        public int highestProgress;//玩家的最大进度，为allLevelName中的索引，即第几关
+
         //private List<AnimationClip> animationClips;
         //public AnimationClip[] scenesAnimationClips = new AnimationClip[5];
         //public RuntimeAnimatorController[] scenesAnimatorControllers = new RuntimeAnimatorController[5];
@@ -27,10 +31,14 @@ namespace MiniGame
 
         //与画面相关
         [Tooltip("是否动态加载场景")]
+        //主要用于判断一开始的画面是否是需要动态加载的
         public bool m_IsSetupDynamicLoad = false;
 
-        private GameObjectStageContainer m_currStageContainer;
-        private GameObjectStageContainer m_nextStageContainer;
+
+        private LinkedList<GameObjectStageContainer> m_stageGameObjectsContainerList = new LinkedList<GameObjectStageContainer>();
+        private LinkedListNode<GameObjectStageContainer> m_currStageContainer;
+        //private GameObjectStageContainer m_currStageContainer;
+        //private GameObjectStageContainer m_nextStageContainer;
 
 
         void Awake()
@@ -43,10 +51,14 @@ namespace MiniGame
 
             DontDestroyOnLoad(gameObject);
 
+            allLevelName.Add("Level0");
+            highestProgress = 0;
+
             m_CurrentZoneScene = SceneManager.GetActiveScene();
 
-            //加载该关卡的开始画面
-            LoadFirstStageGameObjects();
+            if(!m_CurrentZoneScene.name.Equals("Start"))
+                //加载该关卡的开始画面
+                LoadFirstStageGameObjects();
 
 
             //switch (m_CurrentZoneScene.name)
@@ -85,14 +97,26 @@ namespace MiniGame
         void Update()
         {
             //update时序控制
-            InputController.Instance.OnUpdate();
+            if (!m_CurrentZoneScene.name.Equals("Start"))
+            {
+                InputController.Instance.OnUpdate();
 
-      //      var count = selfMonoBehaviours.Length;
-		    //for (var i = 0; i < count; i++)
-		    //{
-			   // selfMonoBehaviours[i].DoUpdate();
-		    //}
-      //      Debug.Log("拥有组件" + selfMonoBehaviours[0].name);
+                ////不在开始界面时按返回键弹出返回按钮
+                //if (Application.platform == RuntimePlatform.Android && (Input.GetKeyDown(KeyCode.Escape)))
+                //{
+                //    GameObject.Find("GameUI").GetComponent<GamingSetButton>().ShowExitWindow();
+                //}
+            }
+
+
+
+
+            //      var count = selfMonoBehaviours.Length;
+            //for (var i = 0; i < count; i++)
+            //{
+            // selfMonoBehaviours[i].DoUpdate();
+            //}
+            //      Debug.Log("拥有组件" + selfMonoBehaviours[0].name);
         }
 
         /// <summary>
@@ -112,6 +136,7 @@ namespace MiniGame
 
             //加载该关卡的开始画面
             LoadFirstStageGameObjects();
+            Debug.Log(newSceneName + "已经加载完成");
 
             m_Transitioning = false;           
         }
@@ -181,16 +206,23 @@ namespace MiniGame
             if (m_IsSetupDynamicLoad)
             {
                 //加载该关卡的开始画面
+
                 GameObject startStagePoint = GameObject.Find("StartStagePoint");
-                string initStageName = startStagePoint.GetComponent<LoadNextStageQuest>().nextStageName;
-                if (initStageName != null)
+                if (startStagePoint != null)
                 {
-                    m_currStageContainer = LoadManager.Instance.LoadStageGameObject(initStageName);
+                    string initStageName = startStagePoint.GetComponent<LoadNextStageQuest>().nextStageName;
+                    Debug.Log("加载该关卡开始界面: " + initStageName);
+                    if (initStageName != null)
+                    {
+                        //m_currStageContainer = LoadManager.Instance.LoadStageGameObject(initStageName);
+                        m_currStageContainer = m_stageGameObjectsContainerList.AddFirst(LoadManager.Instance.LoadStageGameObject(initStageName));
+                    }
+                    else
+                    {
+                        Debug.Log("不存在初始画面的checkPoint或者stageName不正确");
+                    }
                 }
-                else
-                {
-                    Debug.Log("不存在初始画面的checkPoint或者stageName不正确");
-                }
+                
             }
         }
 
@@ -201,7 +233,8 @@ namespace MiniGame
         public void LoadNextStageGameObjects(string stageName)
         {
             GameObjectStageContainer newStageContainer = LoadManager.Instance.LoadStageGameObject(stageName);
-            m_nextStageContainer = newStageContainer;
+            m_stageGameObjectsContainerList.AddLast(newStageContainer);
+            //m_nextStageContainer = newStageContainer;
         }
 
         /// <summary>
@@ -209,9 +242,20 @@ namespace MiniGame
         /// </summary>
         public void UnloadPreStageGameobjects()
         {
-            m_currStageContainer.DestoryAll();
-            m_currStageContainer = m_nextStageContainer;
-            m_nextStageContainer = null;
+            if (m_currStageContainer.Next != null)
+            {
+                m_currStageContainer = m_currStageContainer.Next;
+                m_currStageContainer.Previous.Value.DestoryAll();
+                m_stageGameObjectsContainerList.Remove(m_currStageContainer.Previous);
+            }
+            //m_currStageContainer.DestoryAll();
+            //m_currStageContainer = m_nextStageContainer;
+            //m_nextStageContainer = null;
+        }
+
+        public string GetLevelName(int level)
+        {
+            return allLevelName[level];
         }
     }
 

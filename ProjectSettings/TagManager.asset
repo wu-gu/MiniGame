@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Scene Controller
   - Transition Destination
+  - backsound
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Ground
   - Outline
   - Quest
-  - Culling
+  - Ignore Mirror
   - 
   - 
   - 
