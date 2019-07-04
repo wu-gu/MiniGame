@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MiniGame
 {
 
-    public class pavilionscale : MonoBehaviour,QuestBehavior
+    public class PavilionScale : MonoBehaviour,QuestBehavior
     {
         private Touch pre1;
         private Touch pre2;
@@ -16,7 +16,7 @@ namespace MiniGame
         public float questRaycastDistance = 0.1f;
         private Vector2 m_originPos;//原来位置
         private Vector2 m_offset;//触摸位置与物体中心点的偏移
-        public GameObject destGameobject;//关联机关，此处为树枝
+        private GameObject m_base;//关联机关
         private bool m_isSuccess = false;//此处机关是否成功破解
         private float m_oldOffset;
         private float m_newOffset;
@@ -30,28 +30,30 @@ namespace MiniGame
         public float desty;
         public float alphaspeed;
         private SpriteRenderer m_door;
-        Watertest mytest;
+        private WaterTest m_waterTest;
         private bool next=false;
         private float m_originalpha;
         private float m_newalpha;
         private Collider2D m_collider2D;
         private Collider2D door_collider2D;
+        private float m_collider2DHeight;
 
-
-
-        // Start is called before the first frame update
-        void Awake()
+        void Start()
         {
+            m_collider2D = this.GetComponent<Collider2D>();
+            m_collider2DHeight = (m_collider2D.bounds.max.y - m_collider2D.bounds.min.y) / 2;
+            m_sprite = this.GetComponent<SpriteRenderer>();
             m_originPos = transform.position;
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
-            m_sprite = this.GetComponent<SpriteRenderer>();
-            m_originalScale = this.transform.localScale;
-            mytest = GameObject.Find("Main Camera").GetComponent<Watertest>();
-            m_door = GameObject.Find("door1").GetComponent<SpriteRenderer>();
-            m_originalpha = m_sprite.color.a;
-            m_collider2D = this.GetComponent<Collider2D>();
-            door_collider2D= GameObject.Find("door1").GetComponent<Collider2D>();
 
+            m_originalScale = this.transform.localScale;
+            m_waterTest = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<WaterTest>();
+            m_door = GameObject.Find("Door").GetComponent<SpriteRenderer>();
+            m_base = GameObject.Find("Base");
+            m_originalpha = m_sprite.color.a;
+            door_collider2D = GameObject.Find("Door").GetComponent<Collider2D>();
+
+            this.enabled = false;
         }
 
         // Update is called once per frame
@@ -112,14 +114,14 @@ namespace MiniGame
             }
             */
         }
-        public void settrue()
+        public void setTrue()
         {
             next = true;
         }
 
         public void OnUpdate()
         {
-            if (next == true)
+            if (next)
             {
                 this.enabled = true;
             }
@@ -144,7 +146,12 @@ namespace MiniGame
                 
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 currPos = touchPos + m_offset;
-                transform.position = new Vector3(currPos.x, currPos.y, transform.position.z);
+
+                if (currPos.y > m_base.transform.position.y + m_collider2DHeight)
+                {
+                    transform.position = new Vector3(currPos.x, currPos.y, transform.position.z);
+                }
+
                 m_newOffset = m_originalScale.y+scalespeed * (destscale-m_originalScale.y)*(m_originPos.y - currPos.y)/ (m_originPos.y - desty);
                 m_newalpha = m_originalpha + alphaspeed * (1 - m_originalpha) * (m_originPos.y - currPos.y) / (m_originPos.y - desty);
                 //Debug.Log(currPos.y);
@@ -212,9 +219,10 @@ namespace MiniGame
         private void OnTriggerEnter2D(Collider2D collision)
         {
             //可以采取距离判断或者物体碰撞的方式判断机关是否已经破解。此处采用物体碰撞
-            if (collision.gameObject.Equals(destGameobject))
+            if (collision.gameObject.Equals(m_base))
             {
-                mytest.OnEnable();
+                Debug.Log("碰到地面了");
+                m_waterTest.OnEnable();
                 //可以让目的物体发白光
                 m_isSuccess = true;
             }
@@ -222,8 +230,9 @@ namespace MiniGame
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (!m_isSuccess&&collision.gameObject.Equals(destGameobject))
+            if (!m_isSuccess&&collision.gameObject.Equals(m_base))
             {
+                Debug.Log("离开地面了");
                 m_isSuccess = false;
             }
         }

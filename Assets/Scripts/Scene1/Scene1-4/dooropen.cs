@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class dooropen : MonoBehaviour, QuestBehavior
+public class DoorOpen : MonoBehaviour, QuestBehavior
 {
     private Renderer dooropen_Renderer;
     float scaleFactor = 0.15f;

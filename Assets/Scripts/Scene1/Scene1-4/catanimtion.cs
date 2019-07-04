@@ -4,28 +4,29 @@ using UnityEngine;
 
 namespace MiniGame
 {
-    public class catanimtion : MonoBehaviour, QuestBehavior
+    public class CatAnimtion : MonoBehaviour, QuestBehavior
     {
-        public GameObject destGameobject;
         private Animator m_animator;
-        pavilionscale mypavi;
-        Collider2D cl2d;
+        private PavilionScale m_pavilionScale;
+        private Collider2D m_collider2D;
 
 
         public void OnUpdate()
         {
-            this.enabled = true;
             m_animator.enabled = true;
-            
+            this.enabled = true;
         }
 
-        // Start is called before the first frame update
         void Awake()
         {
             m_animator = GetComponent<Animator>();
+            m_collider2D = GetComponent<Collider2D>();
+        }
+
+        void Start()
+        {
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
-            mypavi = GameObject.Find("Pavilion").GetComponent<pavilionscale>();
-            cl2d = GetComponent<Collider2D>();
+            m_pavilionScale = GameObject.Find("Pavilion").GetComponent<PavilionScale>();
         }
 
         // Update is called once per frame
@@ -37,9 +38,9 @@ namespace MiniGame
             if ((animatorInfo.normalizedTime > 1.0f) )
             {
                 m_animator.enabled = false;
-                cl2d.enabled = false;
+                m_collider2D.enabled = false;
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());         
-                mypavi.settrue();
+                m_pavilionScale.setTrue();
                 Destroy(gameObject);
             }
         }

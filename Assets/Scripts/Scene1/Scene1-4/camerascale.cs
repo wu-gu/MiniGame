@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MiniGame
 {
 
-    public class camerascale : MonoBehaviour, QuestBehavior
+    public class CameraScale : MonoBehaviour, QuestBehavior
     {
         private Camera m_camera;
         private float m_orthograp;

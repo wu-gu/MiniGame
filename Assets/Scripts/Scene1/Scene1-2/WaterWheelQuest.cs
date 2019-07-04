@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestWaterWheelQuest : MonoBehaviour, QuestBehavior
+public class WaterWheelQuest : MonoBehaviour, QuestBehavior
 {
     Vector2 pre;
     Vector2 curr;

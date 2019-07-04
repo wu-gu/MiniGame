@@ -10,7 +10,10 @@ namespace MiniGame
     {
         private Camera cam;
         private Renderer doorRenderer;
-        float scaleFactor = 0.15f;
+        private Renderer m_windowRenderer;
+        private float m_scaleFactor = 0.15f;
+        private float m_timeCounter = 0f;
+        private SpriteRenderer m_frame;
 
         // Start is called before the first frame update
         void Start()
@@ -18,40 +21,50 @@ namespace MiniGame
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
             cam = Camera.main;
             doorRenderer = GetComponent<Renderer>();
+            m_frame = GameObject.Find("WindowFrame").GetComponent<SpriteRenderer>();
             this.enabled = false;
         }
 
         // Update is called once per frame
         void Update()
         {
-            // Door open action, execute with no start trigger: controlled by dynamic script enable and disable
-            Vector3 localScale = transform.localScale;
-            transform.localScale = new Vector3(localScale.x + scaleFactor * 2, localScale.y + scaleFactor, localScale.z + scaleFactor);
-
-            // Detect the need of scene transition
-            // doorMax, doorMin, doorRadius, doorCentral: the maximal point, minimal point, mask radius, and central position of the door-shape sprite mask
-            Vector3 doorMax = doorRenderer.bounds.max;
-            Vector3 doorMin = doorRenderer.bounds.min;
-            Vector3 doorCentral = transform.position;
-            float doorRadius = doorRenderer.bounds.extents.x; // extents.x == extents.y == max.x - center.x == max.y - center.y
-
-
-            // orthoVertical, half height of camera viewport, orthoHorizontal, half width of camera viewport
-            // camCentral, camMax, camMin: the central position, maximal point, and minimal point of the camera viewport
-            float orthoVertical = cam.orthographicSize;
-            float orthoHorizontal = cam.aspect * orthoVertical; // camera viewport: aspect = widht/height
-            Vector3 camCentral = cam.transform.position;
-            Vector3 camMax = new Vector3(camCentral.x + orthoHorizontal, camCentral.y + orthoVertical, camCentral.z);
-            Vector3 camMin = new Vector3(camCentral.x - orthoHorizontal, camCentral.y - orthoVertical, camCentral.z);
-
-            // Transition trigger: door mask outreach camera viewport, transition start
-            if (doorRadius >= Vector3.Distance(camMax, doorCentral) && doorRadius >= Vector3.Distance(camMin, doorCentral))
+            if (m_timeCounter < 2.0f)
             {
-                //Debug.Log("Transition timing reached");
-                scaleFactor = 0f;
-                QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-                this.enabled = false;
-                GameObject.Find("TransitionStart").GetComponent<TransitionPoint>().Transition(); // External call usage of  transition
+                m_timeCounter += Time.deltaTime;
+                Color originColor = m_frame.color;
+                m_frame.color = new Color(originColor.r, originColor.g, originColor.b, originColor.a - 0.01f);
+            }
+            else
+            {
+                // Door open action, execute with no start trigger: controlled by dynamic script enable and disable
+                Vector3 localScale = transform.localScale;
+                transform.localScale = new Vector3(localScale.x + m_scaleFactor * 2, localScale.y + m_scaleFactor, localScale.z + m_scaleFactor);
+
+                // Detect the need of scene transition
+                // doorMax, doorMin, doorRadius, doorCentral: the maximal point, minimal point, mask radius, and central position of the door-shape sprite mask
+                Vector3 doorMax = doorRenderer.bounds.max;
+                Vector3 doorMin = doorRenderer.bounds.min;
+                Vector3 doorCentral = transform.position;
+                float doorRadius = doorRenderer.bounds.extents.x; // extents.x == extents.y == max.x - center.x == max.y - center.y
+
+
+                // orthoVertical, half height of camera viewport, orthoHorizontal, half width of camera viewport
+                // camCentral, camMax, camMin: the central position, maximal point, and minimal point of the camera viewport
+                float orthoVertical = cam.orthographicSize;
+                float orthoHorizontal = cam.aspect * orthoVertical; // camera viewport: aspect = widht/height
+                Vector3 camCentral = cam.transform.position;
+                Vector3 camMax = new Vector3(camCentral.x + orthoHorizontal, camCentral.y + orthoVertical, camCentral.z);
+                Vector3 camMin = new Vector3(camCentral.x - orthoHorizontal, camCentral.y - orthoVertical, camCentral.z);
+
+                // Transition trigger: door mask outreach camera viewport, transition start
+                if (doorRadius >= Vector3.Distance(camMax, doorCentral) && doorRadius >= Vector3.Distance(camMin, doorCentral))
+                {
+                    //Debug.Log("Transition timing reached");
+                    m_scaleFactor = 0f;
+                    QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+                    this.enabled = false;
+                    GameObject.Find("TransitionStart").GetComponent<TransitionPoint>().Transition(); // External call usage of  transition
+                }
             }
 
         }
@@ -60,6 +73,7 @@ namespace MiniGame
         {
             this.enabled = true;
             this.transform.localScale = Vector3.one;
+            GameObject.Find("Boy").GetComponent<PlayerController>().enabled = false;
             doorRenderer.enabled = true;
         }
     }

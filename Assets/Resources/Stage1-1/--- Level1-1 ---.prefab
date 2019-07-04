@@ -5795,7 +5795,7 @@ GameObject:
   - component: {fileID: 1832719783017931180}
   - component: {fileID: 728780318476012337}
   - component: {fileID: 4793844094584208947}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Branch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6068,7 +6068,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5484318260353782679}
   - component: {fileID: 5779892789677215412}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}

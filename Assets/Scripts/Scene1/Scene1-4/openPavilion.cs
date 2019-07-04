@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class openPavilion : MonoBehaviour, QuestBehavior
+public class OpenPavilion : MonoBehaviour, QuestBehavior
 {
     private Collider2D m_collider2D;
     private Animator m_animator;

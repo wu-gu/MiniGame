@@ -48,12 +48,6 @@ namespace MiniGame
         {
             //Test scaling in pc platform using mouse scroll wheel
             float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
-
-            if (Input.GetMouseButton(0))
-                this.gameObject.layer = LayerMask.NameToLayer("Outline");
-            else
-                this.gameObject.layer = LayerMask.NameToLayer("Quest");
-
             Vector3 scaleOffset = new Vector3(mouseScrollWheel, mouseScrollWheel, mouseScrollWheel);
             Vector3 currentScale = this.transform.localScale;
 
@@ -80,10 +74,7 @@ namespace MiniGame
             //    // Trick is scale back, once the player loses control of the trick and has not reached end point
             //    this.transform.localScale = originalScale;
             //    circleCollider2D.enabled = true;
-            //    this.gameObject.layer = LayerMask.NameToLayer("Quest");
-            //    if (Input.touchCount == 1)
-            //        this.gameObject.layer = LayerMask.NameToLayer("Outline");
-            //    else
+            //    if (Input.touchCount < 1)
             //        this.enabled = false; // No touchCount(--At least not consistent on mask)
             //    return;
             //}
@@ -136,7 +127,6 @@ namespace MiniGame
             if (frameRadius <= windowRadius)
             {
                 //Debug.Log("Reach point");
-                this.gameObject.layer = LayerMask.NameToLayer("Quest");
                 QuestController.Instance.FireQuestBehavior(door.ToString());
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                 this.enabled = false;

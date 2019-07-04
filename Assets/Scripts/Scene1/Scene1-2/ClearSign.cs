@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestClearSign : MonoBehaviour
+public class ClearSign : MonoBehaviour
 {
     private ParticleSystem m_particleSystem;
     private CircleCollider2D m_circleCollider2D;
@@ -20,7 +20,7 @@ public class TestClearSign : MonoBehaviour
         m_circleCollider2D.enabled = false;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         m_particleSystem.Stop();
         m_particleSystem.Clear();

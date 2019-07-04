@@ -58,5 +58,12 @@ namespace MiniGame
             }
 
         }
+
+        // 启用影子动画状态机
+        public void SetUpShadows()
+        {
+            Animator shadows = GameObject.Find("Shadows").GetComponent<Animator>();
+            shadows.enabled = true;
+        }
     }
 }
