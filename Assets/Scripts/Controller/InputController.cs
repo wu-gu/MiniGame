@@ -69,6 +69,11 @@ namespace MiniGame
                 }
             }
         }
+
+        public void SetPlayerCanMove(bool canMove)
+        {
+            m_canMovePlayer = canMove;
+        }
     }
 }
 
