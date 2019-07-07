@@ -68,7 +68,7 @@ namespace MiniGame
             m_MusicAudioSource = gameObject.AddComponent<AudioSource> ();
             m_MusicAudioSource.clip = musicAudioClip;
             m_MusicAudioSource.outputAudioMixerGroup = musicOutput;
-            m_MusicAudioSource.loop = true;
+            m_MusicAudioSource.loop = false;
             m_MusicAudioSource.volume = musicVolume; //音量大小
 
             m_AmbientAudioSource = gameObject.AddComponent<AudioSource>();

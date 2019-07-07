@@ -26,5 +26,5 @@ Material:
     m_Floats:
     - _TimeScale: 10
     - _WaveFactor: 50
-    - _WaveStrength: 0.01
+    - _WaveStrength: 0.1
     m_Colors: []

@@ -97,20 +97,22 @@ namespace MiniGame
             // No InventroyCheck settings for now
             // if(requiresInventoryCheck)
             // {
-                // if (!inventoryCheck.CheckInventory(inventoryController))
-                    // return;
+            // if (!inventoryCheck.CheckInventory(inventoryController))
+            // return;
             // }
 
             // No same scene transition settings for now
             // if(transitionType == TransitionType.SameScene)
             // {
-                // GameObjectTeleporter.Teleport(transitioningGameObject, destinationTransform.transform);
+            // GameObjectTeleporter.Teleport(transitioningGameObject, destinationTransform.transform);
             // }
             // else
             // {
-                // GameController.TransitionToScene(this);
+            // GameController.TransitionToScene(this);
             // }
-            GameController.TransitionToScene(this);
+
+            //GameController.TransitionToScene(this);
+            GameController.Instance.TransitionToNewLevel(newSceneName);
         }
 
         public void Transition()

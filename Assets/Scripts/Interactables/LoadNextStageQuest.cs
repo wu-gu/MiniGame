@@ -10,7 +10,7 @@ namespace MiniGame {
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.CompareTag("Player"))
+            if (collision.gameObject.CompareTag("Boy"))
             {
                 Debug.Log("人物走到检查点，可以加载下一个画面");
                 if (nextStageName != null)

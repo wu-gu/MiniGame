@@ -1,47 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
 
-namespace MiniGame
-{
-    public class catanimtion : MonoBehaviour, QuestBehavior
-    {
-        public GameObject destGameobject;
-        private Animator m_animator;
-        pavilionscale mypavi;
-        Collider2D cl2d;
+//namespace MiniGame
+//{
+//    public class CatAnimtion : MonoBehaviour, QuestBehavior
+//    {
+//        private Animator m_animator;
+//        private PavilionScale m_pavilionScale;
+//        private Collider2D m_collider2D;
 
 
-        public void OnUpdate()
-        {
-            this.enabled = true;
-            m_animator.enabled = true;
-            
-        }
+//        public void OnUpdate()
+//        {
+//            m_animator.enabled = true;
+//            this.enabled = true;
+//        }
 
-        // Start is called before the first frame update
-        void Awake()
-        {
-            m_animator = GetComponent<Animator>();
-            QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
-            mypavi = GameObject.Find("Pavilion").GetComponent<pavilionscale>();
-            cl2d = GetComponent<Collider2D>();
-        }
+//        void Awake()
+//        {
+//            m_animator = GetComponent<Animator>();
+//            m_collider2D = GetComponent<Collider2D>();
+//        }
 
-        // Update is called once per frame
-        void Update()
-        {
-            AnimatorStateInfo animatorInfo;
-            animatorInfo = m_animator.GetCurrentAnimatorStateInfo(0);
+//        void Start()
+//        {
+//            QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
+//            m_pavilionScale = GameObject.Find("Pavilion").GetComponent<PavilionScale>();
+//        }
 
-            if ((animatorInfo.normalizedTime > 1.0f) )
-            {
-                m_animator.enabled = false;
-                cl2d.enabled = false;
-                QuestController.Instance.UnRegisterQuest(gameObject.ToString());         
-                mypavi.settrue();
-                Destroy(gameObject);
-            }
-        }
-    }
-}
+//        // Update is called once per frame
+//        void Update()
+//        {
+//            AnimatorStateInfo animatorInfo;
+//            animatorInfo = m_animator.GetCurrentAnimatorStateInfo(0);
+
+//            if ((animatorInfo.normalizedTime > 1.0f) )
+//            {
+                
+//                m_animator.enabled = false;
+//                m_collider2D.enabled = false;
+//                QuestController.Instance.UnRegisterQuest(gameObject.ToString());         
+//                m_pavilionScale.setTrue();
+//                Destroy(gameObject);
+//            }
+//        }
+//    }
+//}
