@@ -11,6 +11,8 @@ namespace MiniGame
         private int clicked;
         private SpriteRenderer SakuraRenderer;
         private Vector3 screenPos;
+        private Camera m_camera;
+        private Vector3 m_originScale;
 
         // Only set once when awaken
         void Awake()
@@ -22,6 +24,8 @@ namespace MiniGame
             clicked = Animator.StringToHash("Clicked");
             anim.SetBool(clicked, false);
             anim.speed = 0;
+            m_camera = Camera.main;
+            m_originScale = transform.localScale;
         }
 
         // Update is called once per frame
@@ -44,6 +48,8 @@ namespace MiniGame
         {
             this.enabled = true;
             this.transform.position = sakuraPos;
+            float currCamSize = m_camera.orthographicSize;
+            this.transform.localScale = new Vector3(m_originScale.x / 5.4f * currCamSize, m_originScale.y / 5.4f * currCamSize, m_originScale.z);
             anim.SetBool(clicked, true);
             SakuraRenderer.enabled = true;
             anim.speed = 0.7f;

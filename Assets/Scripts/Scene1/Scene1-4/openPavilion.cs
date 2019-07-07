@@ -2,80 +2,88 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OpenPavilion : MonoBehaviour, QuestBehavior
+namespace MiniGame
 {
-    private Collider2D m_collider2D;
-    private Animator m_animator;
-    private GameObject destGameobject;
-    private Vector3 boypos;
-    private Vector3 doorpos;
-    private bool canopen=true;
-    private bool isFirst = true;
-    public float distance;
-
-
-    public void OnUpdate()
+    public class OpenPavilion : MonoBehaviour, QuestBehavior
     {
-        if (canopen&& isFirst)
+        private Collider2D m_collider2D;
+        private Animator m_animator;
+        private GameObject destGameobject;
+        private Vector3 boypos;
+        private bool canopen = true;
+        private bool isFirst = true;
+        public float distance;
+        public AudioClip openDoorAudio;
+
+        //转场动画
+        //private GameObject m_stage1_5;
+        private GameObject m_camera;
+
+
+        public void OnUpdate()
         {
-            isFirst = false;
-            m_animator.enabled = true;
+            if (canopen && isFirst)
+            {
+                isFirst = false;
+                m_animator.enabled = true;
+            }
         }
 
-
-    }
-
-    // Start is called before the first frame update
-    void Awake()
-    {
-        QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
-        m_animator = GameObject.Find("Pavilion").GetComponent<Animator>();
-        m_collider2D = GetComponent<Collider2D>();
-        doorpos = this.transform.position;
-    }
-
-    void Start()
-    {
-        destGameobject = GameObject.Find("Boy");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        AnimatorStateInfo animatorInfo;
-        animatorInfo = m_animator.GetCurrentAnimatorStateInfo(0);
-        boypos = destGameobject.transform.position;
-        Debug.Log("distance"+Mathf.Abs(doorpos.x - boypos.x));
-        if (Mathf.Abs(doorpos.x - boypos.x) < distance)
+        void Start()
         {
-            canopen = true;
-        }
-        else
-        {
-            canopen = false;
-        }
-        if ((animatorInfo.normalizedTime > 1.0f))
-        {
-            QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-            m_animator.enabled = false;   
-            m_collider2D.enabled = false;
+            QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
+            m_animator = GameObject.Find("Pavilion").GetComponent<Animator>();
+            m_collider2D = GetComponent<Collider2D>();
+            destGameobject = GameObject.Find("Boy");
+            //m_stage1_5 = GameObject.Find("--- Level1-5 ---");
+            m_camera = GameObject.FindGameObjectWithTag("MainCamera");
             this.enabled = false;
         }
+
+        // Update is called once per frame
+        void Update()
+        {
+            AnimatorStateInfo animatorInfo;
+            animatorInfo = m_animator.GetCurrentAnimatorStateInfo(0);
+            boypos = destGameobject.transform.position;
+            Debug.Log("distance" + Mathf.Abs(transform.position.x - boypos.x));
+            if (Mathf.Abs(transform.position.x - boypos.x) < distance)
+            {
+                canopen = true;
+            }
+            else
+            {
+                canopen = false;
+            }
+            if (animatorInfo.normalizedTime > 1.0f && animatorInfo.IsName("Open"))
+            {
+                GameObject.Find("GroundInDoor").GetComponent<Collider2D>().enabled = true;
+                QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+                AudioController.Instance.PushClip(openDoorAudio);
+                m_animator.enabled = false;
+                m_collider2D.enabled = false;
+                m_camera.GetComponent<Animator>().enabled = true;
+                m_camera.GetComponent<Animator>().SetTrigger("Stage4To5Trigger");
+                //m_stage1_5.GetComponent<Animator>().enabled = true;
+                this.enabled = false;
+            }
+        }
+
+        //private void OnTriggerEnter2D(Collider2D collision)
+        //{
+        //    if (collision.gameObject.Equals(destGameobject))
+        //    {
+        //        canopen = true;
+        //    }
+        //}
+
+        //private void OnTriggerExit2D(Collider2D collision)
+        //{
+        //    if (collision.gameObject.Equals(destGameobject))
+        //    {
+        //        canopen = false;
+        //    }
+        //}
     }
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.gameObject.Equals(destGameobject))
-    //    {
-    //        canopen = true;
-    //    }
-    //}
-
-    //private void OnTriggerExit2D(Collider2D collision)
-    //{
-    //    if (collision.gameObject.Equals(destGameobject))
-    //    {
-    //        canopen = false;
-    //    }
-    //}
 }
+

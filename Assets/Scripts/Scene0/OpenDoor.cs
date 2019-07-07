@@ -63,7 +63,8 @@ namespace MiniGame
                     m_scaleFactor = 0f;
                     QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                     this.enabled = false;
-                    GameObject.Find("TransitionStart").GetComponent<TransitionPoint>().Transition(); // External call usage of  transition
+                    //GameObject.Find("TransitionStart").GetComponent<TransitionPoint>().Transition(); // External call usage of  transition
+                    GameController.Instance.TransitionToNextLevel();
                 }
             }
 
