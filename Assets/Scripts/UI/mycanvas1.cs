@@ -47,6 +47,22 @@ public class mycanvas1 : MonoBehaviour
         cg.interactable = false;
     }
 
+    public void Show1()
+    {
+
+        cg.blocksRaycasts = true;//可以和该UI对象交互
+
+        cg.interactable = true;
+    }
+
+    public void Hide1()
+    {
+
+        cg.blocksRaycasts = false;//不可以和该UI对象交互
+
+        cg.interactable = false;
+    }
+
 
 
 }
