@@ -7,12 +7,14 @@ namespace MiniGame
 
     public class CatControl : MonoBehaviour, QuestBehavior
     {
+        private FollowPlayerCamera m_follw;
         private GameObject m_girl;
         private GameObject m_desout;
         private Vector3 m_girlposition;
         private Vector3 m_outposition;
         private Animator m_cataimator;
         private Collider2D m_catcolider2D;
+        private Collider2D m_doorcolider2D;
         private SpriteRenderer m_catrenderer;
         public float speed;
         public float Xoffset;
@@ -25,8 +27,10 @@ namespace MiniGame
         {
             m_girl = GameObject.Find("ground");
             m_desout = GameObject.Find("catdes");
+            m_follw = GameObject.Find("Main Camera").GetComponent<FollowPlayerCamera>();
             m_cataimator = GetComponent<Animator>();
             m_catcolider2D = GetComponent<Collider2D>();
+            m_doorcolider2D = GameObject.Find("Door").GetComponent<Collider2D>();
             m_catrenderer = GetComponent<SpriteRenderer>();
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
         }
@@ -56,6 +60,7 @@ namespace MiniGame
                 m_catrenderer.flipX = false;
                 m_cataimator.SetBool("catlook", false);
                 m_cataimator.SetBool("catwalk", true);
+                m_doorcolider2D.enabled = true;
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                 m_outposition = m_desout.transform.position;
                 if (Vector3.Distance(m_outposition, this.transform.position) > 0.1f)
@@ -66,6 +71,7 @@ namespace MiniGame
                 else
                 {
                     InputController.Instance.SetPlayerCanMove(true);
+                    m_follw.enabled = true;
                     Destroy(gameObject);
                 }
             }

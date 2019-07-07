@@ -23,7 +23,6 @@ public class DoorController : MonoBehaviour
     {
         if (collision.gameObject.Equals(m_girl))
         {
-            Debug.Log("?????");
             m_doorRenderer.color = new Color(m_doorRenderer.material.color.r, m_doorRenderer.material.color.b, m_doorRenderer.material.color.g, alpha);
 
         }
