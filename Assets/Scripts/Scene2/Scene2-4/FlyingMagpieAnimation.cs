@@ -40,4 +40,9 @@ public class FlyingMagpieAnimation : MonoBehaviour
     {
         m_bridgeMask.GetComponent<Collider2D>().enabled = true;
     }
+
+    void DestorySelf()
+    {
+        GameObject.Destroy(gameObject);
+    }
 }

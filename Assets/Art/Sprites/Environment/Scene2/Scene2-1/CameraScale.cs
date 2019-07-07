@@ -28,6 +28,7 @@ namespace MiniGame
             m_animator = GetComponent<Animator>();
             m_orthograp = m_camera.orthographicSize;
             m_animator.enabled = false;
+            InputController.Instance.SetPlayerCanMove(false);
         }
 
         // Update is called once per frame
@@ -56,6 +57,7 @@ namespace MiniGame
             animatorInfo = m_animator.GetCurrentAnimatorStateInfo(0);
             if (animatorInfo.normalizedTime > 1.0f)
             {
+                InputController.Instance.SetPlayerCanMove(true);
                 Destroy(gameObject);
             }
         }
