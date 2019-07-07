@@ -75,12 +75,20 @@ namespace MiniGame
                     if (m_destPos.x < m_rigidbody2D.position.x)
                     {
                         Debug.Log("左转");
-                        m_renderer.flipX = true;
+                       
+                        if(this.gameObject.CompareTag("Boy"))
+                            m_renderer.flipX = true;
+                        if (this.gameObject.CompareTag("Girl"))
+                            m_renderer.flipX = false;
                     }
                     else
                     {
                         Debug.Log("右转");
-                        m_renderer.flipX = false;
+
+                        if (this.gameObject.CompareTag("Boy"))
+                            m_renderer.flipX = false;
+                        if (this.gameObject.CompareTag("Girl"))
+                            m_renderer.flipX = true;
                     }
                 }
             }
