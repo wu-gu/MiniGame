@@ -11,7 +11,7 @@ namespace MiniGame
         /// <summary>
         /// 机关音效
         /// </summary>
-        public AudioClip m_magpieAudioClip;
+        public AudioClip boatAudio;
         /// <summary>
         /// 缩放业务变量
         /// </summary>
@@ -23,6 +23,7 @@ namespace MiniGame
         private GameObject m_boat;
         private GameObject m_shield;
         public Vector3 threshold = new Vector3(3.0f,3.0f,1.0f);
+        
 
         /// <summary>
         /// 注册机关
@@ -59,6 +60,7 @@ namespace MiniGame
                 m_willow.GetComponent<Animator>().SetBool("LeafQuestFired", true);
                 m_willow.GetComponent<Animator>().Play("LeafHide");
                 m_boat.GetComponent<Animator>().enabled = true;
+                AudioController.Instance.PushClip(boatAudio);
                 GameObject.Destroy(m_shield);
                 //注销机关
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());

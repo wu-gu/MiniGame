@@ -9,6 +9,7 @@ public class Licht : MonoBehaviour
     private int m_lichtingRight, m_lichtingLeft, m_lichtingMid;
     private bool m_reset;
     private bool m_revert;
+    //private LichtUp m_lichtUp;
 
     // Start is called before the first frame update
     void Start()
@@ -20,17 +21,19 @@ public class Licht : MonoBehaviour
         m_lichtingMid = Animator.StringToHash("LichtingMid");
         m_revert = true;
         m_reset = false;
+        //m_lichtUp = GameObject.Find("Light Ambient").GetComponent<LichtUp>();
     }
 
     void Update()
     {
         AnimatorStateInfo animatorStateInfo = m_animator.GetCurrentAnimatorStateInfo(0);
-        if(animatorStateInfo.IsName("Licht_mid"))
+        if(animatorStateInfo.IsName("Licht_idle"))
         {
             GameObject.Find("Glowworm_1").GetComponent<Glowworm>().UnRegisterQuest();
             GameObject.Find("Glowworm_2").GetComponent<Glowworm>().UnRegisterQuest();
             GameObject.Find("Glowworm_3").GetComponent<Glowworm>().UnRegisterQuest();
             Destroy(m_blowPoint);
+            //m_lichtUp.OnUpdate();
             this.enabled = false;
         }
     }
@@ -104,6 +107,17 @@ public class Licht : MonoBehaviour
             m_animator.SetBool(m_lichtingMid, true);
             //m_animator.SetBool(m_lichtingMid, false);
         }
+    }
+
+    public bool AcceptLicht()
+    {
+        AnimatorStateInfo animatorStateInfo = m_animator.GetCurrentAnimatorStateInfo(0);
+        if (!animatorStateInfo.IsName("Idle") && !animatorStateInfo.IsName("WindBlow") && !animatorStateInfo.IsName("Licht_idle"))
+        {
+            return true;
+        }
+        else
+            return false;
     }
 
     public bool Revert()

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace MiniGame
 {
@@ -25,14 +27,14 @@ namespace MiniGame
         public void OnUpdate()
         {
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0)&&!EventSystem.current.IsPointerOverGameObject())
             {
                 //先判断是否触摸某个机关
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero, questRaycastDistance, questLayerMask.value);
                 if (hit.collider != null)
                 {
-                    //Debug.Log("点击机关");
+                    Debug.Log("点击机关");
                     Debug.Log("点击机关: " + hit.collider.gameObject.ToString());
                     QuestController.Instance.FireQuestBehavior(hit.collider.gameObject.ToString());
                 }
@@ -47,7 +49,7 @@ namespace MiniGame
                 }
             }
 
-            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && EventSystem.current.currentSelectedGameObject==null)
             {
                 //Debug.Log("点击");
                 //先判断是否触摸某个机关
