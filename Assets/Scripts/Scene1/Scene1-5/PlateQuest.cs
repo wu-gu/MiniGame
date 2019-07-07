@@ -23,8 +23,8 @@ namespace MiniGame
         private Vector3 m_offsetBetweenCamAndPlate;
         private Vector3 m_nowPosition;
         private Vector3 m_oldPosition;
-        public float minY = 2.1f;
-        public float maxY = 10.0f;
+        public float minY = 0.0f;
+        public float maxY = 8.0f;
         public float m_speed = 0.05f;
 
         private bool m_canFollow = false;
@@ -103,10 +103,11 @@ namespace MiniGame
                         m_animator.enabled = true;
                         //m_animator.Play("Scene1ToScene2");
                         m_moon.transform.SetParent(transform.parent.parent);
+                        m_moon.GetComponent<Animator>().enabled = true;
                         m_moon.transform.position = new Vector3(transform.position.x, transform.position.y, 15.0f);
                         gameObject.GetComponent<Animator>().enabled = true;
                         m_animator.SetBool("PlateQuestFired", true);
-                        m_moon.GetComponent<Animator>().enabled = true;
+                        
                         QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                         gameObject.GetComponent<Collider2D>().enabled = false;
                         this.enabled = false;
@@ -196,8 +197,11 @@ namespace MiniGame
                 m_animator.enabled = true;
 
                 m_moon.transform.SetParent(transform.parent.parent);
-                m_moon.transform.position = new Vector3(transform.position.x, transform.position.y, 15.0f);
+                Debug.Log("stage位置" + transform.parent.transform.position.x);
+                Debug.Log("moon位置" + transform.position.x);
                 m_moon.GetComponent<Animator>().enabled = true;
+                m_moon.transform.position = new Vector3(transform.position.x, transform.position.y, 15.0f);
+                
                 m_animator.SetBool("PlateQuestFired", true);
                 gameObject.GetComponent<Animator>().enabled = true;
                 //m_animator.Play("Scene1ToScene2");

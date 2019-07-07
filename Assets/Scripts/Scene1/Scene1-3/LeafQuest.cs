@@ -23,6 +23,7 @@ namespace MiniGame
         private GameObject m_boat;
         private GameObject m_shield;
         public Vector3 threshold = new Vector3(3.0f,3.0f,1.0f);
+        private bool m_slideBackOriS = false;
         
 
         /// <summary>
@@ -92,7 +93,10 @@ namespace MiniGame
                 {
                     //float originScale = m_oldDistance / newDistance * scaleUnit;
                     //transform.localScale.Scale(new Vector3(originScale, originScale, 1));
-                    transform.localScale = m_originScale;
+                    //瞬间恢复原始大小
+                    //transform.localScale = m_originScale;
+                    //缓缓恢复原始大小
+                    m_slideBackOriS = true;
                 }
             }
             /// <summary>
@@ -101,17 +105,41 @@ namespace MiniGame
             else if (Input.GetAxis("Mouse ScrollWheel") != 0)
             {
                 scaleUnit += Input.GetAxis("Mouse ScrollWheel");
-                transform.localScale += new Vector3(1 * scaleUnit, 1 * scaleUnit, 1 * scaleUnit);//改变物体大小
+                if(transform.localScale.x < 2.0f)
+                {
+                    transform.localScale += new Vector3(1 * scaleUnit, 1 * scaleUnit, 1 * scaleUnit);//改变物体大小
+                }
+                
             }
             else if(Input.GetAxis("Mouse ScrollWheel") == 0)
             {
                 transform.localScale = m_originScale;
+                //缓缓恢复原始大小
+                //m_slideBackOriS = true;
             }
         }
 
         void Update()
         {
             OnUpdate();
+            if(m_slideBackOriS)
+            {
+                SlideBackOriScale();
+            }
+        }
+
+        void SlideBackOriScale()
+        {
+            if(transform.localScale.x > 0.3f)
+            {
+                float destS = Mathf.MoveTowards(transform.localScale.x, 0.3f, 0.1f);
+                transform.localScale = new Vector3(destS, destS, 1.0f);
+            }
+            else
+            {
+                m_slideBackOriS = false;
+                this.enabled = false;
+            }
         }
     }
 }
