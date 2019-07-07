@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class Watertest : PostEffectBase
+public class WaterTest : PostEffectBase
 {
     // Start is called before the first frame update
     //距离系数

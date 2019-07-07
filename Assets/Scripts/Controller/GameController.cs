@@ -13,6 +13,7 @@ namespace MiniGame
         protected Scene m_CurrentZoneScene;
         //用于选择关卡时
         public List<string> allLevelName = new List<string>();//一关对应一个名字
+        public int m_currLevelIndex;
         public int highestProgress;//玩家的最大进度，为allLevelName中的索引，即第几关
 
         //private List<AnimationClip> animationClips;
@@ -52,6 +53,7 @@ namespace MiniGame
             DontDestroyOnLoad(gameObject);
 
             allLevelName.Add("Level0");
+            allLevelName.Add("Level1");
             highestProgress = 0;
 
             m_CurrentZoneScene = SceneManager.GetActiveScene();
@@ -107,96 +109,135 @@ namespace MiniGame
                 //    GameObject.Find("GameUI").GetComponent<GamingSetButton>().ShowExitWindow();
                 //}
             }
+        }
 
 
+        IEnumerator Transition(string newSceneName)
+        {
+            m_Transitioning = true;
+            yield return SceneManager.LoadSceneAsync(newSceneName); //异步加载新场景
+            m_CurrentZoneScene = SceneManager.GetActiveScene();
+            //    //加载该关卡的开始画面
+            LoadFirstStageGameObjects();
+            Debug.Log(newSceneName + "已经加载完成");
+            m_Transitioning = false; 
+        }
 
+        /// <summary>
+        /// 加载一个新场景(场景名)
+        /// </summary>
+        /// <param name="newSceneName"></param>
+        public void TransitionToNewLevel(string newSceneName)
+        {
+            int index = allLevelName.IndexOf(newSceneName);
+            if (index >= 0)
+            {
+                m_currLevelIndex = allLevelName.IndexOf(newSceneName);
+                Instance.StartCoroutine(Instance.Transition(newSceneName));
+            }
+        }
 
-            //      var count = selfMonoBehaviours.Length;
-            //for (var i = 0; i < count; i++)
-            //{
-            // selfMonoBehaviours[i].DoUpdate();
-            //}
-            //      Debug.Log("拥有组件" + selfMonoBehaviours[0].name);
+        /// <summary>
+        /// 加载一个新场景(根据索引)
+        /// </summary>
+        /// <param name="newSceneName"></param>
+        public void TransitionToNewLevel(int index)
+        {
+            if (index >= 0)
+            {
+                m_currLevelIndex = index;
+                Instance.StartCoroutine(Instance.Transition(allLevelName[index]));
+            }
+        }
+
+        /// <summary>
+        /// 自动加载下一个关卡
+        /// </summary>
+        public void TransitionToNextLevel()
+        {
+            m_currLevelIndex++;
+            Debug.Log("加载下一个关卡" + allLevelName[m_currLevelIndex]);
+            TransitionToNewLevel(m_currLevelIndex);
         }
 
         /// <summary>
         /// 设置场景为活动场景
         /// 必须要保证：目标场景被加载后，才可以正确设置活动状态
         /// </summary>
-        IEnumerator Transition(string newSceneName, bool resetInputValues, TransitionDestination.DestinationTag destinationTag, TransitionPoint.TransitionType transitionType = TransitionPoint.TransitionType.DifferentZone)
-        {
-            m_Transitioning = true;
+        //IEnumerator Transition(string newSceneName, bool resetInputValues, TransitionDestination.DestinationTag destinationTag, TransitionPoint.TransitionType transitionType = TransitionPoint.TransitionType.DifferentZone)
+        //{
+        //    m_Transitioning = true;
 
-            yield return SceneManager.LoadSceneAsync(newSceneName); //异步加载新场景
-            TransitionDestination entrance = GetDestination(destinationTag);//获取新场景中人物传送目的地
-            SetEnteringGameObjectLocation(entrance);//设置新场景人物初始位置
-            SetupNewScene(transitionType, entrance); //设置场景为活动场景
-            if (entrance != null)
-                entrance.onReachDestination.Invoke();
+        //    yield return SceneManager.LoadSceneAsync(newSceneName); //异步加载新场景
+        //    TransitionDestination entrance = GetDestination(destinationTag);//获取新场景中人物传送目的地
+        //    SetEnteringGameObjectLocation(entrance);//设置新场景人物初始位置
+        //    SetupNewScene(transitionType, entrance); //设置场景为活动场景
+        //    if (entrance != null)
+        //        entrance.onReachDestination.Invoke();
 
-            //加载该关卡的开始画面
-            LoadFirstStageGameObjects();
-            Debug.Log(newSceneName + "已经加载完成");
+        //    //加载该关卡的开始画面
+        //    LoadFirstStageGameObjects();
+        //    Debug.Log(newSceneName + "已经加载完成");
 
-            m_Transitioning = false;           
-        }
+        //    m_Transitioning = false;           
+        //}
 
         //重新加载当前场景
-        public static void RestartZone()
-        {
-            Instance.StartCoroutine(Instance.Transition(Instance.m_CurrentZoneScene.name, false, Instance.m_ZoneRestartDestinationTag, TransitionPoint.TransitionType.DifferentZone));
-        }
+        //public static void RestartZone()
+        //{
+        //    Instance.StartCoroutine(Instance.Transition(Instance.m_CurrentZoneScene.name, false, Instance.m_ZoneRestartDestinationTag, TransitionPoint.TransitionType.DifferentZone));
+        //}
 
         //根据传送点信息传送到下个场景中
-        public static void TransitionToScene(TransitionPoint transitionPoint)
-        {
-            Instance.StartCoroutine(Instance.Transition(transitionPoint.newSceneName, transitionPoint.resetInputValuesOnTransition, transitionPoint.transitionDestinationTag, transitionPoint.transitionType));
-        }
+        //public static void TransitionToScene(TransitionPoint transitionPoint)
+        //{
+        //    Instance.StartCoroutine(Instance.Transition(transitionPoint.newSceneName, transitionPoint.resetInputValuesOnTransition, transitionPoint.transitionDestinationTag, transitionPoint.transitionType));
+        //}
 
         //获取场景中的传送目的地
-        protected TransitionDestination GetDestination(TransitionDestination.DestinationTag destinationTag)
-        {
-            TransitionDestination[] entrances = FindObjectsOfType<TransitionDestination>();
-            for (int i = 0; i < entrances.Length; i++)
-            {
-                if (entrances[i].destinationTag == destinationTag)
-                    return entrances[i];
-            }
-            Debug.LogWarning("No entrance was found with the " + destinationTag + ".tag. ");
-            return null;
-        }
+        //protected TransitionDestination GetDestination(TransitionDestination.DestinationTag destinationTag)
+        //{
+        //    TransitionDestination[] entrances = FindObjectsOfType<TransitionDestination>();
+        //    for (int i = 0; i < entrances.Length; i++)
+        //    {
+        //        if (entrances[i].destinationTag == destinationTag)
+        //            return entrances[i];
+        //    }
+        //    Debug.LogWarning("No entrance was found with the " + destinationTag + ".tag. ");
+        //    return null;
+        //}
 
         //设置人物的初始化位置
-        protected void SetEnteringGameObjectLocation(TransitionDestination entrance)
-        {
-            if (entrance == null)
-            {
-                Debug.LogWarning("Entering Transform's location has not been set yet. ");
-                return;
-            }
-            Transform entranceLocation = entrance.transform;
-            Transform enteringTransform = entrance.transitioningGameObject.transform;
-            enteringTransform.position = entranceLocation.position;
-            enteringTransform.rotation = entranceLocation.rotation;
-        }
+        //protected void SetEnteringGameObjectLocation(TransitionDestination entrance)
+        //{
+        //    if (entrance == null)
+        //    {
+        //        Debug.LogWarning("Entering Transform's location has not been set yet. ");
+        //        return;
+        //    }
+        //    Transform entranceLocation = entrance.transform;
+        //    Transform enteringTransform = entrance.transitioningGameObject.transform;
+        //    enteringTransform.position = entranceLocation.position;
+        //    enteringTransform.rotation = entranceLocation.rotation;
+        //}
 
-        protected void SetupNewScene(TransitionPoint.TransitionType transitionType, TransitionDestination entrance)
-        {
-            if (entrance == null)
-            {
-                Debug.LogWarning("Restart information has not been set. ");
-                return;
-            }
+        //protected void SetupNewScene(TransitionPoint.TransitionType transitionType, TransitionDestination entrance)
+        //{
+        //    if (entrance == null)
+        //    {
+        //        Debug.LogWarning("Restart information has not been set. ");
+        //        return;
+        //    }
 
-            if (transitionType == TransitionPoint.TransitionType.DifferentZone)
-                SetZoneStart(entrance);
-        }
+        //    if (transitionType == TransitionPoint.TransitionType.DifferentZone)
+        //        SetZoneStart(entrance);
+        //}
 
-        protected void SetZoneStart(TransitionDestination entrance)
-        {
-            m_CurrentZoneScene = entrance.gameObject.scene;
-            m_ZoneRestartDestinationTag = entrance.destinationTag;
-        }
+        //protected void SetZoneStart(TransitionDestination entrance)
+        //{
+        //    m_CurrentZoneScene = entrance.gameObject.scene;
+        //    m_ZoneRestartDestinationTag = entrance.destinationTag;
+        //}
 
         /// <summary>
         /// 加载Scene初始画面的GameObjects
@@ -215,7 +256,7 @@ namespace MiniGame
                     if (initStageName != null)
                     {
                         //m_currStageContainer = LoadManager.Instance.LoadStageGameObject(initStageName);
-                        m_currStageContainer = m_stageGameObjectsContainerList.AddFirst(LoadManager.Instance.LoadStageGameObject(initStageName));
+                        m_currStageContainer = m_stageGameObjectsContainerList.AddFirst(LoadManager.Instance.LoadStageGameObject(allLevelName[m_currLevelIndex] + "/" + initStageName));
                     }
                     else
                     {
@@ -232,7 +273,7 @@ namespace MiniGame
         /// <param name="stageName"></param>
         public void LoadNextStageGameObjects(string stageName)
         {
-            GameObjectStageContainer newStageContainer = LoadManager.Instance.LoadStageGameObject(stageName);
+            GameObjectStageContainer newStageContainer = LoadManager.Instance.LoadStageGameObject(allLevelName[m_currLevelIndex]+"/"+stageName);
             m_stageGameObjectsContainerList.AddLast(newStageContainer);
             //m_nextStageContainer = newStageContainer;
         }
@@ -256,6 +297,11 @@ namespace MiniGame
         public string GetLevelName(int level)
         {
             return allLevelName[level];
+        }
+
+        public void setCurrLevelIndex(int index)
+        {
+            m_currLevelIndex = index;
         }
     }
 

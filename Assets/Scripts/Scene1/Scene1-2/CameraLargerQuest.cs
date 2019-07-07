@@ -9,13 +9,14 @@ public class CameraLargerQuest : MonoBehaviour,QuestBehavior
 
     public void OnUpdate()
     {
-
+        this.enabled = true;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
+        this.enabled = false;
     }
 
     // Update is called once per frame
@@ -38,10 +39,29 @@ public class CameraLargerQuest : MonoBehaviour,QuestBehavior
                 float newDistance = Vector2.Distance(touch1.position, touch2.position);
                 if (newDistance < m_originDistance)
                 {
+                    Debug.Log("镜头拉远机关成功");
                     m_isSuccess = true;
+                    //播放镜头拉远动画
+                    GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Animator>().SetBool("transitionToStage2", true);
+                    GameObject.FindGameObjectWithTag("Boy").transform.parent.gameObject.GetComponent<Animator>().SetTrigger("MakeBoyBigger");
+                    QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+                    Destroy(this);
                 }
             }
         }
+
+        //PC端测试
+        if(Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            Debug.Log("镜头拉远机关成功");
+            m_isSuccess = true;
+            //播放镜头拉远动画
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Animator>().SetBool("transitionToStage2", true);
+            GameObject.FindGameObjectWithTag("Boy").transform.parent.gameObject.GetComponent<Animator>().SetTrigger("MakeBoyBigger");
+            QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+            Destroy(this);
+        }
+
     }
 
 }

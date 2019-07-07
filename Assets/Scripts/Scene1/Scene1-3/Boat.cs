@@ -41,6 +41,8 @@ namespace MiniGame
             if (collider.gameObject.name == "Embankment1")
             {
                 Debug.Log("EmbankmentTriggerFired");
+                GameObject leftShield = GameObject.Find("LeftShield");
+                leftShield.GetComponent<Collider2D>().enabled = true;
                 m_playerInBoat = false;
                 //collider.gameObject.transform.SetParent(transform.parent);
                 GetComponent<Collider2D>().enabled = false;

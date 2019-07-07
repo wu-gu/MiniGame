@@ -70,7 +70,7 @@ namespace MiniGame
                 if (hit.collider != null)
                 {
                     m_destPos = touchPos;
-                    sakura.SetSakura(m_destPos);
+                    sakura.SetSakura(new Vector3(m_destPos.x, m_destPos.y, this.transform.position.z));
                     //控制人物转向
                     if (m_destPos.x < m_rigidbody2D.position.x)
                     {
@@ -104,7 +104,7 @@ namespace MiniGame
                     if (hit.collider != null)
                     {
                         m_destPos = touchPos;
-                        sakura.SetSakura(m_destPos);
+                        sakura.SetSakura(new Vector3(m_destPos.x, m_destPos.y, this.transform.position.z));
                     }
                 }
             }
@@ -129,7 +129,7 @@ namespace MiniGame
             if (Physics2D.Raycast(nextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
             {
                 //修正y方向位置
-                //Debug.Log(hitBuffer[0].collider.gameObject.name);
+                Debug.Log("地面"+hitBuffer[0].collider.gameObject.name);
 
                 Vector2 hitPos = hitBuffer[0].point;
                 Debug.DrawLine(nextPos, hitPos, Color.red);

@@ -22,7 +22,8 @@ namespace MiniGame
         void Update()
         {
             AnimatorStateInfo stateInfo = GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0);
-            if (stateInfo.normalizedTime > 1.0f && stateInfo.IsName("Stage1To2")&&isFirst)
+            //if (stateInfo.normalizedTime > 1.0f && stateInfo.IsName("Stage1To2")&&isFirst)
+            if (stateInfo.normalizedTime > 1.0f && stateInfo.IsName("Stage1To2_b") && isFirst)
             {
                 //isFirst需最开始改变
                 isFirst = false;
@@ -35,15 +36,16 @@ namespace MiniGame
                 //卸载Stage1-1
                 GameController.Instance.UnloadPreStageGameobjects();
 
-                //播放镜头拉远动画
-                mainCamera.GetComponent<Animator>().SetBool("transitionToStage2", true);
-                GameObject.FindGameObjectWithTag("Player").transform.parent.gameObject.GetComponent<Animator>().SetTrigger("MakeBoyBigger");
+                ////播放镜头拉远动画
+                //mainCamera.GetComponent<Animator>().SetBool("transitionToStage2", true);
+                //GameObject.FindGameObjectWithTag("Player").transform.parent.gameObject.GetComponent<Animator>().SetTrigger("MakeBoyBigger");
 
 
             }
-            if (stateInfo.normalizedTime > 1.0f && stateInfo.IsName("Stage2ToOrigin"))
+            //if (stateInfo.normalizedTime > 1.0f && stateInfo.IsName("Stage2ToOrigin"))
+            if (stateInfo.normalizedTime > 1.0f && stateInfo.IsName("Stage2ToOriScale"))
             {
-                GameObject boy = GameObject.FindGameObjectWithTag("Player");
+                GameObject boy = GameObject.FindGameObjectWithTag("Boy");
                 GameObject character = boy.transform.parent.gameObject;
                 boy.transform.SetParent(boy.transform.parent.parent);
                 Destroy(character);
@@ -56,7 +58,13 @@ namespace MiniGame
                 Camera.main.gameObject.GetComponent<CameraController>().UpdateBackgounrdRight(GameObject.Find("Stage1-2-R"));
                 Destroy(this);
             }
+        }
 
+        // 启用影子动画状态机
+        public void SetUpShadows()
+        {
+            Animator shadows = GameObject.Find("Shadows").GetComponent<Animator>();
+            shadows.enabled = true;
         }
     }
 }

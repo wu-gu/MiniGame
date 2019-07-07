@@ -114,13 +114,13 @@ public class buttonscript : MonoBehaviour
 
     public void OnClickLevel_1()
     {
- 
-        print("wdnmd!");
-        string targetLevelName = GameController.Instance.GetLevelName(0);
-        TransitionPoint transitionPoint = GameObject.Find("TransitionStart").GetComponent<TransitionPoint>();
-        transitionPoint.newSceneName = targetLevelName;
-        transitionPoint.transitionType = TransitionPoint.TransitionType.DifferentZone;
-        transitionPoint.Transition();
+
+        GameController.Instance.TransitionToNewLevel(0);
+        //        string targetLevelName = GameController.Instance.GetLevelName(0);
+        //TransitionPoint transitionPoint = GameObject.Find("TransitionStart").GetComponent<TransitionPoint>();
+        //transitionPoint.newSceneName = targetLevelName;
+        //transitionPoint.transitionType = TransitionPoint.TransitionType.DifferentZone;
+        //transitionPoint.Transition();
 
     }
     public void OnClickLevel_2()

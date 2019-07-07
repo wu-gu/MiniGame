@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MiniGame
 {
-    public class doormask : MonoBehaviour, QuestBehavior
+    public class DoorMask : MonoBehaviour, QuestBehavior
     {
         private GameObject dooropenmask;
         private GameObject dooropen;
