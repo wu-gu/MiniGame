@@ -24,9 +24,9 @@ namespace MiniGame
         private GameObject m_mainCamera;
         private GameObject m_flyingMagpie;
         //日月跟随
-        private GameObject m_girl;
-        private Vector3 m_offset;
-        private Vector3 m_nowPosition;
+        //private GameObject m_girl;
+        //private Vector3 m_offset;
+        //private Vector3 m_nowPosition;
 
         //恢复初始角度
         private bool m_isSlidBack = false;
@@ -47,8 +47,8 @@ namespace MiniGame
             m_originRotation = transform.localRotation;
             m_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             m_flyingMagpie = GameObject.Find("FlyingMagpie");
-            m_girl = GameObject.Find("Girl");
-            m_offset = transform.position - m_girl.transform.position;
+            //m_girl = GameObject.Find("Girl");
+            //m_offset = transform.position - m_girl.transform.position;
         }
 
         public void OnUpdate()
@@ -62,16 +62,24 @@ namespace MiniGame
                 //第二个接触点落下，计算初始两触点距离
                 if (touch2.phase == TouchPhase.Began)
                 {
-                    m_oldVector = new Vector2(touch1.position.x - touch2.position.x, touch1.position.y - touch2.position.y);
+                    //m_oldVector = new Vector2(touch1.position.x - touch2.position.x, touch1.position.y - touch2.position.y);
+                    Vector2 touchPos1 = (Vector2)(touch1.position);
+                    Vector2 touchPos2 = (Vector2)(touch2.position);
+                    m_oldVector = touchPos1 - touchPos2;
                     return;
                 }
 
                 if (touch1.phase == TouchPhase.Moved && touch2.phase == TouchPhase.Moved)
                 {
-                    Vector2 newVector = new Vector2(touch1.position.x - touch2.position.x,touch1.position.y - touch2.position.y);
-                    //计算缩放比例，并更新物体缩放系数
-                    float newRotation = Vector2.Dot(newVector, m_oldVector) / (Vector2.SqrMagnitude(newVector) * Vector2.SqrMagnitude(m_oldVector));
-                    if(newVector.x - m_oldVector.x > 0)
+                    //Vector2 newVector = new Vector2(touch1.position.x - touch2.position.x,touch1.position.y - touch2.position.y);
+                    ////计算旋转角度
+                    //float angle = Vector2.Dot(newVector, m_oldVector) / (Vector2.SqrMagnitude(newVector) * Vector2.SqrMagnitude(m_oldVector));
+                    Vector2 touchPos1 = (Vector2)(touch1.position);
+                    Vector2 touchPos2 = (Vector2)(touch2.position);
+                    Vector2 newVector = touchPos1 - touchPos2;
+
+                    float angle = Vector3.Angle(m_oldVector, newVector);
+                    if (newVector.x - m_oldVector.x > 0)
                     {
                         m_clockwise = 1;
                     }
@@ -79,7 +87,7 @@ namespace MiniGame
                     {
                         m_clockwise = -1;
                     }
-                    transform.eulerAngles = new Vector3(m_clockwise * newRotation, m_clockwise * newRotation, 0.0f);
+                    transform.eulerAngles = new Vector3(m_clockwise * angle, m_clockwise * angle, 0.0f);
                     //transform.Rotate(m_clockwise * newRotation, m_clockwise * newRotation, 0.0f);
                     m_oldVector = newVector;
                 }
@@ -141,12 +149,12 @@ namespace MiniGame
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
             }
         }
-        void LateUpdate()
-        {
-            m_nowPosition = m_girl.transform.position - m_offset;
-            m_nowPosition.x = Mathf.MoveTowards(transform.position.x, m_nowPosition.x, 0.1f);
-            transform.position = new Vector3(m_nowPosition.x, transform.position.y, transform.position.z);
-        }
+        //void LateUpdate()
+        //{
+        //    m_nowPosition = m_girl.transform.position - m_offset;
+        //    m_nowPosition.x = Mathf.MoveTowards(transform.position.x, m_nowPosition.x, 0.1f);
+        //    transform.position = new Vector3(m_nowPosition.x, transform.position.y, transform.position.z);
+        //}
 
         void SlidBackOriPos()
         {
