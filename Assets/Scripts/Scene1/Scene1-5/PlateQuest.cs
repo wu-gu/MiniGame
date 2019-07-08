@@ -198,6 +198,7 @@ namespace MiniGame
                 Debug.Log("盘子机关成功");
                 gameObject.GetComponent<Collider2D>().enabled = false;
                 m_animator.enabled = true;
+                AudioController.Instance.PushClip(audioClip);
 
                 m_moon.transform.SetParent(transform.parent.parent);
                 Debug.Log("stage位置" + transform.parent.transform.position.x);

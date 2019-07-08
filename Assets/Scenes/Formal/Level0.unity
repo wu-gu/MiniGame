@@ -413,6 +413,7 @@ GameObject:
   - component: {fileID: 791553942}
   - component: {fileID: 791553941}
   - component: {fileID: 791553944}
+  - component: {fileID: 791553945}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -504,6 +505,22 @@ MonoBehaviour:
   outlineColor: {r: 0.909804, g: 0.6313726, b: 0.7254902, a: 1}
   outlineWidth: 7
   iterations: 1
+--- !u!114 &791553945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791553940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fa79dd6d673991438bc86f93e11b2bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shader: {fileID: 0}
+  paperShader: {fileID: 4800000, guid: 8a459dc4a79d7834ea15c0ac865618d7, type: 3}
+  blendTex: {fileID: 2800000, guid: 67bd88197f0de05428d2589c6f2bba83, type: 3}
+  mixed: 0.6
 --- !u!1 &893662329
 GameObject:
   m_ObjectHideFlags: 0

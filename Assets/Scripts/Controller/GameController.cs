@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Xml;
+using System.IO;
 
 namespace MiniGame
 {
@@ -328,6 +330,68 @@ namespace MiniGame
         public void setCurrLevelIndex(int index)
         {
             m_currLevelIndex = index;
+        }
+
+        /// <summary>
+        /// 从配置文件加载游戏关卡进度，即最高到第几关了
+        /// </summary>
+        public void LoadLevelProgressFromFile()
+        {
+            string filePath = Application.persistentDataPath + "/config.xml";
+            if (File.Exists(filePath))
+            {
+                //创建xml文档
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(filePath);
+                XmlNodeList xmlNodeList = xmlDoc.SelectSingleNode("config").ChildNodes;
+                foreach (XmlElement xmlEle in xmlNodeList)
+                {
+                    if (xmlEle.Name.Equals("progress"))
+                    {
+                        highestProgress = int.Parse(xmlEle.InnerText);
+                        Debug.Log("从配置文件读取，最高关卡为" + highestProgress);
+                    }
+                }
+            }
+            else
+            {
+                highestProgress = 1;
+            }
+        }
+
+
+
+        /// <summary>
+        /// 写入配置文件
+        /// </summary>
+        public void WriteLevelProgressToFile()
+        {
+            string filePath = Application.persistentDataPath + "/config.xml";
+            if (File.Exists(filePath))
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(filePath);
+                XmlNodeList xmlNodeList = xmlDoc.SelectSingleNode("config").ChildNodes;
+                foreach (XmlElement xmlEle in xmlNodeList)
+                {
+                    if (xmlEle.Name.Equals("progress"))
+                    {
+                        xmlEle.InnerText = highestProgress.ToString();
+                    }
+                }
+                xmlDoc.Save(filePath);
+            }
+            else
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                XmlElement root = xmlDoc.CreateElement("config");
+                XmlElement element = xmlDoc.CreateElement("progress");
+                element.InnerText = 1.ToString();
+                root.AppendChild(element);
+                xmlDoc.AppendChild(root);
+                xmlDoc.Save(filePath);
+            }
+            Debug.Log("写入配置文件，最高关卡为" + highestProgress);
         }
     }
 
