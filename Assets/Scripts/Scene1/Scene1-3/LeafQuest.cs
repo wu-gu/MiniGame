@@ -83,7 +83,7 @@ namespace MiniGame
                 {
                     float newDistance = Vector2.Distance(touch1.position, touch2.position);
                     //计算缩放比例，并更新物体缩放系数
-                    float newScale = (newDistance - m_oldDistance) * scaleUnit;
+                    float newScale = (newDistance - m_oldDistance) * scaleUnit / 300.0f;
                     transform.localScale += new Vector3(newScale, newScale, 1);
                     m_oldDistance = newDistance;
                 }
@@ -94,9 +94,9 @@ namespace MiniGame
                     //float originScale = m_oldDistance / newDistance * scaleUnit;
                     //transform.localScale.Scale(new Vector3(originScale, originScale, 1));
                     //瞬间恢复原始大小
-                    //transform.localScale = m_originScale;
+                    transform.localScale = m_originScale;
                     //缓缓恢复原始大小
-                    m_slideBackOriS = true;
+                    //m_slideBackOriS = true;
                 }
             }
             /// <summary>
@@ -107,7 +107,7 @@ namespace MiniGame
                 scaleUnit += Input.GetAxis("Mouse ScrollWheel");
                 if(transform.localScale.x < 2.0f)
                 {
-                    transform.localScale += new Vector3(1 * scaleUnit, 1 * scaleUnit, 1 * scaleUnit);//改变物体大小
+                    transform.localScale += new Vector3(1 * scaleUnit / 300.0f, 1 * scaleUnit / 300.0f, 1 * scaleUnit);//改变物体大小
                 }
                 
             }

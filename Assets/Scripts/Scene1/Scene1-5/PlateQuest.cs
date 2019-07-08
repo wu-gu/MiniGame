@@ -7,6 +7,8 @@ namespace MiniGame
     public class PlateQuest : MonoBehaviour, QuestBehavior
     {
         /*业务变量*/
+        //成功音乐
+        public AudioClip audioClip;
 
         public GameObject destGameobject;//关联机关，此处为树枝
         private bool m_isSuccess = false;//此处机关是否成功破解
@@ -24,7 +26,7 @@ namespace MiniGame
         private Vector3 m_nowPosition;
         private Vector3 m_oldPosition;
         public float minY = 0.0f;
-        public float maxY = 8.0f;
+        public float maxY = 6.0f;
         public float m_speed = 0.05f;
 
         private bool m_canFollow = false;
@@ -100,6 +102,7 @@ namespace MiniGame
                     if (m_isSuccess)
                     {
                         Debug.Log("盘子机关成功");
+                        AudioController.Instance.PushClip(audioClip);
                         m_animator.enabled = true;
                         //m_animator.Play("Scene1ToScene2");
                         m_moon.transform.SetParent(transform.parent.parent);
@@ -122,7 +125,7 @@ namespace MiniGame
                         ////过渡回到原来位置
                         ////m_camera.GetComponent<FollowObjectCamera>().enabled = false;
 
-                        this.enabled = false;
+                        //this.enabled = false;
 
                         m_isSlideBack = true;
                     }

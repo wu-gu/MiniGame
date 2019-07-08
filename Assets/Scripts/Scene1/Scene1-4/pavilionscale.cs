@@ -79,14 +79,14 @@ namespace MiniGame
                 //描边
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero, questRaycastDistance, questLayerMask.value);
-                if (hit.collider != null)
-                {
-                    this.gameObject.layer = LayerMask.NameToLayer("Outline");
-                }
-                else
-                {
-                    this.gameObject.layer = LayerMask.NameToLayer("Quest");
-                }
+                //if (hit.collider != null)
+                //{
+                //    this.gameObject.layer = LayerMask.NameToLayer("Outline");
+                //}
+                //else
+                //{
+                //    this.gameObject.layer = LayerMask.NameToLayer("Quest");
+                //}
 
             }
 
@@ -308,7 +308,6 @@ namespace MiniGame
                 if (m_isSuccess)
                 {
                     m_lerpToRightPos = true;
-                    this.gameObject.layer = LayerMask.NameToLayer("Default");
                     GameObject.Destroy(m_shield);
                     QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                 }

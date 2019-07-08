@@ -4919,7 +4919,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -2
+  m_SortingOrder: -10
   m_Sprite: {fileID: 21300000, guid: b800865c69f0fd44aa7f2ba22c0a21a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
   m_FlipX: 0
@@ -5564,7 +5564,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 2
-  openDoorAudio: {fileID: 8300000, guid: 9bda2ecf9fb869445ba0db4ee140b777, type: 3}
+  openDoorAudio: {fileID: 8300000, guid: 26eac73856a27e74bb322a059baa2224, type: 3}
 --- !u!1 &7680854015680041388
 GameObject:
   m_ObjectHideFlags: 0
@@ -5743,7 +5743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questLayerMask:
     serializedVersion: 2
-    m_Bits: 1537
+    m_Bits: 0
   questRaycastDistance: 0.1
   destscale: 2.5
   origiscale: 0.05
@@ -6556,9 +6556,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89fd325ac81e75448a47e274c186696d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 0243cd63598126a46b6082e4b8add17f, type: 3}
   destGameobject: {fileID: 8610069007431423639}
   minY: 2.1
-  maxY: 10
+  maxY: 9.36
   m_speed: 0.1
 --- !u!95 &6938501786514243232
 Animator:
