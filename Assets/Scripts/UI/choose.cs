@@ -9,6 +9,7 @@ public class choose : MonoBehaviour
 
     public bool flag;
     public Toggle[] mtoggle;
+    private Image chooselevel1, chooselevel2, chooselevel3;
     myImage mimage;
     myimage2 mimage1;
     myimage2 mimage2;
@@ -19,7 +20,12 @@ public class choose : MonoBehaviour
         mimage = GameObject.Find("level_1").GetComponent<myImage>();
         mimage1 = GameObject.Find("level_2").GetComponent<myimage2>();
         mimage2 = GameObject.Find("level_3").GetComponent<myimage2>();
-        
+        chooselevel1 = GameObject.Find("chooselevel1").GetComponent<Image>();
+        chooselevel2 = GameObject.Find("chooselevel2").GetComponent<Image>();
+        chooselevel3 = GameObject.Find("chooselevel3").GetComponent<Image>();
+
+
+
     }
 
     // Update is called once per frame
@@ -32,6 +38,9 @@ public class choose : MonoBehaviour
     {
         if (isOn)
         {
+            chooselevel1.enabled = false;
+            chooselevel2.enabled = true;
+            chooselevel3.enabled = true;
             mimage.Show();
             mimage1.Hide();
             mimage2.Hide();
@@ -43,6 +52,9 @@ public class choose : MonoBehaviour
     {
         if (isOn)
         {
+            chooselevel1.enabled = true;
+            chooselevel2.enabled = false;
+            chooselevel3.enabled = true;
             mimage.Hide();
             mimage2.Hide();
             mimage1.Show();
@@ -53,6 +65,9 @@ public class choose : MonoBehaviour
     {
         if (isOn)
         {
+            chooselevel1.enabled = true;
+            chooselevel2.enabled = true;
+            chooselevel3.enabled = false;
             mimage.Hide();
             mimage1.Hide();
             mimage2.Show();

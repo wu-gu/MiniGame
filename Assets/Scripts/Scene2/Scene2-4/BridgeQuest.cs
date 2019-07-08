@@ -160,9 +160,7 @@ namespace MiniGame
         }
 
         public void OnUpdate()
-        {
-           
-
+        {          
             Vector2 touchPos = (Vector2)(transform.position);
 
             //Android--stable

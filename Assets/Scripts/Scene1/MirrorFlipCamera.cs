@@ -13,7 +13,7 @@ public class MirrorFlipCamera : MonoBehaviour
     {
         camera.ResetWorldToCameraMatrix();
         camera.ResetProjectionMatrix();
-        Vector3 scale = new Vector3(flipHorizontal ? 1 : 1, -1, 1);
+        Vector3 scale = new Vector3(flipHorizontal ? 1 : 1, -1f, 1);
         camera.projectionMatrix = camera.projectionMatrix * Matrix4x4.Scale(scale);
     }
     void OnPreRender()
