@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using MiniGame;
 
-public class Buttonscript : MonoBehaviour
+public class buttonscript : MonoBehaviour
 {
     // Start is called before the first frame update
     mycanvas com;
@@ -15,7 +15,8 @@ public class Buttonscript : MonoBehaviour
     mycanvas2 com3;
     WalkSakura sakura;
     Vector3 point;
-    public ParticleSystem par;
+    public ParticleSystem leafPar;
+    public ParticleSystem flowerPar;
 
     [Tooltip("按钮点击音效")]
     public AudioClip buttonEffectClip;
@@ -50,7 +51,8 @@ public class Buttonscript : MonoBehaviour
         AudioController.Instance.PushClip(buttonEffectClip);
         com.Hide();
         com1.Show();
-        par.gameObject.SetActive(false);
+        leafPar.gameObject.SetActive(false);
+        flowerPar.gameObject.SetActive(false);
     }
 
     public void OnClickReturn()
@@ -59,7 +61,8 @@ public class Buttonscript : MonoBehaviour
         Debug.Log("return");
         com1.Hide();
         com.Show();
-        par.gameObject.SetActive(true);
+        leafPar.gameObject.SetActive(true);
+        flowerPar.gameObject.SetActive(false);
     }
 
     public void OnClickSet()
@@ -70,8 +73,8 @@ public class Buttonscript : MonoBehaviour
 
         com2.Show();
         com.Hide();
-        par.gameObject.SetActive(false);
-
+        leafPar.gameObject.SetActive(false);
+        flowerPar.gameObject.SetActive(true);
     }
 
     public void OnClickReturn1()
@@ -80,7 +83,8 @@ public class Buttonscript : MonoBehaviour
         com1.Hide();
         com.Show();
         com2.Hide();
-        par.gameObject.SetActive(true);
+        leafPar.gameObject.SetActive(true);
+        flowerPar.gameObject.SetActive(false);
     }
 
     public void OnClickEND()
@@ -93,8 +97,9 @@ public class Buttonscript : MonoBehaviour
     public void OnClickENDSure()
     {
         AudioController.Instance.PushClip(buttonEffectClip);
-        com3.Hide();
-        com.Show1();
+        Application.Quit();
+        //com3.Hide();
+        //com.Show1();
     }
 
     public void OnClickENDCancel()
@@ -123,7 +128,7 @@ public class Buttonscript : MonoBehaviour
     public void OnClickLevel_1()
     {
         AudioController.Instance.PushClip(buttonEffectClip);
-        GameController.Instance.TransitionToNewLevel(0);
+        GameController.Instance.TransitionToNewLevel("Level0");
         //        string targetLevelName = GameController.Instance.GetLevelName(0);
         //TransitionPoint transitionPoint = GameObject.Find("TransitionStart").GetComponent<TransitionPoint>();
         //transitionPoint.newSceneName = targetLevelName;
@@ -134,14 +139,25 @@ public class Buttonscript : MonoBehaviour
     public void OnClickLevel_2()
     {
 
-        print("2222222222!");
     }
     public void OnClickLevel_3()
     {
 
-        print("333333333!");
     }
 
+    /// <summary>
+    /// 写在这里是因为如果直接在Slider的OnValueChanged中拉入GameObjectController时，当再回到该界面时，Slider的OnValueChanged
+    /// 已经时Missing了，所以OnValueChanged拉入的物体最好不是动态的，而是跟随Slider一起出现，一起消失
+    /// </summary>
+    /// <param name="slider"></param>
+    public void AmbientMusicVolumeChanged(Slider slider)
+    {
+        AudioController.Instance.AmbientMusicVolumeChanged(slider);
+    }
 
+    public void EffectMusicVolumeChanged(Slider slider)
+    {
+        AudioController.Instance.EffectMusicVolumeChanged(slider);
+    }
 
 }

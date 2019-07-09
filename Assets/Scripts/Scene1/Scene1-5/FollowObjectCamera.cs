@@ -11,7 +11,7 @@ namespace MiniGame
         private Vector3 m_nowPosition;
         private Vector3 m_oldPosition;
         private float minY = 0.0f;
-        private float maxY = 16.0f;
+        private float maxY = 6.0f;
         private float m_speed = 0.1f;
         // Start is called before the first frame update
         void Start()

@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
   allLevelName: []
+  m_currLevelIndex: 0
   highestProgress: 0
   m_IsSetupDynamicLoad: 1
 --- !u!114 &827596058746313160
@@ -106,8 +107,8 @@ MonoBehaviour:
   musicAudioClip: {fileID: 0}
   musicOutput: {fileID: 0}
   musicPlayOnAwake: 1
-  musicVolume: 1
+  musicVolume: 0.8
   ambientAudioClip: {fileID: 0}
   ambientOutput: {fileID: 0}
   ambientPlayOnAwake: 1
-  ambientVolume: 1
+  ambientVolume: 0.5

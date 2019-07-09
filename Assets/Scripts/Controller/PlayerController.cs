@@ -7,18 +7,22 @@ namespace MiniGame
 
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
+    [RequireComponent(typeof(AudioSource))]
     public class PlayerController : MonoSingleton<PlayerController>
     {
+        public AudioClip walkingMusic;
         [Tooltip("The Layers which represent gameobjects that the Character Controller can be grounded on.")]
         public LayerMask groundedLayerMask;
 
-        public float speed = 1f;//x方向移动速率
+        public float speed = 2.5f;//x方向移动速率
         public float groundedRaycastDistance = 50f;
         private float touchThreshold;
 
         private Rigidbody2D m_rigidbody2D;
         private CapsuleCollider2D m_capsule;
         private ContactFilter2D m_contactFilter;
+        private AudioSource m_audioSource;
+
         private Vector2 m_destPos;//目标点
         private float m_centerHeight;
         private SpriteRenderer m_renderer;
@@ -35,6 +39,10 @@ namespace MiniGame
                 Destroy(gameObject);
                 return;
             }
+
+            //设置人物脚步声
+            m_audioSource = GetComponent<AudioSource>();
+            m_audioSource.volume = AudioController.Instance.musicVolume;
 
             forwardable = true;
             m_renderer = GetComponent<SpriteRenderer>();
@@ -58,6 +66,14 @@ namespace MiniGame
         private void OnEnable()
         {
             SelfDestination();UpdateCenterHeight();
+        }
+
+        /// <summary>
+        /// 如果人物正在走路，禁用人物控制使人停止走路
+        /// </summary>
+        private void OnDisable()
+        {
+            m_animator.SetBool(IsWalking, false);
         }
 
         public void OnUpdate()
@@ -134,7 +150,9 @@ namespace MiniGame
                 Vector2 hitPos = hitBuffer[0].point;
                 Debug.DrawLine(nextPos, hitPos, Color.red);
                 nextPos.y = hitPos.y + m_centerHeight;
+                //设置人物行走动画与音乐
                 m_animator.SetBool(IsWalking, true);
+
                 m_rigidbody2D.MovePosition(nextPos);
             }
         }
@@ -178,6 +196,21 @@ namespace MiniGame
         public void SelfDestination()
         {
             m_destPos = m_rigidbody2D.position;
+        }
+
+        public void ChangeWalkigVolume(float volume)
+        {
+            m_audioSource.volume = volume;
+        }
+
+        public void PlayWalkingMusic()
+        {
+            m_audioSource.Play();
+        }
+
+        public void StopWalkingMusic()
+        {
+            m_audioSource.Stop();
         }
     }
 }

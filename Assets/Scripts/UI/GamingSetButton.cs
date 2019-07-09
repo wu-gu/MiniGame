@@ -67,7 +67,8 @@ namespace MiniGame
         /// </summary>
         public void BackToStartLevel()
         {
-
+            Debug.Log("回到主界面");
+            GameController.Instance.TransitionToNewLevel("Start");
         }
 
         public void HideExitWindow()

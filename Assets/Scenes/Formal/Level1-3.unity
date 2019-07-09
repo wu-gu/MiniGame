@@ -1520,12 +1520,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7e1002c52a1489f4e8f701ee33294750, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 42b1d9a212d72db4bb95e333b917f113, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 32.719997, y: 2.2367187}
+  m_Size: {x: 10.906666, y: 0.74557287}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1540,7 +1540,7 @@ Transform:
   m_GameObject: {fileID: 979789127}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -10.81, y: 8.77, z: 0}
-  m_LocalScale: {x: 1, y: 0.3, z: 1}
+  m_LocalScale: {x: 3, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -1643,7 +1643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9e980bd6e84534983e76a47113108b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_magpieAudioClip: {fileID: 0}
+  boatAudio: {fileID: 0}
   scaleUnit: 0.1
   threshold: {x: 1, y: 1, z: 1}
 --- !u!114 &1117878647
@@ -1975,6 +1975,8 @@ GameObject:
   - component: {fileID: 1163836880}
   - component: {fileID: 1163836879}
   - component: {fileID: 1163836882}
+  - component: {fileID: 1163836883}
+  - component: {fileID: 1163836884}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2061,6 +2063,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destTransform: {fileID: 484851409}
+--- !u!114 &1163836883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163836878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fa79dd6d673991438bc86f93e11b2bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shader: {fileID: 0}
+  paperShader: {fileID: 4800000, guid: 8a459dc4a79d7834ea15c0ac865618d7, type: 3}
+  blendTex: {fileID: 2800000, guid: 37121a3979350d74d97abcea31823dfa, type: 3}
+  mixed: 0
+--- !u!114 &1163836884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163836878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8414fe194366a6b41bde9a53da80c5a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shader: {fileID: 4800000, guid: 5d0ecb146a2255a4ca8bc8d10fa2423a, type: 3}
+  brightness: 1
+  contrast: 1
+  saturation: 1
 --- !u!1 &1173325407
 GameObject:
   m_ObjectHideFlags: 0

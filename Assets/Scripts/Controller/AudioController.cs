@@ -23,11 +23,19 @@ namespace MiniGame
         public bool ambientPlayOnAwake = true;
         [Range(0f, 1f)]
         public float ambientVolume = 1f;
+        //用于播放环境场景音的音乐源
+        [Header("Ambient Settings")]
+        public AudioClip environmentAudioClip;
+        public AudioMixerGroup environmentOutput;
+        public bool environmentPlayOnAwake = true;
+        [Range(0f, 1f)]
+        public float environmentVolume = 1f;
 
         protected AudioSource m_MusicAudioSource;
         protected AudioSource m_AmbientAudioSource;
+        protected AudioSource m_EnvironmentAudioSource;
 
-        protected bool m_TransferMusicTime, m_TransferAmbientTime;
+        protected bool m_TransferMusicTime, m_TransferAmbientTime, m_TransferEnvironmentTime;
         //protected AudioController m_OldInstanceToDestroy = null;
 
         //每一个栈中音频剪辑都会被播放，并在播放后弹出
@@ -77,6 +85,12 @@ namespace MiniGame
             m_AmbientAudioSource.loop = true;
             m_AmbientAudioSource.volume = ambientVolume;
 
+            m_EnvironmentAudioSource = gameObject.AddComponent<AudioSource>();
+            m_EnvironmentAudioSource.clip = environmentAudioClip;
+            m_EnvironmentAudioSource.outputAudioMixerGroup = environmentOutput;
+            m_EnvironmentAudioSource.loop = true;
+            m_EnvironmentAudioSource.volume = environmentVolume;
+
 
             if (musicPlayOnAwake)
             {
@@ -88,6 +102,12 @@ namespace MiniGame
             {
                 m_AmbientAudioSource.time = 0f;
                 m_AmbientAudioSource.Play();
+            }
+
+            if (environmentPlayOnAwake)
+            {
+                m_EnvironmentAudioSource.time = 0f;
+                m_EnvironmentAudioSource.Play();
             }
         }
 
@@ -149,11 +169,17 @@ namespace MiniGame
             m_AmbientAudioSource.clip = clip;
         }
 
+        public void ChangeEnviroment(AudioClip clip)
+        {
+            environmentAudioClip = clip;
+            m_EnvironmentAudioSource.clip = clip;
+        }
 
         public void Play ()
         {
             PlayJustAmbient ();
             PlayJustMusic ();
+            PlayJustEnvironment();
         }
 
         public void PlayJustMusic ()
@@ -167,10 +193,16 @@ namespace MiniGame
             m_AmbientAudioSource.Play();
         }
 
+        public void PlayJustEnvironment()
+        {
+            m_EnvironmentAudioSource.Play();
+        }
+
         public void Stop ()
         {
             StopJustAmbient ();
             StopJustMusic ();
+            StopJustEnvironment();
         }
 
         public void StopJustMusic ()
@@ -183,11 +215,17 @@ namespace MiniGame
             m_AmbientAudioSource.Stop ();
         }
 
+        public void StopJustEnvironment()
+        {
+            m_EnvironmentAudioSource.Stop();
+        }
+
         //静音
         public void Mute ()
         {
             MuteJustAmbient ();
             MuteJustMusic ();
+            MuteJustEnvironment();
         }
 
         public void MuteJustMusic ()
@@ -200,11 +238,17 @@ namespace MiniGame
             m_AmbientAudioSource.volume = 0f;
         }
 
+        public void MuteJustEnvironment()
+        {
+            m_EnvironmentAudioSource.volume = 0f;
+        }
+
         //取消静音
         public void Unmute ()
         {
             UnmuteJustAmbient ();
             UnmuteJustMustic ();
+            UnmuteJustEnvironment();
         }
 
         public void UnmuteJustMustic ()
@@ -217,11 +261,17 @@ namespace MiniGame
             m_AmbientAudioSource.volume = ambientVolume;
         }
 
+        public void UnmuteJustEnvironment()
+        {
+            m_EnvironmentAudioSource.volume = environmentVolume;
+        }
+
         //渐渐消音
         public void Mute (float fadeTime)
         {
             MuteJustAmbient(fadeTime);
             MuteJustMusic(fadeTime);
+            MuteJustEnvironment(fadeTime);
         }
 
         public void MuteJustMusic (float fadeTime)
@@ -234,11 +284,17 @@ namespace MiniGame
             StartCoroutine(VolumeFade(m_AmbientAudioSource, 0f, fadeTime));
         }
 
+        public void MuteJustEnvironment(float fadeTime)
+        {
+            StartCoroutine(VolumeFade(m_EnvironmentAudioSource, 0f, fadeTime));
+        }
+
         //渐渐取消静音
         public void Unmute (float fadeTime)
         {
             UnmuteJustAmbient(fadeTime);
             UnmuteJustMusic(fadeTime);
+            UnmuteJustEnvironment(fadeTime);
         }
 
         public void UnmuteJustMusic (float fadeTime)
@@ -249,6 +305,26 @@ namespace MiniGame
         public void UnmuteJustAmbient (float fadeTime)
         {
             StartCoroutine(VolumeFade(m_AmbientAudioSource, ambientVolume, fadeTime));
+        }
+
+        public void UnmuteJustEnvironment(float fadeTime)
+        {
+            StartCoroutine(VolumeFade(m_EnvironmentAudioSource, environmentVolume, fadeTime));
+        }
+
+        public void SetMusicVolume(float volume)
+        {
+            musicVolume = volume;
+        }
+
+        public void SetAmbientVolume(float volume)
+        {
+            ambientVolume = volume;
+        }
+
+        public void SetEnvironmentVolume(float volume)
+        {
+            environmentVolume = volume;
         }
 
         //声音渐变
@@ -375,6 +451,7 @@ namespace MiniGame
         //调节音效音乐音量
         public void EffectMusicVolumeChanged(Slider slider)
         {
+           //PlayerController.Instance.ChangeWalkigVolume(slider.value);
            musicVolume = slider.value;
            UnmuteJustMustic();
         }

@@ -52,6 +52,7 @@ namespace MiniGame
                 GetComponent<ParticleSystem>().Clear();
                 Debug.Log("男主前进");
                 character.GetComponent<Animator>().enabled = true;//男主按照设定路线行进
+                character.GetComponent<Animator>().SetTrigger("CanMoveAlongRoad");
                 //Debug.Log(character.transform.Find("Boy").ToString());
                 character.transform.Find("Boy").GetComponent<Animator>().SetBool("isWalking", true);
             }

@@ -16,13 +16,12 @@ namespace MiniGame
         /// </summary>
         private Vector2 m_oldVector;
         private Quaternion m_originRotation;
-        private GameObject m_mainCamera;
+        private GameObject m_mainCam;
         private GameObject m_flyingMagpie;
         private Collider2D m_collider;
         //日月跟随 -- 改为不跟（未定）
 
         private float m_angleCounter;
-
         /// <summary>
         /// 注册机关
         /// 初始化比例系数
@@ -31,7 +30,7 @@ namespace MiniGame
         {
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
             m_originRotation = transform.localRotation;
-            m_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            m_mainCam = GameObject.FindGameObjectWithTag("MainCamera");
             m_flyingMagpie = GameObject.Find("FlyingMagpie");
             m_collider = this.GetComponent<Collider2D>();
             m_angleCounter = 0f;
@@ -75,7 +74,8 @@ namespace MiniGame
                         this.transform.localRotation = new Quaternion(0, 0, 180f, 0);
                         gameObject.GetComponent<Collider2D>().enabled = false;
                         AudioController.Instance.PushClip(m_moonAndSunAudioClip);
-                        m_mainCamera.GetComponent<Animator>().enabled = true;
+                        m_mainCam.GetComponent<CameraController>().enabled = false;
+                        m_mainCam.GetComponent<CameraNaturalTransition>().NaturalTransition1();
                         m_flyingMagpie.GetComponent<Animator>().enabled = true;
                         QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                         this.enabled = false;
@@ -108,9 +108,10 @@ namespace MiniGame
             //}
 
             // PC-- Directly controlled here
-            Debug.Log("PC");
+            //Debug.Log("PC");
             this.transform.localRotation = new Quaternion(0, 0, 180f, 0);
-            m_mainCamera.GetComponent<Animator>().enabled = true;
+            m_mainCam.GetComponent<CameraController>().enabled = false;
+            m_mainCam.GetComponent<CameraNaturalTransition>().NaturalTransition1();
             m_flyingMagpie.GetComponent<Animator>().enabled = true;
             gameObject.GetComponent<Collider2D>().enabled = false;
             AudioController.Instance.PushClip(m_moonAndSunAudioClip);
@@ -192,7 +193,7 @@ namespace MiniGame
         //    //    this.transform.localRotation = new Quaternion(0, 0, 180f, 0);
         //    //    gameObject.GetComponent<Collider2D>().enabled = false;
         //    //    AudioController.Instance.PushClip(m_moonAndSunAudioClip);
-        //    //    m_mainCamera.GetComponent<Animator>().enabled = true;
+        //    //    m_mainCamAnimator.GetComponent<Animator>().enabled = true;
         //    //    m_flyingMagpie.GetComponent<Animator>().enabled = true;
         //    //    //注销机关
         //    //    QuestController.Instance.UnRegisterQuest(gameObject.ToString());
@@ -211,10 +212,10 @@ namespace MiniGame
         //            Debug.Log("点击到位，触发事件");
         //            //成功动画触发
         //            transform.localEulerAngles = new Vector3(0.0f, 0.0f, 180.0f);
-        //            Debug.Log("相机名字" + m_mainCamera.name);
-        //            m_mainCamera.GetComponent<Animator>().enabled = true;
+        //            Debug.Log("相机名字" + m_mainCamAnimator.name);
+        //            m_mainCamAnimator.GetComponent<Animator>().enabled = true;
         //            m_flyingMagpie.GetComponent<Animator>().enabled = true;
-        //            Debug.Log("相机动画" + m_mainCamera.GetComponent<Animator>().name);
+        //            Debug.Log("相机动画" + m_mainCamAnimator.GetComponent<Animator>().name);
 
         //            gameObject.GetComponent<Collider2D>().enabled = false;
         //            AudioController.Instance.PushClip(m_moonAndSunAudioClip);
