@@ -18,6 +18,7 @@ namespace MiniGame
         private SpriteRenderer m_catrenderer;
         public float speed;
         public float Xoffset;
+        public float FilpXoffset;
         public float Yoffset;
         private bool isIn = true;
         private bool isOut = false;
@@ -56,8 +57,7 @@ namespace MiniGame
             }
             if (isOut)
             {
-                m_catcolider2D.enabled = false;
-                m_catrenderer.flipX = false;
+                m_catcolider2D.enabled = false;               
                 m_cataimator.SetBool("catlook", false);
                 m_cataimator.SetBool("catwalk", true);
                 m_doorcolider2D.enabled = true;
@@ -80,6 +80,8 @@ namespace MiniGame
         public void OnUpdate()
         {
             isOut = true;
+            transform.position = new Vector3(transform.position.x +FilpXoffset, transform.position.y, transform.position.z);
+            m_catrenderer.flipX = false;
         }
     }
 }

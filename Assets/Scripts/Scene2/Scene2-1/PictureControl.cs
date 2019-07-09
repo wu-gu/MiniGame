@@ -9,7 +9,8 @@ namespace MiniGame
         private GameObject m_girl;
         private CatControl m_cat;
         private Animator m_cataimator;
-        private Collider2D m_colider2D;
+        private Collider2D m_collider2D;
+        
 
         // Start is called before the first frame update
         void Start()
@@ -17,7 +18,8 @@ namespace MiniGame
             m_girl = GameObject.Find("Girl");
             m_cat = GameObject.Find("Cat 1").GetComponent<CatControl>();
             m_cataimator = GameObject.Find("Cat 1").GetComponent<Animator>();
-            m_colider2D = GetComponent<Collider2D>();
+            m_collider2D = GetComponent<Collider2D>();
+            
         }
 
         // Update is called once per frame
@@ -33,7 +35,8 @@ namespace MiniGame
                 InputController.Instance.SetPlayerCanMove(false);
                 m_cat.enabled = true;
                 m_cataimator.enabled = true;
-                m_colider2D.enabled = false;
+                m_collider2D.enabled = false;
+                
             }
         }
 
