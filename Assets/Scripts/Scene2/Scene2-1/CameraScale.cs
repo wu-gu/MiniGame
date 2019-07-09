@@ -33,75 +33,75 @@ namespace MiniGame
         // Update is called once per frame
         void Update()
         {
-           
-            //float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
+
+            float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
 
             float currentSize = m_camera.orthographicSize;
 
-            //if (mouseScrollWheel + currentSize <= m_orthograp)
+            if (mouseScrollWheel + currentSize <= m_orthograp)
+            {
+                m_camera.orthographicSize = m_orthograp;
+                return;
+            }
+            else
+            {
+                if (mouseScrollWheel + currentSize >= m_dest)
+                {
+                    m_camera.orthographicSize = m_dest;
+                    m_animator.enabled = true;
+
+                }
+                else
+                    m_camera.orthographicSize = currentSize + mouseScrollWheel;
+            }
+
+            //if (Input.touchCount == 2)
             //{
-            //    m_camera.orthographicSize = m_orthograp;
-            //    return;
-            //}
-            //else
-            //{
-            //    if (mouseScrollWheel + currentSize >= m_dest)
+            //    Touch curr1 = Input.GetTouch(0);
+            //    Touch curr2 = Input.GetTouch(1);
+            //    if (curr2.phase == TouchPhase.Began)
             //    {
-            //        m_camera.orthographicSize = m_dest;
-            //        m_animator.enabled = true;
+            //        pre2 = curr2;
+            //        pre1 = curr1;
+            //        return;
+            //    }
+
+            //    // Process when the user input is clearly the act of scaling
+            //    else
+            //    {
+            //        // Disable collider component when scale starts, or player will be pushed out 
+
+            //        float preDist = Vector2.Distance(pre1.position, pre2.position);
+            //        float currDist = Vector2.Distance(curr1.position, curr2.position);
+
+            //        // Scale distance
+            //        float offset = currDist - preDist;
+
+            //        // Calculate scale offset and new scale vector per frame
+            //        float scaleFactor = offset / 10000f;
+
+            //        if (scaleFactor + currentSize <= m_orthograp)
+            //        {
+            //            m_camera.orthographicSize = m_orthograp;
+            //            return;
+            //        }
+            //        else
+            //        {
+            //            if (scaleFactor + currentSize >= m_dest)
+            //            {
+            //                m_camera.orthographicSize = m_dest;
+            //                m_animator.enabled = true;
+
+            //            }
+            //            else
+            //                m_camera.orthographicSize = currentSize + scaleFactor;
+            //        }
+
+            //        pre1 = curr1;
+            //        pre2 = curr2;
 
             //    }
-            //    else
-            //        m_camera.orthographicSize = currentSize + mouseScrollWheel;
             //}
-
-            if (Input.touchCount == 2)
-            {
-                Touch curr1 = Input.GetTouch(0);
-                Touch curr2 = Input.GetTouch(1);
-                if (curr2.phase == TouchPhase.Began)
-                {
-                    pre2 = curr2;
-                    pre1 = curr1;
-                    return;
-                }
-
-                // Process when the user input is clearly the act of scaling
-                else
-                {
-                    // Disable collider component when scale starts, or player will be pushed out 
-
-                    float preDist = Vector2.Distance(pre1.position, pre2.position);
-                    float currDist = Vector2.Distance(curr1.position, curr2.position);
-
-                    // Scale distance
-                    float offset = currDist - preDist;
-
-                    // Calculate scale offset and new scale vector per frame
-                    float scaleFactor = offset / 10000f;
-
-                    if (scaleFactor + currentSize <= m_orthograp)
-                    {
-                        m_camera.orthographicSize = m_orthograp;
-                        return;
-                    }
-                    else
-                    {
-                        if (scaleFactor + currentSize >= m_dest)
-                        {
-                            m_camera.orthographicSize = m_dest;
-                            m_animator.enabled = true;
-
-                        }
-                        else
-                            m_camera.orthographicSize = currentSize + scaleFactor;
-                    }
-
-                    pre1 = curr1;
-                    pre2 = curr2;
-
-                }
-            }
 
             AnimatorStateInfo animatorInfo;
             animatorInfo = m_animator.GetCurrentAnimatorStateInfo(0);

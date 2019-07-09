@@ -95,6 +95,8 @@ namespace MiniGame
                     glowworm = GameObject.Find("Glowworm_3");
                     glowworm.GetComponent<Glowworm>().Revert();
                 }
+                else if (!m_lanternL.bounds.Contains(currPos) && !m_lanternM.bounds.Contains(currPos) && !m_lanternR.bounds.Contains(currPos))
+                    Revert();
                 else
                     this.transform.localScale = new Vector3(0f, 0f, 0f);
 
