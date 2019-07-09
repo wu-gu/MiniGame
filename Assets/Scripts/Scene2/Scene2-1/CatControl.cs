@@ -7,7 +7,8 @@ namespace MiniGame
 
     public class CatControl : MonoBehaviour, QuestBehavior
     {
-        private FollowPlayerCamera m_follw;
+        private CameraController m_follw;
+        private Animator m_mainCamAnimator;
         private GameObject m_girl;
         private GameObject m_desout;
         private Vector3 m_girlposition;
@@ -26,9 +27,11 @@ namespace MiniGame
         // Start is called before the first frame update
         void Start()
         {
+            GameObject mainCam = GameObject.FindGameObjectWithTag("MainCamera");
             m_girl = GameObject.Find("ground");
             m_desout = GameObject.Find("catdes");
-            m_follw = GameObject.Find("Main Camera").GetComponent<FollowPlayerCamera>();
+            m_follw = mainCam.GetComponent<CameraController>();
+            m_mainCamAnimator = mainCam.GetComponent<Animator>();
             m_cataimator = GetComponent<Animator>();
             m_catcolider2D = GetComponent<Collider2D>();
             m_doorcolider2D = GameObject.Find("Door").GetComponent<Collider2D>();
@@ -72,7 +75,21 @@ namespace MiniGame
                 {
                     InputController.Instance.SetPlayerCanMove(true);
                     m_follw.enabled = true;
+                    m_mainCamAnimator.enabled = false;
                     Destroy(gameObject);
+
+                    string nextStageName = "Stage2-2";
+                    Debug.Log("Load 2-2");
+                    if (nextStageName != null)
+                    {
+                        GameController.Instance.LoadNextStageGameObjects(nextStageName);
+                        //调整摄像机边界限定
+                        //Camera.main.gameObject.GetComponent<CameraController>().UpdateBackgounrdLeft(GameObject.Find(nextStageName+"-L"));
+                        //加载时调整右边，卸载时调整左边
+                        Camera.main.gameObject.GetComponent<CameraController>().UpdateBackgounrdRight(GameObject.Find(nextStageName + "-R"));
+                        Destroy(this);
+                    }
+                    
                 }
             }
         }

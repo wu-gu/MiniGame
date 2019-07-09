@@ -12,21 +12,29 @@ namespace MiniGame
         private float m_orthograp;
         public float m_dest;
         private Animator m_animator;
+        private CameraController m_cameraController;
         private Touch pre1;
         private Touch pre2;
+        private int IsScaleTime;
+        private bool m_firstTime;
 
 
         // Start is called before the first frame update
         void Start()
         {
+            GameObject mainCam = GameObject.FindGameObjectWithTag("MainCamera");
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
             m_camera = Camera.main;
-            m_animator = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Animator>();
+            m_animator = mainCam.GetComponent<Animator>();
+            m_cameraController = mainCam.GetComponent<CameraController>();
             //m_camera = GetComponent<Camera>();
            // m_animator = GetComponent<Animator>();
             m_orthograp = m_camera.orthographicSize;
             m_animator.enabled = false;
             InputController.Instance.SetPlayerCanMove(false);
+            IsScaleTime = Animator.StringToHash("IsScaleTime");
+            m_cameraController.enabled = false;
+            m_firstTime = true;
             this.enabled = false;
         }
 
@@ -45,11 +53,12 @@ namespace MiniGame
             }
             else
             {
-                if (mouseScrollWheel + currentSize >= m_dest)
+                if (mouseScrollWheel + currentSize >= m_dest&&m_firstTime)
                 {
                     m_camera.orthographicSize = m_dest;
                     m_animator.enabled = true;
-
+                    m_animator.SetTrigger(IsScaleTime);
+                    m_firstTime = false;
                 }
                 else
                     m_camera.orthographicSize = currentSize + mouseScrollWheel;
