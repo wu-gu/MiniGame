@@ -46,7 +46,7 @@ namespace MiniGame
             AnimatorStateInfo animatorInfo;
             animatorInfo = m_animator.GetCurrentAnimatorStateInfo(0);
             boypos = destGameobject.transform.position;
-            Debug.Log("distance" + Mathf.Abs(transform.position.x - boypos.x));
+            //Debug.Log("distance" + Mathf.Abs(transform.position.x - boypos.x));
             if (Mathf.Abs(transform.position.x - boypos.x) < distance)
             {
                 canopen = true;
@@ -57,15 +57,14 @@ namespace MiniGame
             }
             if (animatorInfo.normalizedTime > 1.0f && animatorInfo.IsName("Open"))
             {
-                GameObject.Find("GroundInDoor").GetComponent<Collider2D>().enabled = true;
+
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                 AudioController.Instance.PushClip(openDoorAudio);
                 m_animator.enabled = false;
                 m_collider2D.enabled = false;
                 m_camera.GetComponent<Animator>().enabled = true;
                 m_camera.GetComponent<Animator>().SetTrigger("Stage4To5Trigger");
-                //m_stage1_5.GetComponent<Animator>().enabled = true;
-                this.enabled = false;
+                Destroy(this);
             }
         }
 

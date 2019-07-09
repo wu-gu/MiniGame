@@ -7,6 +7,8 @@ namespace MiniGame
     public class PlateQuest : MonoBehaviour, QuestBehavior
     {
         /*业务变量*/
+        //成功音乐
+        public AudioClip audioClip;
 
         public GameObject destGameobject;//关联机关，此处为树枝
         private bool m_isSuccess = false;//此处机关是否成功破解
@@ -23,8 +25,8 @@ namespace MiniGame
         private Vector3 m_offsetBetweenCamAndPlate;
         private Vector3 m_nowPosition;
         private Vector3 m_oldPosition;
-        public float minY = 2.1f;
-        public float maxY = 10.0f;
+        public float minY = 0.0f;
+        public float maxY = 6.0f;
         public float m_speed = 0.05f;
 
         private bool m_canFollow = false;
@@ -100,13 +102,15 @@ namespace MiniGame
                     if (m_isSuccess)
                     {
                         Debug.Log("盘子机关成功");
+                        AudioController.Instance.PushClip(audioClip);
                         m_animator.enabled = true;
                         //m_animator.Play("Scene1ToScene2");
                         m_moon.transform.SetParent(transform.parent.parent);
+                        m_moon.GetComponent<Animator>().enabled = true;
                         m_moon.transform.position = new Vector3(transform.position.x, transform.position.y, 15.0f);
                         gameObject.GetComponent<Animator>().enabled = true;
                         m_animator.SetBool("PlateQuestFired", true);
-                        m_moon.GetComponent<Animator>().enabled = true;
+                        
                         QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                         gameObject.GetComponent<Collider2D>().enabled = false;
                         this.enabled = false;
@@ -121,7 +125,7 @@ namespace MiniGame
                         ////过渡回到原来位置
                         ////m_camera.GetComponent<FollowObjectCamera>().enabled = false;
 
-                        this.enabled = false;
+                        //this.enabled = false;
 
                         m_isSlideBack = true;
                     }
@@ -194,10 +198,14 @@ namespace MiniGame
                 Debug.Log("盘子机关成功");
                 gameObject.GetComponent<Collider2D>().enabled = false;
                 m_animator.enabled = true;
+                AudioController.Instance.PushClip(audioClip);
 
                 m_moon.transform.SetParent(transform.parent.parent);
-                m_moon.transform.position = new Vector3(transform.position.x, transform.position.y, 15.0f);
+                Debug.Log("stage位置" + transform.parent.transform.position.x);
+                Debug.Log("moon位置" + transform.position.x);
                 m_moon.GetComponent<Animator>().enabled = true;
+                m_moon.transform.position = new Vector3(transform.position.x, transform.position.y, 15.0f);
+                
                 m_animator.SetBool("PlateQuestFired", true);
                 gameObject.GetComponent<Animator>().enabled = true;
                 //m_animator.Play("Scene1ToScene2");

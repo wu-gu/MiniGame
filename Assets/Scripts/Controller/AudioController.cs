@@ -451,6 +451,7 @@ namespace MiniGame
         //调节音效音乐音量
         public void EffectMusicVolumeChanged(Slider slider)
         {
+           //PlayerController.Instance.ChangeWalkigVolume(slider.value);
            musicVolume = slider.value;
            UnmuteJustMustic();
         }

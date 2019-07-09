@@ -7,6 +7,7 @@ namespace MiniGame
     // Sakura effect on player movement touches(except tricks, can also serves as a kind of trick hint)
     public class WalkSakura : MonoBehaviour
     {
+        public AudioClip audioClip;
         private Animator anim;
         private int clicked;
         private SpriteRenderer SakuraRenderer;
@@ -51,6 +52,7 @@ namespace MiniGame
             float currCamSize = m_camera.orthographicSize;
             this.transform.localScale = new Vector3(m_originScale.x / 5.4f * currCamSize, m_originScale.y / 5.4f * currCamSize, m_originScale.z);
             anim.SetBool(clicked, true);
+            AudioController.Instance.PushClip(audioClip);
             SakuraRenderer.enabled = true;
             anim.speed = 0.7f;
 

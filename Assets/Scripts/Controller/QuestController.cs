@@ -17,19 +17,6 @@ public class QuestController : MonoSingleton<QuestController>
         }
     }
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /// <summary>
     /// 机关注册
     /// </summary>
@@ -44,12 +31,24 @@ public class QuestController : MonoSingleton<QuestController>
         }
     }
 
+    /// <summary>
+    /// 机关注销
+    /// </summary>
+    /// <param name="gameobjectName"></param>
     public void UnRegisterQuest(string gameobjectName)
     {
         if (m_questBehaviorDict.ContainsKey(gameobjectName))
         {
             m_questBehaviorDict.Remove(gameobjectName);
         }
+    }
+
+    /// <summary>
+    /// 注销所有机关，用于关卡变换的时候，避免有些剩下的机关忘记注销
+    /// </summary>
+    public void UnRegisterAllQuest()
+    {
+        m_questBehaviorDict.Clear();
     }
 
     /// <summary>
