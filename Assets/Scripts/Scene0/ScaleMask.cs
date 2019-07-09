@@ -18,6 +18,7 @@ namespace MiniGame
         private Renderer doorRenderer;
         private Renderer windowRenderer;
         private CircleCollider2D circleCollider2D;
+        private bool m_blocked;
 
         void Start()
         {
@@ -40,6 +41,7 @@ namespace MiniGame
                 originalScale = this.transform.localScale;
             }
             circleCollider2D = GetComponent<CircleCollider2D>();
+            m_blocked = false;
             this.enabled = false;
         }
 
@@ -47,27 +49,29 @@ namespace MiniGame
         void Update()
         {
             //Test scaling in pc platform using mouse scroll wheel
-            //float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
-            //Vector3 scaleOffset = new Vector3(mouseScrollWheel, mouseScrollWheel, mouseScrollWheel);
-            //Vector3 currentScale = this.transform.localScale;
 
-            //if (scaleOffset.magnitude > 0)
-            //    circleCollider2D.enabled = false;
+#if UNITY_STANDALONE_WIN
+            float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
+            Vector3 scaleOffset = new Vector3(mouseScrollWheel, mouseScrollWheel, mouseScrollWheel);
+            Vector3 currentScale = this.transform.localScale;
 
-            //if (scaleOffset.x + currentScale.x <= originalScale.x || scaleOffset.y + currentScale.y <= originalScale.y || scaleOffset.z + currentScale.z <= originalScale.z)
-            //{
-            //    this.transform.localScale = originalScale;
-            //    return;
-            //}
-            //else
-            //{
-            //    this.transform.localScale += scaleOffset;
-            //}
+            if (scaleOffset.magnitude > 0)
+                circleCollider2D.enabled = false;
 
+            if (scaleOffset.x + currentScale.x <= originalScale.x || scaleOffset.y + currentScale.y <= originalScale.y || scaleOffset.z + currentScale.z <= originalScale.z)
+            {
+                this.transform.localScale = originalScale;
+                return;
+            }
+            else
+            {
+                this.transform.localScale += scaleOffset;
+            }
+#endif
 
 
             // Real usage in Android platform
-
+#if UNITY_ANDROID
             // Nothing to process when one or less finger is detected
             if (Input.touchCount <= 1)
             {
@@ -106,7 +110,7 @@ namespace MiniGame
                     float offset = currDist - preDist;
 
                     // Calculate scale offset and new scale vector per frame
-                    float scaleFactor = offset / 100f;
+                    float scaleFactor = offset / 300f;
                     Vector3 localScale = this.transform.localScale;
                     Vector3 scale = new Vector3(localScale.x + scaleFactor, localScale.y + scaleFactor, localScale.z + scaleFactor);
 
@@ -118,7 +122,9 @@ namespace MiniGame
 
                 }
             }
+#endif
 
+            //common
             float frameRadius = doorRenderer.bounds.extents.x;
             float windowRadius = windowRenderer.bounds.extents.x; // extents.x == extents.y == window radius
 
@@ -137,7 +143,14 @@ namespace MiniGame
 
         public void OnUpdate()
         {
+            if (!m_blocked)
+                return;
             this.enabled = true;
+        }
+
+        public void SetBlocked()
+        {
+            m_blocked = true;
         }
     }
 }
