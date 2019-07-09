@@ -348,7 +348,7 @@ Camera:
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.4662691, g: 0.5849056, b: 0.57094836, a: 1}
-  m_projectionMatrixMode: 1
+  m_projectionMatrixMode: 0
   m_GateFitMode: 2
   m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
@@ -475,7 +475,7 @@ PrefabInstance:
     - target: {fileID: 9060385587483783717, guid: 45ff50b438b417647b755c900f03ae24,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9060385587483783736, guid: 45ff50b438b417647b755c900f03ae24,
         type: 3}
@@ -491,6 +491,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Size.y
       value: 4.8208547
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060385587483783719, guid: 45ff50b438b417647b755c900f03ae24,
+        type: 3}
+      propertyPath: speed
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060385587483783719, guid: 45ff50b438b417647b755c900f03ae24,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45ff50b438b417647b755c900f03ae24, type: 3}
@@ -743,6 +753,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameController
       objectReference: {fileID: 0}
+    - target: {fileID: 173836838, guid: 5745f3156e61f7145816a40b1c0aa2e7, type: 3}
+      propertyPath: musicAudioClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 173836838, guid: 5745f3156e61f7145816a40b1c0aa2e7, type: 3}
+      propertyPath: ambientAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2d16d4b257a343e41a3d15ff1d92871c, type: 3}
     - target: {fileID: 827596058746313163, guid: 5745f3156e61f7145816a40b1c0aa2e7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -801,16 +819,8 @@ PrefabInstance:
     - target: {fileID: 827596058746313162, guid: 5745f3156e61f7145816a40b1c0aa2e7,
         type: 3}
       propertyPath: m_currLevelIndex
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 173836838, guid: 5745f3156e61f7145816a40b1c0aa2e7, type: 3}
-      propertyPath: musicAudioClip
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 173836838, guid: 5745f3156e61f7145816a40b1c0aa2e7, type: 3}
-      propertyPath: ambientAudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 2d16d4b257a343e41a3d15ff1d92871c, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5745f3156e61f7145816a40b1c0aa2e7, type: 3}
 --- !u!1 &1409903228
