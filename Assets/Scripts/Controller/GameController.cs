@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Xml;
 using System.IO;
+using UnityEngine.EventSystems;
 
 namespace MiniGame
 {
@@ -24,7 +25,7 @@ namespace MiniGame
         //private SelfMonoBehaviour[] selfMonoBehaviours;
 
         //public TransitionDestination initialSceneTransitionDestination;
-        protected TransitionDestination.DestinationTag m_ZoneRestartDestinationTag;
+        //protected TransitionDestination.DestinationTag m_ZoneRestartDestinationTag;
         protected bool m_Transitioning;
         public static bool Transitioning
         {
@@ -36,12 +37,12 @@ namespace MiniGame
         [Tooltip("是否动态加载场景")]
         //主要用于判断一开始的画面是否是需要动态加载的
         public bool m_IsSetupDynamicLoad = false;
-
-
         private LinkedList<GameObjectStageContainer> m_stageGameObjectsContainerList = new LinkedList<GameObjectStageContainer>();
         private LinkedListNode<GameObjectStageContainer> m_currStageContainer;
         //private GameObjectStageContainer m_currStageContainer;
         //private GameObjectStageContainer m_nextStageContainer;
+
+        public GamingUI gamingUI;
 
 
         void Awake()
@@ -54,17 +55,28 @@ namespace MiniGame
 
             DontDestroyOnLoad(gameObject);
 
-            allLevelName.Add("Start");
-            allLevelName.Add("Level0");
-            allLevelName.Add("Level1");
-            allLevelName.Add("Level2");
-            highestProgress = 1;
+            //所有关卡名字(包括开始关卡)
+            allLevelName.Add("Start");//0
+            allLevelName.Add("Level0");//1
+            allLevelName.Add("Level1");//2
+            allLevelName.Add("Level2-1");//3
+            allLevelName.Add("Level3");//4
+            //highestProgress = 1;
+
+
+            //从文件中读取游戏进度、配置，没有则默认进度配置
+            LoadLevelProgressFromFile();
 
             m_CurrentZoneScene = SceneManager.GetActiveScene();
 
-            if(!m_CurrentZoneScene.name.Equals("Start"))
-                //加载该关卡的开始画面
+            if (!m_CurrentZoneScene.name.Equals("Start"))
+            {
+                //获取UI脚本
+                gamingUI = GameObject.Find("GameUI").GetComponent<GamingUI>();
+                //加载非开始关卡的开始画面
                 LoadFirstStageGameObjects();
+            }
+
 
 
             //switch (m_CurrentZoneScene.name)
@@ -94,19 +106,14 @@ namespace MiniGame
 
         }
 
-        //void Start()
-        //{
-        //    selfMonoBehaviours = gameObject.GetComponents<SelfMonoBehaviour>();
-        //}
-
-
         void Update()
         {
             //update时序控制
             if (!m_CurrentZoneScene.name.Equals("Start"))
             {
-                InputController.Instance.OnUpdate();
-
+                {
+                    InputController.Instance.OnUpdate();
+                }
                 ////不在开始界面时按返回键弹出返回按钮，所以此处注释掉
                 //if (Application.platform == RuntimePlatform.Android && (Input.GetKeyDown(KeyCode.Escape)))
                 //{
@@ -124,9 +131,13 @@ namespace MiniGame
             yield return SceneManager.LoadSceneAsync(newSceneName); //异步加载新场景
             m_CurrentZoneScene = SceneManager.GetActiveScene();
             if (!m_CurrentZoneScene.name.Equals("Start"))
-                //加载该关卡的开始画面
+            {
+                //获取UI脚本
+                gamingUI = GameObject.Find("GameUI").GetComponent<GamingUI>();
+                //加载非开始关卡的开始画面
                 LoadFirstStageGameObjects();
-            
+            }
+
             //加载该关卡对应的背景音乐
             AudioController.Instance.MuteJustAmbient();
             AudioController.Instance.ChangeAmbient(GameObject.Find("InitSetting").GetComponent<InitSetting>().backgroundClip);
@@ -337,15 +348,20 @@ namespace MiniGame
         /// </summary>
         public void LoadLevelProgressFromFile()
         {
+            Debug.Log("读取游戏最高进度");
             string filePath = Application.persistentDataPath + "/config.xml";
             if (File.Exists(filePath))
             {
-                //创建xml文档
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(filePath);
                 XmlNodeList xmlNodeList = xmlDoc.SelectSingleNode("config").ChildNodes;
                 foreach (XmlElement xmlEle in xmlNodeList)
                 {
+                    if (xmlEle.Name.Equals("progress"))
+                    {
+                        highestProgress = int.Parse(xmlEle.InnerText);
+                        Debug.Log("从配置文件读取，最高关卡为" + highestProgress);
+                    }
                     if (xmlEle.Name.Equals("progress"))
                     {
                         highestProgress = int.Parse(xmlEle.InnerText);
@@ -367,6 +383,7 @@ namespace MiniGame
         public void WriteLevelProgressToFile()
         {
             string filePath = Application.persistentDataPath + "/config.xml";
+            //修改
             if (File.Exists(filePath))
             {
                 XmlDocument xmlDoc = new XmlDocument();
@@ -381,6 +398,7 @@ namespace MiniGame
                 }
                 xmlDoc.Save(filePath);
             }
+            //新增
             else
             {
                 XmlDocument xmlDoc = new XmlDocument();
@@ -392,6 +410,24 @@ namespace MiniGame
                 xmlDoc.Save(filePath);
             }
             Debug.Log("写入配置文件，最高关卡为" + highestProgress);
+        }
+
+        /// <summary>
+        /// 公共结束游戏接口，退出前存储游戏关卡最高进度
+        /// </summary>
+        public void EndGame()
+        {
+            WriteLevelProgressToFile();
+            Application.Quit();
+        }
+
+        /// <summary>
+        /// 游戏中非UI区域点击关闭正在显示UI
+        /// </summary>
+        public void HideGamingUI()
+        {
+            if (gamingUI != null)
+                gamingUI.HideShowingWindow();
         }
     }
 

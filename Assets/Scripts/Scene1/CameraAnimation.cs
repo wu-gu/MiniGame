@@ -5,7 +5,9 @@ using UnityEngine;
 namespace MiniGame
 {
 
-
+    /// <summary>
+    /// 在Stage1-4到Stage1-5的转场过程中使用
+    /// </summary>
     public class CameraAnimation : MonoBehaviour
     {
 
@@ -45,7 +47,8 @@ namespace MiniGame
         {
 
             GetComponent<Animator>().enabled = false;
-            Destroy(GameObject.Find("Stage1-3"));
+            //Destroy(GameObject.Find("Stage1-3"));
+            GameController.Instance.UnloadPreStageGameobjects();//currStage在Stage1-4(而1-5是在1-4里面的)
             Destroy(GameObject.Find("Stage1-4"));
             //启用人物移动与摄像机跟随
             PlayerController.Instance.enabled = true;

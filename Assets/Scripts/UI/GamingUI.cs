@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 namespace MiniGame
 {
-
-    public class GamingSetButton : MonoBehaviour
+    //GamingSetButton
+    public class GamingUI : MonoBehaviour
     {
         public CanvasGroup settingImage;
         public CanvasGroup exitImage;
@@ -87,9 +87,18 @@ namespace MiniGame
             exitImage.interactable = true;
         }
 
+        /// <summary>
+        /// 当点击显示窗口以外地方的时候，关闭当前所有窗口
+        /// </summary>
+        public void HideShowingWindow()
+        {
+            HideExitWindow();
+            HideSettingWindow();
+        }
+
         public void ExitGame()
         {
-            Application.Quit();
+            GameController.Instance.EndGame();
         }
 
         public void AmbientMusicVolumeChanged(Slider slider)

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using MiniGame;
 
-public class buttonscript : MonoBehaviour
+public class Buttonscript : MonoBehaviour
 {
     // Start is called before the first frame update
     mycanvas com;
@@ -97,7 +97,7 @@ public class buttonscript : MonoBehaviour
     public void OnClickENDSure()
     {
         AudioController.Instance.PushClip(buttonEffectClip);
-        Application.Quit();
+        GameController.Instance.EndGame();
         //com3.Hide();
         //com.Show1();
     }
@@ -136,13 +136,25 @@ public class buttonscript : MonoBehaviour
         //transitionPoint.Transition();
 
     }
+
+
     public void OnClickLevel_2()
     {
-
+        if (GameController.Instance.highestProgress > 2)
+        {
+            AudioController.Instance.PushClip(buttonEffectClip);
+            GameController.Instance.TransitionToNewLevel("Level2-1");
+        }
     }
+
+
     public void OnClickLevel_3()
     {
-
+        if (GameController.Instance.highestProgress > 3)
+        {
+            AudioController.Instance.PushClip(buttonEffectClip);
+            GameController.Instance.TransitionToNewLevel("Level3");
+        }
     }
 
     /// <summary>
