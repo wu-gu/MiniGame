@@ -12,7 +12,7 @@ namespace MiniGame
         [Tooltip("The Layers which represent gameobjects that the Character Controller can be grounded on.")]
         public LayerMask groundedLayerMask;
 
-        public float speed = 1f;//x方向移动速率
+        public float speed = 2.5f;//x方向移动速率
         public float groundedRaycastDistance = 50f;
         private float touchThreshold;
 

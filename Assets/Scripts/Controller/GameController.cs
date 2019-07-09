@@ -54,6 +54,7 @@ namespace MiniGame
 
             allLevelName.Add("Level0");
             allLevelName.Add("Level1");
+            allLevelName.Add("Level2");
             highestProgress = 0;
 
             m_CurrentZoneScene = SceneManager.GetActiveScene();

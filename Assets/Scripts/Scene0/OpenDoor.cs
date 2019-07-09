@@ -32,7 +32,7 @@ namespace MiniGame
             {
                 m_timeCounter += Time.deltaTime;
                 Color originColor = m_frame.color;
-                m_frame.color = new Color(originColor.r, originColor.g, originColor.b, originColor.a - 0.01f);
+                m_frame.color = new Color(originColor.r, originColor.g, originColor.b, originColor.a - 0.1f);
             }
             else
             {
