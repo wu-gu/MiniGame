@@ -94,28 +94,28 @@ namespace MiniGame
         {
             // Android -- stable
             //Debug.Log("Android");
-            //this.enabled = true;
-            //Touch touch1 = Input.GetTouch(0);
-            //if (Input.touchCount == 2)
-            //{
-            //    Debug.Log("Two touches at the same time");
-            //    Touch touch2 = Input.GetTouch(1);
-            //    Vector2 touchPos1, touchPos2;
-            //    touchPos1 = Camera.main.ScreenToWorldPoint(touch1.position);
-            //    touchPos2 = Camera.main.ScreenToWorldPoint(touch2.position);
+            this.enabled = true;
+            Touch touch1 = Input.GetTouch(0);
+            if (Input.touchCount == 2)
+            {
+                Debug.Log("Two touches at the same time");
+                Touch touch2 = Input.GetTouch(1);
+                Vector2 touchPos1, touchPos2;
+                touchPos1 = Camera.main.ScreenToWorldPoint(touch1.position);
+                touchPos2 = Camera.main.ScreenToWorldPoint(touch2.position);
 
-            //    m_oldVector = touchPos1 - touchPos2;
-            //}
+                m_oldVector = touchPos1 - touchPos2;
+            }
 
             // PC-- Directly controlled here
             //Debug.Log("PC");
-            this.transform.localRotation = new Quaternion(0, 0, 180f, 0);
-            m_mainCam.GetComponent<CameraController>().enabled = false;
-            m_mainCam.GetComponent<CameraNaturalTransition>().NaturalTransition1();
-            m_flyingMagpie.GetComponent<Animator>().enabled = true;
-            gameObject.GetComponent<Collider2D>().enabled = false;
-            AudioController.Instance.PushClip(m_moonAndSunAudioClip);
-            QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+            //this.transform.localRotation = new Quaternion(0, 0, 180f, 0);
+            //m_mainCam.GetComponent<CameraController>().enabled = false;
+            //m_mainCam.GetComponent<CameraNaturalTransition>().NaturalTransition1();
+            //m_flyingMagpie.GetComponent<Animator>().enabled = true;
+            //gameObject.GetComponent<Collider2D>().enabled = false;
+            //AudioController.Instance.PushClip(m_moonAndSunAudioClip);
+            //QuestController.Instance.UnRegisterQuest(gameObject.ToString());
         }
 
         private void SlidBackOriPos()

@@ -43,7 +43,7 @@ namespace MiniGame
         void Update()
         {
             // -- PC stable --          -- Android stable --                                       
-            if (Input.GetMouseButton(0)/*Input.touchCount > 0*/)
+            if (/*Input.GetMouseButton(0)*/Input.touchCount > 0)
             {
                 if (m_firstTouch)
                 {
@@ -54,7 +54,7 @@ namespace MiniGame
                     m_firstTouch = false;
                 }
                 // -- PC stable --          -- Android stable --          
-                Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition/*Input.GetTouch(0).position*/);
+                Vector2 touchPos = Camera.main.ScreenToWorldPoint(/*Input.mousePosition*/Input.GetTouch(0).position);
                 this.transform.position = new Vector3(touchPos.x + m_offset.x, touchPos.y + m_offset.y, this.transform.position.z);
             }
             else
@@ -113,11 +113,11 @@ namespace MiniGame
                 m_lockMovement = false;
 
             // -- PC stable --          -- Android stable --          
-            if (!m_lockMovement /*&& Input.GetTouch(0).phase == TouchPhase.Began*/)
+            if (!m_lockMovement && Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 this.enabled = true;
                 // -- PC stable --          -- Android stable --          
-                Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition /*Input.GetTouch(0).position*/);
+                Vector2 touchPos = Camera.main.ScreenToWorldPoint(/*Input.mousePosition*/ Input.GetTouch(0).position);
                 m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
                 m_firstTouch = true;
             }
