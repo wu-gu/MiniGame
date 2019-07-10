@@ -29,7 +29,7 @@ namespace MiniGame
         public void OnUpdate()
         {
             //此处PC端输入在Android端会干扰输入，导出Android的时候需要注释掉
-#if UNITY_STANDALONE_WIN
+//#if UNITY_STANDALONE_WIN
                 if (Input.GetMouseButtonDown(0)&& !EventSystem.current.IsPointerOverGameObject())
                 {
                     GameController.Instance.HideGamingUI();
@@ -51,7 +51,7 @@ namespace MiniGame
                         }
                     }
                 }
-#endif
+//#endif
 
 #if UNITY_ANDROID
             if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began&& !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
