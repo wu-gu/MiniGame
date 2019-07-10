@@ -9,7 +9,7 @@ namespace MiniGame
     {
         private CameraController m_follw;
         private Animator m_mainCamAnimator;
-        private GameObject m_girl;
+        private GameObject m_ground;
         private GameObject m_desout;
         private Vector3 m_girlposition;
         private Vector3 m_outposition;
@@ -28,7 +28,7 @@ namespace MiniGame
         void Start()
         {
             GameObject mainCam = GameObject.FindGameObjectWithTag("MainCamera");
-            m_girl = GameObject.Find("ground");
+            m_ground = GameObject.Find("ground");
             m_desout = GameObject.Find("catdes");
             m_follw = mainCam.GetComponent<CameraController>();
             m_mainCamAnimator = mainCam.GetComponent<Animator>();
@@ -44,7 +44,7 @@ namespace MiniGame
         {
             if (isIn)
             {
-                m_girlposition = m_girl.transform.position;
+                m_girlposition = m_ground.transform.position;
                 m_girlposition = new Vector3(m_girlposition.x - Xoffset, m_girlposition.y - Yoffset, 0);
                 if (Vector3.Distance(m_girlposition, this.transform.position) > 0.1f)
                 {
@@ -97,6 +97,7 @@ namespace MiniGame
         public void OnUpdate()
         {
             isOut = true;
+            GameObject.FindGameObjectWithTag("Girl").GetComponent<SpriteRenderer>().flipX = true;
             transform.position = new Vector3(transform.position.x +FilpXoffset, transform.position.y, transform.position.z);
             m_catrenderer.flipX = false;
         }

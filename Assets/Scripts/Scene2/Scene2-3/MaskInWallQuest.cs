@@ -17,6 +17,8 @@ public class MaskInWallQuest : MonoBehaviour,QuestBehavior
     private Animator m_animator;
     private CameraController m_cameraController;
     private int IsSwitchPoint;
+    private float m_pressTime;
+    private bool m_beforeTouch;
 
     // Start is called before the first frame update
     void Start()
@@ -46,12 +48,16 @@ public class MaskInWallQuest : MonoBehaviour,QuestBehavior
         IsSwitchPoint = Animator.StringToHash("IsSwitchPoint");
        
         QuestController.Instance.RegisterQuest(this.gameObject.ToString(), this);
+        m_pressTime = 0f;
+        m_beforeTouch = true;
         this.enabled = false;
 
     }
 
     public void OnUpdate()
-    { 
+    {
+        if(m_beforeTouch)
+            m_pressTime = 0f;
         this.enabled = true;
 
         // Android -- began
@@ -66,6 +72,15 @@ public class MaskInWallQuest : MonoBehaviour,QuestBehavior
     // Update is called once per frame
     void Update()
     {
+        if (m_pressTime<1.0f)
+        {
+            if (Input.GetMouseButton(0))
+                m_pressTime += Time.deltaTime;
+            return;
+        }
+
+        m_beforeTouch = false;
+
         if(!m_canMove)
         {
             Color oriColor = m_sculpture.color;
