@@ -8,5 +8,5 @@ using UnityEngine;
 public class InitSetting : MonoBehaviour
 {
     public AudioClip backgroundClip;
-
+    public AudioClip envirnmentClip;
 }

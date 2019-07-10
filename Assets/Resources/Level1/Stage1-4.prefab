@@ -6558,9 +6558,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioClip: {fileID: 8300000, guid: 0243cd63598126a46b6082e4b8add17f, type: 3}
   destGameobject: {fileID: 8610069007431423639}
-  minY: 2.1
+  minY: 1.2
   maxY: 9.36
-  m_speed: 0.1
+  followSpeed: 2
+  returnSpeed: 2.3
 --- !u!95 &6938501786514243232
 Animator:
   serializedVersion: 3

@@ -46,6 +46,10 @@ namespace MiniGame
         public void UnloadStage4()
         {
 
+            Debug.Log("销毁Stage1-3以及1-4，停止水流声");
+            //停止水流环境音
+            AudioController.Instance.MuteJustEnvironment(1.0f);
+
             GetComponent<Animator>().enabled = false;
             //Destroy(GameObject.Find("Stage1-3"));
             GameController.Instance.UnloadPreStageGameobjects();//currStage在Stage1-4(而1-5是在1-4里面的)

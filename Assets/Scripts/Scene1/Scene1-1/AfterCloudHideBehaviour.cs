@@ -27,6 +27,7 @@ namespace MiniGame
             if (stateInfo.normalizedTime > 1.0f)
             {
                 GameObject.Find("GoAction").GetComponent<GoToPavilionQuest>().DoWorking();
+                GameController.Instance.UpdateStageProgress(1);
                 Destroy(this);
             }
         }

@@ -18,6 +18,7 @@ namespace MiniGame
         public List<string> allLevelName = new List<string>();//一关对应一个名字
         public int m_currLevelIndex;
         public int highestProgress;//玩家的最大进度，为allLevelName中的索引，即第几关
+        public int[] stageProgress = new int[3];//玩家在每一关的Stage最大进度，因为第0关和第1关是为一关，所以一共有3关的Stage。0/1/2
 
         //private List<AnimationClip> animationClips;
         //public AnimationClip[] scenesAnimationClips = new AnimationClip[5];
@@ -52,14 +53,13 @@ namespace MiniGame
                 Destroy(gameObject);
                 return;
             }
-
             DontDestroyOnLoad(gameObject);
 
             //所有关卡名字(包括开始关卡)
             allLevelName.Add("Start");//0
             allLevelName.Add("Level0");//1
             allLevelName.Add("Level1");//2
-            allLevelName.Add("Level2-1");//3
+            allLevelName.Add("Level2");//3
             allLevelName.Add("Level3");//4
             //highestProgress = 1;
 
@@ -69,40 +69,26 @@ namespace MiniGame
 
             m_CurrentZoneScene = SceneManager.GetActiveScene();
 
+            //关卡初始化设置
             if (!m_CurrentZoneScene.name.Equals("Start"))
             {
                 //获取UI脚本
                 gamingUI = GameObject.Find("GameUI").GetComponent<GamingUI>();
+                //加载对应关卡的提示(碎片)进度
+                int level = m_currLevelIndex;
+                level = level == 1 ? level - 1 : level - 2;
+                gamingUI.SettipIndexes(stageProgress[level]);
+
                 //加载非开始关卡的开始画面
                 LoadFirstStageGameObjects();
             }
-
-
-
-            //switch (m_CurrentZoneScene.name)
-            //{
-            //    case "Scene0":
-            //    {
-            //        AnimationController.Instance.AddAnimation(scenesAnimationClips[0]);
-            //        AnimationController.Instance.PlayAnimation(scenesAnimationClips[0].name);
-            //            //AnimatorController.Instance.AddAnimator(scenesAnimatorControllers[0]);
-            //            //AnimatorController.Instance.PlayAnimator()
-            //        Debug.Log(scenesAnimationClips[0].name);
-            //        break;
-            //    }
-            //    case "Scene1":
-            //    {
-            //        AnimationController.Instance.AddAnimation(scenesAnimationClips[1]);
-            //        AnimationController.Instance.PlayAnimation(scenesAnimationClips[1].name);
-            //        Debug.Log(scenesAnimationClips[1].name);
-            //        break;
-            //    }
-            //    default:
-            //        break;
-            //}
-            //可以在此初始化输入控制等其他控制器
-
-            mainCamera = Camera.main;
+            //加载该关卡对应的背景音乐
+            AudioController.Instance.MuteJustBackground();
+            AudioController.Instance.MuteJustEnvironment();
+            AudioController.Instance.ChangeBackground(GameObject.Find("InitSetting").GetComponent<InitSetting>().backgroundClip);
+            AudioController.Instance.ChangeEnviroment(GameObject.Find("InitSetting").GetComponent<InitSetting>().envirnmentClip);
+            AudioController.Instance.PlayJustBackground();
+            AudioController.Instance.UnmuteJustBackground(1.0f);
 
         }
 
@@ -134,15 +120,20 @@ namespace MiniGame
             {
                 //获取UI脚本
                 gamingUI = GameObject.Find("GameUI").GetComponent<GamingUI>();
+                //加载对应关卡的提示(碎片)进度
+                int level = m_currLevelIndex;
+                level = level == 1 ? level - 1 : level - 2;
+                gamingUI.SettipIndexes(stageProgress[level]);
+
                 //加载非开始关卡的开始画面
                 LoadFirstStageGameObjects();
             }
 
             //加载该关卡对应的背景音乐
-            AudioController.Instance.MuteJustAmbient();
-            AudioController.Instance.ChangeAmbient(GameObject.Find("InitSetting").GetComponent<InitSetting>().backgroundClip);
-            AudioController.Instance.PlayJustAmbient();
-            AudioController.Instance.UnmuteJustAmbient(1.0f);
+            AudioController.Instance.MuteJustBackground();
+            AudioController.Instance.ChangeBackground(GameObject.Find("InitSetting").GetComponent<InitSetting>().backgroundClip);
+            AudioController.Instance.PlayJustBackground();
+            AudioController.Instance.UnmuteJustBackground(1.0f);
 
             Debug.Log(newSceneName + "已经加载完成");
             m_Transitioning = false; 
@@ -348,7 +339,7 @@ namespace MiniGame
         /// </summary>
         public void LoadLevelProgressFromFile()
         {
-            Debug.Log("读取游戏最高进度");
+            Debug.Log("读取游戏配置");
             string filePath = Application.persistentDataPath + "/config.xml";
             if (File.Exists(filePath))
             {
@@ -357,21 +348,34 @@ namespace MiniGame
                 XmlNodeList xmlNodeList = xmlDoc.SelectSingleNode("config").ChildNodes;
                 foreach (XmlElement xmlEle in xmlNodeList)
                 {
-                    if (xmlEle.Name.Equals("progress"))
+                    if (xmlEle.Name.Equals("levelProgress"))
                     {
                         highestProgress = int.Parse(xmlEle.InnerText);
                         Debug.Log("从配置文件读取，最高关卡为" + highestProgress);
                     }
-                    if (xmlEle.Name.Equals("progress"))
+                    if (xmlEle.Name.Equals("stageProgress"))
                     {
-                        highestProgress = int.Parse(xmlEle.InnerText);
-                        Debug.Log("从配置文件读取，最高关卡为" + highestProgress);
+                        int level = int.Parse(xmlEle.GetAttribute("level"));
+                        stageProgress[level] = int.Parse(xmlEle.InnerText);
+                        Debug.Log("从配置文件读取" + level + "关卡最高进度为" + stageProgress[level]);
+                    }
+                    if (xmlEle.Name.Equals("musicVolume"))
+                    {
+                        AudioController.Instance.backgroundVolume = float.Parse(xmlEle.GetAttribute("background"));
+                        AudioController.Instance.environmentVolume = AudioController.Instance.soundEffectVolume;
+                        AudioController.Instance.soundEffectVolume = float.Parse(xmlEle.GetAttribute("soundEffect"));
+                        Debug.Log("从配置文件读取音量设置,背景音量"+ AudioController.Instance.backgroundVolume+",音效音量"+ AudioController.Instance.soundEffectVolume);
                     }
                 }
             }
             else
             {
                 highestProgress = 1;
+                for(int i= 0;i < stageProgress.Length; i++)
+                {
+                    stageProgress[i] = 0;
+                }
+                WriteLevelProgressToFile();
             }
         }
 
@@ -391,9 +395,20 @@ namespace MiniGame
                 XmlNodeList xmlNodeList = xmlDoc.SelectSingleNode("config").ChildNodes;
                 foreach (XmlElement xmlEle in xmlNodeList)
                 {
-                    if (xmlEle.Name.Equals("progress"))
+                    if (xmlEle.Name.Equals("levelProgress"))
                     {
                         xmlEle.InnerText = highestProgress.ToString();
+                    }
+                    if (xmlEle.Name.Equals("stageProgress"))
+                    {
+                        int level = int.Parse(xmlEle.GetAttribute("level"));
+                        xmlEle.InnerText = stageProgress[level].ToString();
+                        Debug.Log("写入配置文件" + level + "关卡最高进度为" + stageProgress[level]);
+                    }
+                    if (xmlEle.Name.Equals("musicVolume"))
+                    {
+                        xmlEle.SetAttribute("background", AudioController.Instance.backgroundVolume.ToString());
+                        xmlEle.SetAttribute("soundEffect", AudioController.Instance.soundEffectVolume.ToString());
                     }
                 }
                 xmlDoc.Save(filePath);
@@ -403,13 +418,44 @@ namespace MiniGame
             {
                 XmlDocument xmlDoc = new XmlDocument();
                 XmlElement root = xmlDoc.CreateElement("config");
-                XmlElement element = xmlDoc.CreateElement("progress");
-                element.InnerText = 1.ToString();
-                root.AppendChild(element);
+                //
+                XmlElement levelProgressElement = xmlDoc.CreateElement("levelProgress");
+                levelProgressElement.InnerText = 1.ToString();
+                root.AppendChild(levelProgressElement);
+                //
+                for (int i = 0; i < stageProgress.Length; i++)
+                {
+                    XmlElement stageProgressElement = xmlDoc.CreateElement("stageProgress");
+                    //设置level
+                    stageProgressElement.SetAttribute("level", i.ToString());
+                    //设置stageProgress
+                    stageProgressElement.InnerText = stageProgress[i].ToString();
+                    root.AppendChild(stageProgressElement);
+                }
+                //
+                XmlElement musicVolumeEle = xmlDoc.CreateElement("musicVolume");
+                musicVolumeEle.SetAttribute("background", AudioController.Instance.backgroundVolume.ToString());
+                musicVolumeEle.SetAttribute("soundEffect", AudioController.Instance.soundEffectVolume.ToString());
+                root.AppendChild(musicVolumeEle);
+
                 xmlDoc.AppendChild(root);
                 xmlDoc.Save(filePath);
             }
             Debug.Log("写入配置文件，最高关卡为" + highestProgress);
+        }
+
+        /// <summary>
+        /// 更新对应关卡的提示(碎片)游戏进度
+        /// </summary>
+        /// <param name="stage"></param>
+        public void UpdateStageProgress(int stage)
+        {
+            int level = m_currLevelIndex;
+            level = level == 1 ? level - 1 : level - 2;
+            stageProgress[level] = stage;
+            gamingUI.SettipIndexes(stage);
+            gamingUI.ShowForTime(4);
+            WriteLevelProgressToFile();
         }
 
         /// <summary>
@@ -429,6 +475,8 @@ namespace MiniGame
             if (gamingUI != null)
                 gamingUI.HideShowingWindow();
         }
+
+
     }
 
 }

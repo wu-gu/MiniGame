@@ -68,8 +68,8 @@ public class Buttonscript : MonoBehaviour
     public void OnClickSet()
     {
         AudioController.Instance.PushClip(buttonEffectClip);
-        ambientMusicSlider.value = AudioController.Instance.ambientVolume;
-        effectMusicSlider.value = AudioController.Instance.musicVolume;
+        ambientMusicSlider.value = AudioController.Instance.backgroundVolume;
+        effectMusicSlider.value = AudioController.Instance.soundEffectVolume;
 
         com2.Show();
         com.Hide();
@@ -164,12 +164,12 @@ public class Buttonscript : MonoBehaviour
     /// <param name="slider"></param>
     public void AmbientMusicVolumeChanged(Slider slider)
     {
-        AudioController.Instance.AmbientMusicVolumeChanged(slider);
+        AudioController.Instance.BackgroundMusicVolumeChanged(slider);
     }
 
     public void EffectMusicVolumeChanged(Slider slider)
     {
-        AudioController.Instance.EffectMusicVolumeChanged(slider);
+        AudioController.Instance.SoundEffectVolumeChanged(slider);
     }
 
 }
