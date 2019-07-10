@@ -62,6 +62,7 @@ namespace MiniGame
                 m_willow.GetComponent<Animator>().Play("LeafHide");
                 m_boat.GetComponent<Animator>().enabled = true;
                 AudioController.Instance.PushClip(boatAudio);
+                GameController.Instance.UpdateStageProgress(3);
                 GameObject.Destroy(m_shield);
                 //注销机关
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());

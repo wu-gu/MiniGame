@@ -47,6 +47,7 @@ namespace MiniGame
                 //collider.gameObject.transform.SetParent(transform.parent);
                 GetComponent<Collider2D>().enabled = false;
                 PlayerController.Instance.enabled = true;
+                this.enabled = false;
             }
         }
 
@@ -68,15 +69,15 @@ namespace MiniGame
             //}
         }
 
-        void OnTriggerExit2D(Collider2D collider)
-        {
-            Debug.Log("exit");
-            if (collider.gameObject.name == "Boy")
-            {
-                m_playerInBoat = false;
-                //collider.gameObject.transform.SetParent(transform.parent);
-            }
-        }
+        //void OnTriggerExit2D(Collider2D collider)
+        //{
+        //    Debug.Log("exit");
+        //    if (collider.gameObject.name == "Boy")
+        //    {
+        //        m_playerInBoat = false;
+        //        //collider.gameObject.transform.SetParent(transform.parent);
+        //    }
+        //}
     }
 
 }

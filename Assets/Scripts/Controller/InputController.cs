@@ -14,6 +14,8 @@ namespace MiniGame
 
         private bool m_canMovePlayer = true;//是否可以手动控制人物
 
+        
+
 
         void Awake()
         {
@@ -28,14 +30,14 @@ namespace MiniGame
         {
             //此处PC端输入在Android端会干扰输入，导出Android的时候需要注释掉
 #if UNITY_STANDALONE_WIN
-                if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+                if (Input.GetMouseButtonDown(0)&& !EventSystem.current.IsPointerOverGameObject())
                 {
+                    GameController.Instance.HideGamingUI();
                     //先判断是否触摸某个机关
                     Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero, questRaycastDistance, questLayerMask.value);
                     if (hit.collider != null)
                     {
-                        Debug.Log("点击机关");
                         Debug.Log("点击机关: " + hit.collider.gameObject.ToString());
                         QuestController.Instance.FireQuestBehavior(hit.collider.gameObject.ToString());
                     }
@@ -52,12 +54,12 @@ namespace MiniGame
 #endif
 
 #if UNITY_ANDROID
-            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-                {
-
-                    //Debug.Log("点击");
-                    //先判断是否触摸某个机关
-                    Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.touches[0].position);
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began&& !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+            {
+                GameController.Instance.HideGamingUI();
+                //Debug.Log("点击");
+                //先判断是否触摸某个机关
+                Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.touches[0].position);
                     RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero, questRaycastDistance, questLayerMask.value);
                     if (hit.collider != null)
                     {

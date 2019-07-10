@@ -45,6 +45,7 @@ namespace MiniGame
             //if (stateInfo.normalizedTime > 1.0f && stateInfo.IsName("Stage2ToOrigin"))
             if (stateInfo.normalizedTime > 1.0f && stateInfo.IsName("Stage2ToOriScale"))
             {
+                //让Boy脱离Character
                 GameObject boy = GameObject.FindGameObjectWithTag("Boy");
                 GameObject character = boy.transform.parent.gameObject;
                 boy.transform.SetParent(boy.transform.parent.parent);
@@ -52,6 +53,10 @@ namespace MiniGame
 
                 PlayerController.Instance.enabled = true;
                 GetComponent<Animator>().enabled = false;
+
+                //播放水流环境音
+                AudioController.Instance.PlayJustEnvironment();
+                AudioController.Instance.UnmuteJustEnvironment(1.0f);
 
                 //调整摄像机边界限定，要注意和摄像机动画的冲突
                 Camera.main.gameObject.GetComponent<CameraController>().UpdateBackgounrdLeft(GameObject.Find("Stage1-2-L"));

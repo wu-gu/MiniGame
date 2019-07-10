@@ -12,6 +12,8 @@ namespace MiniGame
 
         public GameObject destGameobject;//关联机关，此处为树枝
         private bool m_isSuccess = false;//此处机关是否成功破解
+        private bool m_isLastSuccess = false;
+
         private Animator m_animator;
         private GameObject m_camera;
         private Vector3 m_cameraOriPos;
@@ -25,12 +27,14 @@ namespace MiniGame
         private Vector3 m_offsetBetweenCamAndPlate;
         private Vector3 m_nowPosition;
         private Vector3 m_oldPosition;
-        public float minY = 0.0f;
-        public float maxY = 6.0f;
-        public float m_speed = 0.05f;
+        public float minY = 1.2f;
+        public float maxY = 9.36f;
+        public float followSpeed = 2.0f;
+        public float returnSpeed = 2.3f;
 
         private bool m_canFollow = false;
         private bool m_isSlideBack = false;
+        
 
         void Start()
         {
@@ -40,6 +44,7 @@ namespace MiniGame
             m_camera = GameObject.FindGameObjectWithTag("MainCamera");
             m_animator = m_camera.GetComponent<Animator>();
             m_moon = GameObject.Find("Moon");
+
             //m_cameraOriPos = m_camera.transform.position;
             //m_offsetBetweenCamAndPlate = transform.position - m_camera.transform.position;
             Debug.Log("camera OriPos"+m_cameraOriPos);
@@ -56,34 +61,49 @@ namespace MiniGame
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 if (touch.phase == TouchPhase.Began)
                 {
-                    Debug.Log("盘子原始位置"+transform.position);
+                    //Debug.Log("盘子原始位置"+transform.position);
                     m_camera.GetComponent<CameraController>().enabled = false;
                     m_originPos = transform.position;
                     m_cameraOriPos = m_camera.transform.position;
                     m_offsetBetweenCamAndPlate = transform.position - m_camera.transform.position;
                     m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
                     //m_camera.GetComponent<FollowObjectCamera>().enabled = true;
+                    m_canFollow = true;
+                    this.enabled = true;
                 }
             }
-            m_canFollow = true;
-            this.enabled = true;
+
         }
 
         void CameraFollow()
         {
             if (m_canFollow)
             {
-                m_nowPosition = transform.position - m_offsetBetweenCamAndPlate;
+                //m_nowPosition = transform.position - m_offsetBetweenCamAndPlate;
+                float y = transform.position.y - m_offsetBetweenCamAndPlate.y;
+                m_nowPosition.y = y;
+
                 m_nowPosition.y = Mathf.Clamp(m_nowPosition.y, minY, maxY);
-                //m_nowPosition.y = Mathf.MoveTowards(m_camera.transform.position.y, m_nowPosition.y, m_speed);
-                Debug.Log("现在位置" + m_nowPosition + "偏差" + m_offsetBetweenCamAndPlate);
+                m_nowPosition.y = Mathf.MoveTowards(m_camera.transform.position.y, m_nowPosition.y, followSpeed * Time.deltaTime);
                 m_camera.transform.position = new Vector3(m_cameraOriPos.x, m_nowPosition.y, m_cameraOriPos.z);
+                //Debug.Log("现在位置" + m_camera.transform.position + "偏差" + m_offsetBetweenCamAndPlate);
             }
 
         }
 
         void Update()
         {
+            if (m_isLastSuccess)
+            {
+                AnimatorStateInfo m_animatorInfo = m_moon.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                if ((m_animatorInfo.normalizedTime > 1.0f) && (m_animatorInfo.IsName("MoonAppear")))
+                {
+                    GameController.Instance.UpdateStageProgress(4);
+                    this.enabled = false;
+                }
+            }
+
+
             if (Input.touchCount == 1)
             {
                 Touch touch = Input.touches[0];
@@ -93,7 +113,7 @@ namespace MiniGame
                 {
                     Vector2 currPos = touchPos + m_offset;
                     transform.position = new Vector3(currPos.x, currPos.y, transform.position.z);
-                    CameraFollow();
+                    //CameraFollow();
                 }
                 if (touch.phase == TouchPhase.Ended)
                 {
@@ -113,7 +133,9 @@ namespace MiniGame
                         
                         QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                         gameObject.GetComponent<Collider2D>().enabled = false;
-                        this.enabled = false;
+
+                        m_isLastSuccess = true;
+                        
                     }
                     else
                     {
@@ -149,6 +171,7 @@ namespace MiniGame
             //}
         }
 
+
         /// <summary>
         /// PC端使用
         /// </summary>
@@ -161,26 +184,28 @@ namespace MiniGame
                 m_animator.enabled = false;
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
-                Debug.Log("盘子原始位置" + transform.position);
+                //Debug.Log("盘子原始位置" + transform.position);
                 m_originPos = transform.position;
                 m_cameraOriPos = m_camera.transform.position;
                 m_offsetBetweenCamAndPlate = transform.position - m_camera.transform.position;
                 m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
 
                 m_canFollow = true;
+                this.enabled = true;
                 //m_camera.GetComponent<FollowObjectCamera>().enabled = true;
             }
         }
 
         private void OnMouseDrag()
         {
-            Debug.Log("拖拽物体");
+            //Debug.Log("拖拽物体");
             if (Input.GetMouseButton(0))
             {
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 currPos = touchPos + m_offset;
                 transform.position = new Vector3(currPos.x, currPos.y, transform.position.z);
                 CameraFollow();
+                //Debug.Log("盘子位置" + transform.position);
             }
         }
 
@@ -190,7 +215,7 @@ namespace MiniGame
         private void OnMouseUp()
         {
             m_canFollow = false;
-            Debug.Log("进来啦" + m_isSuccess);
+            //Debug.Log("进来啦" + m_isSuccess);
             m_camera.GetComponent<CameraController>().enabled = true;
             //先做机关破解成功判断
             if (m_isSuccess)
@@ -210,10 +235,12 @@ namespace MiniGame
                 gameObject.GetComponent<Animator>().enabled = true;
                 //m_animator.Play("Scene1ToScene2");
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-                this.enabled = false;
+                //this.enabled = false;
+
+                m_isLastSuccess = true;
             }
             else
-            {
+            {            CameraFollow();
 
                 //瞬时回到原来位置
                 Debug.Log("盘子机关未成功");
@@ -229,7 +256,7 @@ namespace MiniGame
 
         private void SlidBackOriPos()
         {
-            float destY = Mathf.MoveTowards(m_camera.transform.position.y, m_cameraOriPos.y, 0.1f);
+            float destY = Mathf.MoveTowards(m_camera.transform.position.y, m_cameraOriPos.y,  returnSpeed *Time.deltaTime);
             m_camera.transform.position = new Vector3(m_camera.transform.position.x, destY, 5.0f);
             if(m_camera.transform.position.y- m_cameraOriPos.y<0.1f)
             {
@@ -237,7 +264,6 @@ namespace MiniGame
                 m_isSlideBack = false;
                 this.enabled = false;
             }
-            
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

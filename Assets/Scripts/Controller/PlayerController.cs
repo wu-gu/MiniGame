@@ -42,7 +42,7 @@ namespace MiniGame
 
             //设置人物脚步声
             m_audioSource = GetComponent<AudioSource>();
-            m_audioSource.volume = AudioController.Instance.musicVolume;
+            m_audioSource.volume = AudioController.Instance.soundEffectVolume;
 
             forwardable = true;
             m_renderer = GetComponent<SpriteRenderer>();
@@ -121,18 +121,42 @@ namespace MiniGame
                     {
                         m_destPos = touchPos;
                         sakura.SetSakura(new Vector3(m_destPos.x, m_destPos.y, this.transform.position.z));
+                        //控制人物转向
+                        if (m_destPos.x < m_rigidbody2D.position.x)
+                        {
+                            Debug.Log("左转");
+
+                            if (this.gameObject.CompareTag("Boy"))
+                                m_renderer.flipX = true;
+                            if (this.gameObject.CompareTag("Girl"))
+                                m_renderer.flipX = false;
+                        }
+                        else
+                        {
+                            Debug.Log("右转");
+
+                            if (this.gameObject.CompareTag("Boy"))
+                                m_renderer.flipX = false;
+                            if (this.gameObject.CompareTag("Girl"))
+                                m_renderer.flipX = true;
+                        }
                     }
                 }
             }
 
-            Debug.Log("更新目的地，目的地为:" + m_destPos);
+            //Debug.Log("更新目的地，目的地为:" + m_destPos);
             //控制动画播放                
         }
 
         void FixedUpdate()
         {
-            if (Mathf.Abs(m_rigidbody2D.position.x - m_destPos.x) < 0.01f || (m_destPos.x > m_rigidbody2D.position.x && !forwardable))
+            //Debug.Log("刚体位置"+m_rigidbody2D.position.ToString("f9"));
+            //Debug.Log("目的地"+m_destPos.ToString("f9"));
+            //Debug.Log(Mathf.Abs(m_rigidbody2D.position.x - m_destPos.x) < 0.1f);
+            //Debug.Log((m_destPos.x > m_rigidbody2D.position.x && !forwardable));
+            if (Mathf.Abs(m_rigidbody2D.position.x - m_destPos.x) < 0.1f || (m_destPos.x > m_rigidbody2D.position.x && !forwardable))
             {
+                Debug.Log("走不动了");
                 m_animator.SetBool(IsWalking, false);
                 m_destPos = m_rigidbody2D.position;
                 return;
@@ -145,7 +169,7 @@ namespace MiniGame
             if (Physics2D.Raycast(nextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
             {
                 //修正y方向位置
-                Debug.Log("地面"+hitBuffer[0].collider.gameObject.name);
+                //Debug.Log("地面"+hitBuffer[0].collider.gameObject.name);
 
                 Vector2 hitPos = hitBuffer[0].point;
                 Debug.DrawLine(nextPos, hitPos, Color.red);

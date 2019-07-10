@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class choose : MonoBehaviour
+public class Choose : MonoBehaviour
 {
-
+    
     public bool flag;
     public Toggle[] mtoggle;
     private Image chooselevel1, chooselevel2, chooselevel3;
