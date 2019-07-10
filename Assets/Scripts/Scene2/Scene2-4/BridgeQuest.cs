@@ -15,7 +15,6 @@ namespace MiniGame
         private bool m_firstTouch;
         private CircleCollider2D m_downEdge;
         private Renderer m_firstMagpie;
-        private GameObject m_shield;
         private GameObject m_buildBridgeMagpies;
         private GameObject m_flyingMagpie;
 
@@ -35,7 +34,6 @@ namespace MiniGame
             m_firstTouch = true;
             m_downEdge = GameObject.Find("Down Edge").GetComponent<CircleCollider2D>();
             m_firstMagpie = GameObject.Find("FlyingMagpie (15)").GetComponent<Renderer>();
-            m_shield = GameObject.Find("Shield");
             m_buildBridgeMagpies = GameObject.Find("BuildingBridgeMagpies");
             m_flyingMagpie = GameObject.Find("FlyingMagpie");
             this.enabled = false;
@@ -150,7 +148,6 @@ namespace MiniGame
                 transform.localRotation = new Quaternion(0, 0, 180f, 0);
                 gameObject.GetComponent<Collider2D>().enabled = false;
                 m_buildBridgeMagpies.GetComponent<Animator>().SetBool("BridgeQuestFired", true);
-                GameObject.Destroy(m_shield);
                 m_bridge.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.None;
                 Destroy(m_downEdge.gameObject);
                 Destroy(m_flyingMagpie.gameObject);

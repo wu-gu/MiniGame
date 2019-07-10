@@ -30,6 +30,8 @@ public class CameraController : MonoBehaviour
         m_mainCam = Camera.main;
         orthoHorizontal = m_mainCam.aspect * m_mainCam.orthographicSize;
         m_player = GameObject.FindGameObjectWithTag("Boy");
+        if (m_player == null)
+            m_player = GameObject.FindGameObjectWithTag("Girl");
     }
 
     /*

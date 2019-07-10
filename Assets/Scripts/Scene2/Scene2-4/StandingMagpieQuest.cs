@@ -13,12 +13,17 @@ namespace MiniGame
         public AudioClip m_magpieAudioClip;
         private GameObject m_flyingMagpie;
         private Collider2D m_collider2D;
+        private Animator m_mainCamAnimator;
+        private GameObject mainCam;
 
         void Start()
         {
+            mainCam = GameObject.FindGameObjectWithTag("MainCamera");
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
             m_flyingMagpie = GameObject.Find("FlyingMagpie");
             m_collider2D = GetComponent<Collider2D>();
+            m_mainCamAnimator = mainCam.GetComponent<Animator>();
+            this.enabled = false;
         }
 
         void Update()
@@ -33,6 +38,8 @@ namespace MiniGame
                 m_isSuccess = false;
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                 Destroy(gameObject);
+                mainCam.GetComponent<CameraController>().enabled = false;
+                mainCam.GetComponent<CameraNaturalTransition>().NaturalTransition2();
                 m_flyingMagpie.GetComponent<Animator>().SetBool("MagpieQuestFired", true);
                 AudioController.Instance.PushClip(m_magpieAudioClip);
                 this.enabled = false;
