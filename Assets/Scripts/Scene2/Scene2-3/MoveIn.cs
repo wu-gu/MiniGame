@@ -56,9 +56,9 @@ namespace MiniGame
         private void OnMouseDown()
         {
             m_particleSystem.Stop();
-            m_particleSystem.Clear();
-            GameObject.FindGameObjectWithTag("Girl").GetComponent<PlayerController>().enabled = false;
+            m_particleSystem.Clear();            
             InputController.Instance.SetPlayerCanMove(false);
+            GameObject.FindGameObjectWithTag("Girl").GetComponent<PlayerController>().enabled = false;
             if (m_destPos.x < m_rigidbody2D.position.x)
                 m_renderer.flipX = false;
             this.enabled = true;

@@ -69,6 +69,12 @@ namespace MiniGame
 
             m_CurrentZoneScene = SceneManager.GetActiveScene();
 
+
+
+        }
+
+        private void Start()
+        {
             //关卡初始化设置
             if (!m_CurrentZoneScene.name.Equals("Start"))
             {
@@ -83,13 +89,12 @@ namespace MiniGame
                 LoadFirstStageGameObjects();
             }
             //加载该关卡对应的背景音乐
-            AudioController.Instance.MuteJustBackground();
-            AudioController.Instance.MuteJustEnvironment();
             AudioController.Instance.ChangeBackground(GameObject.Find("InitSetting").GetComponent<InitSetting>().backgroundClip);
             AudioController.Instance.ChangeEnviroment(GameObject.Find("InitSetting").GetComponent<InitSetting>().envirnmentClip);
+            //AudioController.Instance.MuteJustBackground();
+            //AudioController.Instance.MuteJustEnvironment();
             AudioController.Instance.PlayJustBackground();
             AudioController.Instance.UnmuteJustBackground(1.0f);
-
         }
 
         void Update()
@@ -131,7 +136,9 @@ namespace MiniGame
 
             //加载该关卡对应的背景音乐
             AudioController.Instance.MuteJustBackground();
+            AudioController.Instance.MuteJustEnvironment();
             AudioController.Instance.ChangeBackground(GameObject.Find("InitSetting").GetComponent<InitSetting>().backgroundClip);
+            AudioController.Instance.ChangeEnviroment(GameObject.Find("InitSetting").GetComponent<InitSetting>().envirnmentClip);
             AudioController.Instance.PlayJustBackground();
             AudioController.Instance.UnmuteJustBackground(1.0f);
 

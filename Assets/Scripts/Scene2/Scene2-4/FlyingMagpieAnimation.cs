@@ -19,6 +19,7 @@ public class FlyingMagpieAnimation : MonoBehaviour
     void FlyingMagpieArrivalEventFired()
     {
         m_standingMagpie.GetComponent<Animator>().SetBool("FlyingMagpieArrivalEventFired", true);
+        m_standingMagpie.GetComponent<Collider2D>().enabled = true;
     }
 
     void BuildingBridgeMagpies()

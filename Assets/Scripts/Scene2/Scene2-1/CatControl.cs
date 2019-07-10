@@ -29,7 +29,7 @@ namespace MiniGame
         {
             GameObject mainCam = GameObject.FindGameObjectWithTag("MainCamera");
             m_ground = GameObject.Find("ground");
-            m_desout = GameObject.Find("catdes");
+            m_desout = GameObject.Find("Catdes");
             m_follw = mainCam.GetComponent<CameraController>();
             m_mainCamAnimator = mainCam.GetComponent<Animator>();
             m_cataimator = GetComponent<Animator>();

@@ -143,7 +143,7 @@ public class Buttonscript : MonoBehaviour
         if (GameController.Instance.highestProgress > 2)
         {
             AudioController.Instance.PushClip(buttonEffectClip);
-            GameController.Instance.TransitionToNewLevel("Level2-1");
+            GameController.Instance.TransitionToNewLevel("Level2");
         }
     }
 

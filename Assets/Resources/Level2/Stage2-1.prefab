@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 321373314105683030}
   - component: {fileID: 321373314105683031}
   m_Layer: 10
-  m_Name: moon
+  m_Name: Moon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -177,8 +177,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 321373314105683025}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.26, y: 2, z: 0}
-  m_LocalScale: {x: 0.09236257, y: 0.09505216, z: 1}
+  m_LocalPosition: {x: -4.26, y: 1.99, z: 0}
+  m_LocalScale: {x: 0.08, y: 0.08, z: 1}
   m_Children: []
   m_Father: {fileID: 321373314916622561}
   m_RootOrder: 2
@@ -220,7 +220,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 4
-  m_Sprite: {fileID: 21300000, guid: a34d6c5c90fb3fd4782ba2d2d74ecaaa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 813fb7aee277a7944a5bf0e8e12356d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -248,7 +248,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.62, y: 3.59}
+    oldSize: {x: 4.4266667, y: 4.4}
     newSize: {x: 3.62, y: 3.59}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -971,7 +971,7 @@ GameObject:
   - component: {fileID: 321373315153084809}
   - component: {fileID: 321373315153084808}
   m_Layer: 0
-  m_Name: catdes
+  m_Name: Catdes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1337,7 +1337,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -3
+  m_SortingOrder: -4
   m_Sprite: {fileID: 21300000, guid: ee4025e49817be141b3cb318084ebca5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -1470,7 +1470,7 @@ GameObject:
   - component: {fileID: 321373315745671269}
   - component: {fileID: 321373315745671270}
   m_Layer: 8
-  m_Name: room
+  m_Name: Room
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1532,7 +1532,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 19.48, y: 12.72}
+  m_Size: {x: 46.59, y: 17.084517}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1687,7 +1687,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -2
+  m_SortingOrder: -3
   m_Sprite: {fileID: 21300000, guid: d7e2da4782a50f64b843a460498878eb, type: 3}
   m_Color: {r: 0.9150943, g: 0.5395603, b: 0.5395603, a: 1}
   m_FlipX: 0

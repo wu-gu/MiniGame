@@ -42,76 +42,79 @@ namespace MiniGame
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector2 touchPos = (Vector2)(transform.position);
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    Vector2 touchPos = (Vector2)(transform.position);
 
-                //Android--stable
-                //Touch currTouch = Input.GetTouch(0);
-                //touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+            //    //Android--stable
+            //    Touch currTouch = Input.GetTouch(0);
+            //    touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
 
-                // PC --stable
-                Vector2 currTouch = (Vector2)Input.mousePosition;
-                touchPos = Camera.main.ScreenToWorldPoint(currTouch);
+            //    // PC --stable
+            //    //Vector2 currTouch = (Vector2)Input.mousePosition;
+            //    //touchPos = Camera.main.ScreenToWorldPoint(currTouch);
 
-                Vector2 currDirection = touchPos - (Vector2)(transform.position);
-                m_preDirection = currDirection;
-            }
+            //    Vector2 currDirection = touchPos - (Vector2)(transform.position);
+            //    m_preDirection = currDirection;
+            //}
 
             // PC --stable
-            if (Input.GetMouseButton(0))
-            {
-                Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
+            //if (Input.GetMouseButton(0))
+            //{
+            //    Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //    Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
 
-                if (bounds.Contains(mousePoint) && !m_downEdge.bounds.Contains(mousePoint))
-                {
-                    Vector2 touchPos = (Vector2)(transform.position);
-                    touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    Vector2 currDirection = touchPos - (Vector2)(transform.position);
+            //    if (bounds.Contains(mousePoint) && !m_downEdge.bounds.Contains(mousePoint))
+            //    {
+            //        Vector2 touchPos = (Vector2)(transform.position);
+            //        touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //        Vector2 currDirection = touchPos - (Vector2)(transform.position);
 
-                    Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
-                    Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
+            //        Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
+            //        Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
 
-                    float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
-                    Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
+            //        float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
+            //        Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
 
-                    //计算顺时针还是逆时针
-                    angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
+            //        //计算顺时针还是逆时针
+            //        angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
 
-                    if (m_angleCounter > 180)
-                    {
-                        m_success = true;
-                    }
-                    if (angle < 0)
-                    {
-                        m_angleCounter += Mathf.Abs(angle);
-                        transform.Rotate(new Vector3(0, 0, angle));
-                    }
-                    //transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);                    
-                    m_preDirection = currDirection;
+            //        if (m_angleCounter > 180)
+            //        {
+            //            m_success = true;
+            //        }
+            //        if (angle < 0)
+            //        {
+            //            m_angleCounter += Mathf.Abs(angle);
+            //            transform.Rotate(new Vector3(0, 0, angle));
+            //        }
+            //        //transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);                    
+            //        m_preDirection = currDirection;
 
-                }
+            //    }
 
-                else
-                {
-                    Vector2 touchPos = (Vector2)(transform.position);
-                    Vector2 currTouch = (Vector2)Input.mousePosition;
-                    touchPos = Camera.main.ScreenToWorldPoint(currTouch);
+            //    else
+            //    {
+            //        Vector2 touchPos = (Vector2)(transform.position);
+            //        Vector2 currTouch = (Vector2)Input.mousePosition;
+            //        touchPos = Camera.main.ScreenToWorldPoint(currTouch);
 
-                    Vector2 currDirection = touchPos - (Vector2)(transform.position);
-                    m_preDirection = currDirection;
-                }
+            //        Vector2 currDirection = touchPos - (Vector2)(transform.position);
+            //        m_preDirection = currDirection;
+            //    }
                     
-            }
+            //}
+
             //Android--stable
-            if (Input.touchCount > 0)
+            if (Input.touchCount == 1)
             {
-                Vector2 touchPoint = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                Touch currTouch = Input.GetTouch(0);
+                Vector2 touchPoint = Camera.main.ScreenToWorldPoint(currTouch.position);
                 Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
-                if (bounds.Contains(touchPoint))
+
+                if (bounds.Contains(touchPoint)&&!m_downEdge.bounds.Contains(touchPoint))
                 {
-                    Touch currTouch = Input.GetTouch(0);
+                    
                     Vector2 touchPos = (Vector2)(transform.position);
                     touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
                     Vector2 currDirection = touchPos - (Vector2)(transform.position);
@@ -130,16 +133,33 @@ namespace MiniGame
 
                         //计算顺时针还是逆时针
                         angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
-                        Debug.Log(angle);
-                        transform.Rotate(new Vector3(0, 0, angle));
-                        m_preDirection = currDirection;
-                        if (Mathf.Abs(angle) > 100)
+
+                        if (m_angleCounter > 180)
                         {
                             m_success = true;
                         }
+                        if (angle < 0)
+                        {
+                            m_angleCounter += Mathf.Abs(angle);
+                            transform.Rotate(new Vector3(0, 0, angle));
+                        }
+                        //transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);                    
+                        m_preDirection = currDirection;
+
                     }
                 }
+
+                else
+                {
+                    Vector2 touchPos = (Vector2)(transform.position);                  
+                    touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+
+                    Vector2 currDirection = touchPos - (Vector2)(transform.position);
+                    m_preDirection = currDirection;
+                }
             }
+
+
             Debug.Log("旋转到位没？" + m_success);
             if (m_success)
             {
@@ -161,12 +181,12 @@ namespace MiniGame
             Vector2 touchPos = (Vector2)(transform.position);
 
             //Android--stable
-            //Touch currTouch = Input.GetTouch(0);
-            //touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+            Touch currTouch = Input.GetTouch(0);
+            touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
 
             // PC --stable
-            Vector2 currTouch = (Vector2)Input.mousePosition;
-            touchPos = Camera.main.ScreenToWorldPoint(currTouch);
+            //Vector2 currTouch = (Vector2)Input.mousePosition;
+            //touchPos = Camera.main.ScreenToWorldPoint(currTouch);
 
             if (m_firstTouch)
             {
