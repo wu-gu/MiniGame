@@ -38,8 +38,8 @@ namespace MiniGame
 
         void Start()
         {
-            //m_originPos = transform.position;
-            
+            m_originPos = transform.position;
+
             QuestController.Instance.RegisterQuest(gameObject.ToString(), this);
             m_camera = GameObject.FindGameObjectWithTag("MainCamera");
             m_animator = m_camera.GetComponent<Animator>();
@@ -55,23 +55,23 @@ namespace MiniGame
 
         public void OnUpdate()
         {
-            if (Input.touchCount == 1)
-            {
-                Touch touch = Input.touches[0];
-                Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                if (touch.phase == TouchPhase.Began)
-                {
-                    //Debug.Log("盘子原始位置"+transform.position);
-                    m_camera.GetComponent<CameraController>().enabled = false;
-                    m_originPos = transform.position;
-                    m_cameraOriPos = m_camera.transform.position;
-                    m_offsetBetweenCamAndPlate = transform.position - m_camera.transform.position;
-                    m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
-                    //m_camera.GetComponent<FollowObjectCamera>().enabled = true;
-                    m_canFollow = true;
-                    this.enabled = true;
-                }
-            }
+            //if (Input.touchCount == 1)
+            //{
+            //    Touch touch = Input.touches[0];
+            //    Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //    if (touch.phase == TouchPhase.Began)
+            //    {
+            //        //Debug.Log("盘子原始位置"+transform.position);
+            //        m_camera.GetComponent<CameraController>().enabled = false;
+            //        m_originPos = transform.position;
+            //        m_cameraOriPos = m_camera.transform.position;
+            //        m_offsetBetweenCamAndPlate = transform.position - m_camera.transform.position;
+            //        m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
+            //        //m_camera.GetComponent<FollowObjectCamera>().enabled = true;
+            //        m_canFollow = true;
+            //        this.enabled = true;
+            //    }
+            //}
 
         }
 
@@ -85,7 +85,7 @@ namespace MiniGame
 
                 m_nowPosition.y = Mathf.Clamp(m_nowPosition.y, minY, maxY);
                 m_nowPosition.y = Mathf.MoveTowards(m_camera.transform.position.y, m_nowPosition.y, followSpeed * Time.deltaTime);
-                m_camera.transform.position = new Vector3(m_cameraOriPos.x, m_nowPosition.y, m_cameraOriPos.z);
+                m_camera.transform.position = new Vector3(m_cameraOriPos.x, m_nowPosition.y, m_cameraOriPos.z); 
                 //Debug.Log("现在位置" + m_camera.transform.position + "偏差" + m_offsetBetweenCamAndPlate);
             }
 
@@ -104,55 +104,55 @@ namespace MiniGame
             }
 
 
-            if (Input.touchCount == 1)
-            {
-                Touch touch = Input.touches[0];
-                Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //if (Input.touchCount == 1)
+            //{
+            //    Touch touch = Input.touches[0];
+            //    Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 
-                if (touch.phase == TouchPhase.Moved)
-                {
-                    Vector2 currPos = touchPos + m_offset;
-                    transform.position = new Vector3(currPos.x, currPos.y, transform.position.z);
-                    //CameraFollow();
-                }
-                if (touch.phase == TouchPhase.Ended)
-                {
-                    m_canFollow = false;
-                    m_camera.GetComponent<CameraController>().enabled = true;
-                    if (m_isSuccess)
-                    {
-                        Debug.Log("盘子机关成功");
-                        AudioController.Instance.PushClip(audioClip);
-                        m_animator.enabled = true;
-                        //m_animator.Play("Scene1ToScene2");
-                        m_moon.transform.SetParent(transform.parent.parent);
-                        m_moon.GetComponent<Animator>().enabled = true;
-                        m_moon.transform.position = new Vector3(transform.position.x, transform.position.y, 15.0f);
-                        gameObject.GetComponent<Animator>().enabled = true;
-                        m_animator.SetBool("PlateQuestFired", true);
+            //    if (touch.phase == TouchPhase.Moved)
+            //    {
+            //        Vector2 currPos = touchPos + m_offset;
+            //        transform.position = new Vector3(currPos.x, currPos.y, transform.position.z);
+            //        CameraFollow();
+            //    }
+            //    if (touch.phase == TouchPhase.Ended)
+            //    {
+            //        m_canFollow = false;
+            //        m_camera.GetComponent<CameraController>().enabled = true;
+            //        if (m_isSuccess)
+            //        {
+            //            Debug.Log("盘子机关成功");
+            //            AudioController.Instance.PushClip(audioClip);
+            //            m_animator.enabled = true;
+            //            //m_animator.Play("Scene1ToScene2");
+            //            m_moon.transform.SetParent(transform.parent.parent);
+            //            m_moon.GetComponent<Animator>().enabled = true;
+            //            m_moon.transform.position = new Vector3(transform.position.x, transform.position.y, 15.0f);
+            //            gameObject.GetComponent<Animator>().enabled = true;
+            //            m_animator.SetBool("PlateQuestFired", true);
                         
-                        QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-                        gameObject.GetComponent<Collider2D>().enabled = false;
+            //            QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+            //            gameObject.GetComponent<Collider2D>().enabled = false;
 
-                        m_isLastSuccess = true;
+            //            m_isLastSuccess = true;
                         
-                    }
-                    else
-                    {
-                        Debug.Log("盘子机关未成功");
-                        //瞬时回到原来位置
-                        m_animator.enabled = false;
-                        transform.position = new Vector3(m_originPos.x, m_originPos.y, transform.position.z);
-                        //m_camera.transform.position = m_cameraOriPos;
-                        ////过渡回到原来位置
-                        ////m_camera.GetComponent<FollowObjectCamera>().enabled = false;
+            //        }
+            //        else
+            //        {
+            //            Debug.Log("盘子机关未成功");
+            //            //瞬时回到原来位置
+            //            m_animator.enabled = false;
+            //            transform.position = new Vector3(m_originPos.x, m_originPos.y, transform.position.z);
+            //            //m_camera.transform.position = m_cameraOriPos;
+            //            ////过渡回到原来位置
+            //            ////m_camera.GetComponent<FollowObjectCamera>().enabled = false;
 
-                        //this.enabled = false;
+            //            //this.enabled = false;
 
-                        m_isSlideBack = true;
-                    }
-                }
-            }
+            //            m_isSlideBack = true;
+            //        }
+            //    }
+            //}
             if (m_isSlideBack)
             {
                 SlidBackOriPos();
@@ -175,6 +175,7 @@ namespace MiniGame
         /// <summary>
         /// PC端使用
         /// </summary>
+//#if UNITY_STANDALONE_WIN
         private void OnMouseDown()
         {
             if (Input.GetMouseButton(0))
@@ -185,7 +186,7 @@ namespace MiniGame
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
                 //Debug.Log("盘子原始位置" + transform.position);
-                m_originPos = transform.position;
+                //m_originPos = transform.position;
                 m_cameraOriPos = m_camera.transform.position;
                 m_offsetBetweenCamAndPlate = transform.position - m_camera.transform.position;
                 m_offset = new Vector2(transform.position.x, transform.position.y) - touchPos;
@@ -230,7 +231,7 @@ namespace MiniGame
                 Debug.Log("moon位置" + transform.position.x);
                 m_moon.GetComponent<Animator>().enabled = true;
                 m_moon.transform.position = new Vector3(transform.position.x, transform.position.y, 15.0f);
-                
+
                 m_animator.SetBool("PlateQuestFired", true);
                 gameObject.GetComponent<Animator>().enabled = true;
                 //m_animator.Play("Scene1ToScene2");
@@ -240,7 +241,7 @@ namespace MiniGame
                 m_isLastSuccess = true;
             }
             else
-            {            CameraFollow();
+            {
 
                 //瞬时回到原来位置
                 Debug.Log("盘子机关未成功");
@@ -253,6 +254,7 @@ namespace MiniGame
                 m_isSlideBack = true;
             }
         }
+//#endif
 
         private void SlidBackOriPos()
         {
@@ -266,7 +268,7 @@ namespace MiniGame
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void OnTriggerStay2D(Collider2D collision)
         {
             //可以采取距离判断或者物体碰撞的方式判断机关是否已经破解。此处采用物体碰撞
             if (collision.gameObject.Equals(destGameobject))
