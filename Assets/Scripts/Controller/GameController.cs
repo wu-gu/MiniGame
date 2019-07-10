@@ -88,13 +88,9 @@ namespace MiniGame
                 //加载非开始关卡的开始画面
                 LoadFirstStageGameObjects();
             }
-            //加载该关卡对应的背景音乐
-            AudioController.Instance.ChangeBackground(GameObject.Find("InitSetting").GetComponent<InitSetting>().backgroundClip);
-            AudioController.Instance.ChangeEnviroment(GameObject.Find("InitSetting").GetComponent<InitSetting>().envirnmentClip);
-            //AudioController.Instance.MuteJustBackground();
-            //AudioController.Instance.MuteJustEnvironment();
-            AudioController.Instance.PlayJustBackground();
-            AudioController.Instance.UnmuteJustBackground(1.0f);
+
+            //加载该关卡默认设置
+            LoadInitSetting();
         }
 
         void Update()
@@ -134,13 +130,8 @@ namespace MiniGame
                 LoadFirstStageGameObjects();
             }
 
-            //加载该关卡对应的背景音乐
-            AudioController.Instance.MuteJustBackground();
-            AudioController.Instance.MuteJustEnvironment();
-            AudioController.Instance.ChangeBackground(GameObject.Find("InitSetting").GetComponent<InitSetting>().backgroundClip);
-            AudioController.Instance.ChangeEnviroment(GameObject.Find("InitSetting").GetComponent<InitSetting>().envirnmentClip);
-            AudioController.Instance.PlayJustBackground();
-            AudioController.Instance.UnmuteJustBackground(1.0f);
+            //加载该关卡默认设置
+            LoadInitSetting();
 
             Debug.Log(newSceneName + "已经加载完成");
             m_Transitioning = false; 
@@ -264,6 +255,29 @@ namespace MiniGame
         //    m_CurrentZoneScene = entrance.gameObject.scene;
         //    m_ZoneRestartDestinationTag = entrance.destinationTag;
         //}
+
+        /// <summary>
+        /// 加载该Scene的初始设置，比如背景音乐
+        /// </summary>
+        public void LoadInitSetting()
+        {
+            //加载该关卡对应的背景音乐
+            AudioController.Instance.MuteJustBackground();
+            AudioController.Instance.MuteJustEnvironment();
+            AudioClip environmentClip = GameObject.Find("InitSetting").GetComponent<InitSetting>().envirnmentClip;
+            AudioClip backgroundClip = GameObject.Find("InitSetting").GetComponent<InitSetting>().backgroundClip;
+            if (environmentClip != null)
+            {
+                AudioController.Instance.ChangeBackground(backgroundClip);
+            }
+            if (backgroundClip != null)
+            {
+                AudioController.Instance.ChangeEnviroment(environmentClip);
+            }
+            AudioController.Instance.PlayJustBackground();
+            AudioController.Instance.UnmuteJustBackground(1.0f);
+        }
+
 
         /// <summary>
         /// 加载Scene初始画面的GameObjects

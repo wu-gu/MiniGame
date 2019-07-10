@@ -59,105 +59,105 @@ namespace MiniGame
             //}
 
             // PC --stable
-            //if (Input.GetMouseButton(0))
-            //{
-            //    Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //    Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
-
-            //    if (bounds.Contains(mousePoint) && !m_downEdge.bounds.Contains(mousePoint))
-            //    {
-            //        Vector2 touchPos = (Vector2)(transform.position);
-            //        touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //        Vector2 currDirection = touchPos - (Vector2)(transform.position);
-
-            //        Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
-            //        Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
-
-            //        float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
-            //        Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
-
-            //        //计算顺时针还是逆时针
-            //        angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
-
-            //        if (m_angleCounter > 180)
-            //        {
-            //            m_success = true;
-            //        }
-            //        if (angle < 0)
-            //        {
-            //            m_angleCounter += Mathf.Abs(angle);
-            //            transform.Rotate(new Vector3(0, 0, angle));
-            //        }
-            //        //transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);                    
-            //        m_preDirection = currDirection;
-
-            //    }
-
-            //    else
-            //    {
-            //        Vector2 touchPos = (Vector2)(transform.position);
-            //        Vector2 currTouch = (Vector2)Input.mousePosition;
-            //        touchPos = Camera.main.ScreenToWorldPoint(currTouch);
-
-            //        Vector2 currDirection = touchPos - (Vector2)(transform.position);
-            //        m_preDirection = currDirection;
-            //    }
-                    
-            //}
-
-            //Android--stable
-            if (Input.touchCount == 1)
+            if (Input.GetMouseButton(0))
             {
-                Touch currTouch = Input.GetTouch(0);
-                Vector2 touchPoint = Camera.main.ScreenToWorldPoint(currTouch.position);
+                Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
 
-                if (bounds.Contains(touchPoint)&&!m_downEdge.bounds.Contains(touchPoint))
+                if (bounds.Contains(mousePoint) && !m_downEdge.bounds.Contains(mousePoint))
                 {
-                    
                     Vector2 touchPos = (Vector2)(transform.position);
-                    touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+                    touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     Vector2 currDirection = touchPos - (Vector2)(transform.position);
 
-                    if (currTouch.phase == TouchPhase.Moved)
+                    Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
+                    Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
+
+                    float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
+                    Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
+
+                    //计算顺时针还是逆时针
+                    angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
+
+                    if (m_angleCounter > 180)
                     {
-                        Debug.Log("Moved");
-                        Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
-                        Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
-
-                        Debug.Log("PreDirection" + preDirectionVec3);
-                        Debug.Log("CurrDirection" + currDirectionVec3);
-
-                        float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
-                        Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
-
-                        //计算顺时针还是逆时针
-                        angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
-
-                        if (m_angleCounter > 180)
-                        {
-                            m_success = true;
-                        }
-                        if (angle < 0)
-                        {
-                            m_angleCounter += Mathf.Abs(angle);
-                            transform.Rotate(new Vector3(0, 0, angle));
-                        }
-                        //transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);                    
-                        m_preDirection = currDirection;
-
+                        m_success = true;
                     }
+                    if (angle < 0)
+                    {
+                        m_angleCounter += Mathf.Abs(angle);
+                        transform.Rotate(new Vector3(0, 0, angle));
+                    }
+                    //transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);                    
+                    m_preDirection = currDirection;
+
                 }
 
                 else
                 {
-                    Vector2 touchPos = (Vector2)(transform.position);                  
-                    touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+                    Vector2 touchPos = (Vector2)(transform.position);
+                    Vector2 currTouch = (Vector2)Input.mousePosition;
+                    touchPos = Camera.main.ScreenToWorldPoint(currTouch);
 
                     Vector2 currDirection = touchPos - (Vector2)(transform.position);
                     m_preDirection = currDirection;
                 }
+
             }
+
+            //Android--stable
+            //if (Input.touchCount == 1)
+            //{
+            //    Touch currTouch = Input.GetTouch(0);
+            //    Vector2 touchPoint = Camera.main.ScreenToWorldPoint(currTouch.position);
+            //    Bounds bounds = gameObject.GetComponent<Collider2D>().bounds;
+
+            //    if (bounds.Contains(touchPoint)&&!m_downEdge.bounds.Contains(touchPoint))
+            //    {
+                    
+            //        Vector2 touchPos = (Vector2)(transform.position);
+            //        touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+            //        Vector2 currDirection = touchPos - (Vector2)(transform.position);
+
+            //        if (currTouch.phase == TouchPhase.Moved)
+            //        {
+            //            Debug.Log("Moved");
+            //            Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
+            //            Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
+
+            //            Debug.Log("PreDirection" + preDirectionVec3);
+            //            Debug.Log("CurrDirection" + currDirectionVec3);
+
+            //            float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
+            //            Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
+
+            //            //计算顺时针还是逆时针
+            //            angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
+
+            //            if (m_angleCounter > 180)
+            //            {
+            //                m_success = true;
+            //            }
+            //            if (angle < 0)
+            //            {
+            //                m_angleCounter += Mathf.Abs(angle);
+            //                transform.Rotate(new Vector3(0, 0, angle));
+            //            }
+            //            //transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle);                    
+            //            m_preDirection = currDirection;
+
+            //        }
+            //    }
+
+            //    else
+            //    {
+            //        Vector2 touchPos = (Vector2)(transform.position);                  
+            //        touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+
+            //        Vector2 currDirection = touchPos - (Vector2)(transform.position);
+            //        m_preDirection = currDirection;
+            //    }
+            //}
 
 
             Debug.Log("旋转到位没？" + m_success);
