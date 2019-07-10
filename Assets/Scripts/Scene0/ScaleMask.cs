@@ -145,6 +145,13 @@ namespace MiniGame
         {
             if (!m_blocked)
                 return;
+            if (Input.touchCount == 1)
+                pre1 = Input.GetTouch(0);
+            if(Input.touchCount == 2)
+            {
+                pre1 = Input.GetTouch(0);
+                pre2 = Input.GetTouch(1);
+            }
             this.enabled = true;
         }
 
