@@ -44,76 +44,76 @@ namespace MiniGame
             float currentSize = m_camera.orthographicSize;
 
             // PC -- stable
-            float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
+            //float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
 
-            if (mouseScrollWheel + currentSize <= m_orthograp)
-            {
-                m_camera.orthographicSize = m_orthograp;
-                return;
-            }
-            else
-            {
-                if (mouseScrollWheel + currentSize >= m_dest && m_firstTime)
-                {
-                    m_camera.orthographicSize = m_dest;
-                    m_animator.enabled = true;
-                    m_animator.SetTrigger(IsScaleTime);
-                    m_firstTime = false;
-                }
-                else
-                    m_camera.orthographicSize = currentSize + mouseScrollWheel;
-            }
+            //if (mouseScrollWheel + currentSize <= m_orthograp)
+            //{
+            //    m_camera.orthographicSize = m_orthograp;
+            //    return;
+            //}
+            //else
+            //{
+            //    if (mouseScrollWheel + currentSize >= m_dest && m_firstTime)
+            //    {
+            //        m_camera.orthographicSize = m_dest;
+            //        m_animator.enabled = true;
+            //        m_animator.SetTrigger(IsScaleTime);
+            //        m_firstTime = false;
+            //    }
+            //    else
+            //        m_camera.orthographicSize = currentSize + mouseScrollWheel;
+            //}
 
             // Android -- stable
-            //if (Input.touchCount == 2)
-            //{
-            //    Touch curr1 = Input.GetTouch(0);
-            //    Touch curr2 = Input.GetTouch(1);
-            //    if (curr2.phase == TouchPhase.Began)
-            //    {
-            //        pre2 = curr2;
-            //        pre1 = curr1;
-            //        return;
-            //    }
+            if (Input.touchCount == 2)
+            {
+                Touch curr1 = Input.GetTouch(0);
+                Touch curr2 = Input.GetTouch(1);
+                if (curr2.phase == TouchPhase.Began)
+                {
+                    pre2 = curr2;
+                    pre1 = curr1;
+                    return;
+                }
 
-            //    // Process when the user input is clearly the act of scaling
-            //    else
-            //    {
-            //        // Disable collider component when scale starts, or player will be pushed out 
+                // Process when the user input is clearly the act of scaling
+                else
+                {
+                    // Disable collider component when scale starts, or player will be pushed out 
 
-            //        float preDist = Vector2.Distance(pre1.position, pre2.position);
-            //        float currDist = Vector2.Distance(curr1.position, curr2.position);
+                    float preDist = Vector2.Distance(pre1.position, pre2.position);
+                    float currDist = Vector2.Distance(curr1.position, curr2.position);
 
-            //        // Scale distance
-            //        float offset = preDist - currDist;
+                    // Scale distance
+                    float offset = preDist - currDist;
 
-            //        // Calculate scale offset and new scale vector per frame
-            //        float scaleFactor = offset / 2000f;
+                    // Calculate scale offset and new scale vector per frame
+                    float scaleFactor = offset / 2000f;
 
-            //        if (scaleFactor + currentSize <= m_orthograp)
-            //        {
-            //            m_camera.orthographicSize = m_orthograp;
-            //            return;
-            //        }
-            //        else
-            //        {
-            //            if (scaleFactor + currentSize >= m_dest)
-            //            {
-            //                m_camera.orthographicSize = m_dest;
-            //                m_animator.enabled = true;
-            //                m_animator.SetTrigger(IsScaleTime);
-            //                m_animator.enabled = true;
+                    if (scaleFactor + currentSize <= m_orthograp)
+                    {
+                        m_camera.orthographicSize = m_orthograp;
+                        return;
+                    }
+                    else
+                    {
+                        if (scaleFactor + currentSize >= m_dest)
+                        {
+                            m_camera.orthographicSize = m_dest;
+                            m_animator.enabled = true;
+                            m_animator.SetTrigger(IsScaleTime);
+                            m_animator.enabled = true;
 
-            //            }
-            //            else
-            //                m_camera.orthographicSize = currentSize + scaleFactor;
-            //        }
+                        }
+                        else
+                            m_camera.orthographicSize = currentSize + scaleFactor;
+                    }
 
-            //        pre1 = curr1;
-            //        pre2 = curr2;
+                    pre1 = curr1;
+                    pre2 = curr2;
 
-            //    }
-            //}
+                }
+            }
 
             //common
             AnimatorStateInfo animatorInfo;

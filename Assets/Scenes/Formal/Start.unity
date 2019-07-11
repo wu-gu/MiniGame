@@ -207,7 +207,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7722282613832487148}
         m_MethodName: OnClick1
-        m_Mode: 0
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -417,7 +417,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7722282613832487148}
         m_MethodName: OnClick2
-        m_Mode: 0
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3163,7 +3163,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7722282613832487148}
         m_MethodName: OnClick3
-        m_Mode: 0
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4939,10 +4939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flag: 0
-  mtoggle:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  mtoggle: []
 --- !u!114 &7722282613832487149
 MonoBehaviour:
   m_ObjectHideFlags: 0
