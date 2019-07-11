@@ -42,6 +42,7 @@ namespace MiniGame
 
             //设置人物脚步声
             m_audioSource = GetComponent<AudioSource>();
+            m_audioSource.clip = walkingMusic;
             m_audioSource.volume = AudioController.Instance.soundEffectVolume;
 
             forwardable = true;

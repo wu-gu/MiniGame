@@ -29,7 +29,7 @@ namespace MiniGame
             m_rigidbody2D = girl.GetComponent<Rigidbody2D>();
             m_girlAnimator = girl.GetComponent<Animator>();
             m_animator = m_character.GetComponent<Animator>();            
-            m_destPos = new Vector3(17.44f, -3.26f, 0f);
+            m_destPos = new Vector3(9.98f, -3.26f, 0f);
             IsWalking = Animator.StringToHash("isWalking");
             IsRightPos = Animator.StringToHash("IsRightPos");
             this.enabled = false;

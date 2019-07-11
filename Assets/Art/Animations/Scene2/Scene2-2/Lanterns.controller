@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6f35819ab8373d4294d9c3a6eba3d16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  windBlowLeavesClip: {fileID: 8300000, guid: 44f36f8129dd7f442a57fea91ea79bfb, type: 3}
 --- !u!1102 &-2765372643887253846
 AnimatorState:
   serializedVersion: 5

@@ -132,6 +132,7 @@ namespace MiniGame
                 //isPlaying will be false once the current clip end up playing
                 if(!m_SoundEffectAudioSource.isPlaying)
                 {
+                    //把播完的弹出来
                     m_MusicStack.Pop();
                     if(m_MusicStack.Count > 0)
                     {
@@ -151,6 +152,8 @@ namespace MiniGame
         //音效入栈方法
         public void PushClip(AudioClip clip)
         {
+            if(m_MusicStack.Count>0)
+                m_MusicStack.Pop();
             m_MusicStack.Push(clip);
             m_SoundEffectAudioSource.Stop();
             m_SoundEffectAudioSource.loop = false;

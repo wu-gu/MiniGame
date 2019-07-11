@@ -115,12 +115,16 @@ namespace MiniGame
             //    }
             //}
 
+            //common
             AnimatorStateInfo animatorInfo;
             animatorInfo = m_animator.GetCurrentAnimatorStateInfo(0);
             if (animatorInfo.normalizedTime > 1.0f&&animatorInfo.IsName("Stage2-1Scale"))
             {
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                 InputController.Instance.SetPlayerCanMove(true);
+                AudioController.Instance.PlayJustEnvironment();
+                AudioController.Instance.UnmuteJustEnvironment(1.0f);
+
                 Destroy(gameObject.GetComponent<Collider2D>());
                 Destroy(this);
             }

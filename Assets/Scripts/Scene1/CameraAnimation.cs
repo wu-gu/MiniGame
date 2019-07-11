@@ -11,6 +11,9 @@ namespace MiniGame
     public class CameraAnimation : MonoBehaviour
     {
 
+        [Tooltip("Stage1-4 to 1-5转场音乐")]
+        public AudioClip transitionClip;
+
         /// <summary>
         /// 动画开始播放，关闭主相机深度设置
         /// </summary>
@@ -20,6 +23,7 @@ namespace MiniGame
             GetComponent<CameraController>().enabled = false;
             gameObject.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            AudioController.Instance.PushClip(transitionClip);
         }
 
         /// <summary>

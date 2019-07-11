@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurnBehavior : StateMachineBehaviour
+namespace MiniGame
 {
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+
+    public class TurnBehavior : StateMachineBehaviour
     {
-        Animator leaves = GameObject.Find("Leaves").GetComponent<Animator>();
-        int shouldTurn = Animator.StringToHash("ShouldTurn");
-        leaves.SetBool(shouldTurn, true);
-        leaves.speed = 0.4f;
+        // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
+        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            GameController.Instance.UpdateStageProgress(2);
+            Animator leaves = GameObject.Find("Leaves").GetComponent<Animator>();
+            int shouldTurn = Animator.StringToHash("ShouldTurn");
+            leaves.SetBool(shouldTurn, true);
+            leaves.speed = 0.4f;
+        }
     }
 }

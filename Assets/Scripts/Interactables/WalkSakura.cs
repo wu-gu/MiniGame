@@ -14,13 +14,15 @@ namespace MiniGame
         private Vector3 screenPos;
         private Camera m_camera;
         private Vector3 m_originScale;
+        private AudioSource m_audioSource;
 
         // Only set once when awaken
         void Awake()
         {
             anim = GetComponent<Animator>();
             SakuraRenderer = GetComponent<SpriteRenderer>();
-
+            m_audioSource = GetComponent<AudioSource>();
+            m_audioSource.clip = audioClip;
             // "Clicked" parameter is used to defer anim state "Sakura" from "Idle", while "Idle" is the default state
             clicked = Animator.StringToHash("Clicked");
             anim.SetBool(clicked, false);
@@ -52,7 +54,8 @@ namespace MiniGame
             float currCamSize = m_camera.orthographicSize;
             this.transform.localScale = new Vector3(m_originScale.x / 5.4f * currCamSize, m_originScale.y / 5.4f * currCamSize, m_originScale.z);
             anim.SetBool(clicked, true);
-            AudioController.Instance.PushClip(audioClip);
+            //AudioController.Instance.PushClip(audioClip);
+            m_audioSource.Play();
             SakuraRenderer.enabled = true;
             anim.speed = 0.7f;
 

@@ -5564,7 +5564,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 2
-  openDoorAudio: {fileID: 8300000, guid: 26eac73856a27e74bb322a059baa2224, type: 3}
+  openDoorAudio: {fileID: 8300000, guid: e26550d8f9c9e60498f6ac828c8e5e39, type: 3}
 --- !u!1 &7680854015680041388
 GameObject:
   m_ObjectHideFlags: 0

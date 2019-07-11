@@ -23,6 +23,11 @@ namespace MiniGame
         public float Yoffset;
         private bool isIn = true;
         private bool isOut = false;
+        private int m_miaowCounter = 0;
+        private float m_touchCounter = 0f;
+
+        [Tooltip("猫叫声")]
+        public AudioClip miaowClip;
 
         // Start is called before the first frame update
         void Start()
@@ -60,6 +65,19 @@ namespace MiniGame
             }
             if (isOut)
             {
+                if(m_touchCounter<1.0f)
+                {
+                    if(Input.GetMouseButton(0))
+                        m_touchCounter += Time.deltaTime;
+                    return;
+                }
+
+                if (m_miaowCounter == 1)
+                {
+                    m_miaowCounter++;
+                    AudioController.Instance.PushClip(miaowClip);
+                }
+                m_catrenderer.flipX = false;
                 m_catcolider2D.enabled = false;               
                 m_cataimator.SetBool("catlook", false);
                 m_cataimator.SetBool("catwalk", true);
@@ -76,6 +94,7 @@ namespace MiniGame
                     InputController.Instance.SetPlayerCanMove(true);
                     m_follw.enabled = true;
                     m_mainCamAnimator.enabled = false;
+                    GameController.Instance.UpdateStageProgress(1);
                     Destroy(gameObject);
 
                     string nextStageName = "Stage2-2";
@@ -95,11 +114,21 @@ namespace MiniGame
         }
 
         public void OnUpdate()
-        {
-            isOut = true;
+        {            
             GameObject.FindGameObjectWithTag("Girl").GetComponent<SpriteRenderer>().flipX = true;
-            transform.position = new Vector3(transform.position.x +FilpXoffset, transform.position.y, transform.position.z);
-            m_catrenderer.flipX = false;
+            if (m_touchCounter == 0f)
+                transform.position = new Vector3(transform.position.x + FilpXoffset, transform.position.y, transform.position.z);
+            m_touchCounter = 0f;
+            isOut = true;
+        }
+
+        public void MiaowAnimationEvent()
+        {
+            if (m_miaowCounter == 0)
+            {
+                AudioController.Instance.PushClip(miaowClip);
+                m_miaowCounter++;
+            }
         }
     }
 }

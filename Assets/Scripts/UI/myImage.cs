@@ -3,48 +3,57 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class myImage : MonoBehaviour
+namespace MiniGame
 {
-    CanvasGroup myimage;
-    private float alpha = 1.0f;
-    private float alphaSpeed = 0.5f;
 
-    // Start is called before the first frame update
-    void Start()
+    public class myImage : MonoBehaviour
     {
-        myimage = this.transform.GetComponent<CanvasGroup>();
-    }
+        public Material grayMaterial;
+        public int ownLevel;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-        if (alpha != myimage.alpha)
+        CanvasGroup myimage;
+        private float alpha = 1.0f;
+        private float alphaSpeed = 0.5f;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            myimage.alpha = Mathf.Lerp(myimage.alpha, alpha, alphaSpeed * Time.deltaTime);
-            if (Mathf.Abs(alpha - myimage.alpha) <= 0.01)
-            {
-                myimage.alpha = alpha;
-            }
+            myimage = this.transform.GetComponent<CanvasGroup>();
+            if (GameController.Instance.highestProgress <= ownLevel) 
+                GetComponent<Image>().material = grayMaterial;
         }
-        
-    }
 
-    public void Show()
-    {
-        alpha = 1;
+        // Update is called once per frame
+        void Update()
+        {
 
-        myimage.blocksRaycasts = true;//可以和该UI对象交互
+            if (alpha != myimage.alpha)
+            {
+                myimage.alpha = Mathf.Lerp(myimage.alpha, alpha, alphaSpeed * Time.deltaTime);
+                if (Mathf.Abs(alpha - myimage.alpha) <= 0.01)
+                {
+                    myimage.alpha = alpha;
+                }
+            }
 
-        myimage.interactable = true;
-    }
+        }
 
-    public void Hide()
-    {
-        alpha = 0;
+        public void Show()
+        {
+            alpha = 1;
 
-        myimage.blocksRaycasts = false;//不可以和该UI对象交互
+            myimage.blocksRaycasts = true;//可以和该UI对象交互
 
-        myimage.interactable = false;
+            myimage.interactable = true;
+        }
+
+        public void Hide()
+        {
+            alpha = 0;
+
+            myimage.blocksRaycasts = false;//不可以和该UI对象交互
+
+            myimage.interactable = false;
+        }
     }
 }

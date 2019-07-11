@@ -91,7 +91,8 @@ namespace MiniGame
         public void SetPlayerCanMove(bool canMove)
         {
             m_canMovePlayer = canMove;
-            PlayerController.Instance.enabled = canMove;
+            if(PlayerController.Instance!=null)
+                PlayerController.Instance.enabled = canMove;
         }
     }
 }

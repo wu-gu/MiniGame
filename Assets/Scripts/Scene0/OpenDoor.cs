@@ -8,6 +8,9 @@ namespace MiniGame
     // This script is only enabled when ScaleMask script end trigger detected
     public class OpenDoor : MonoBehaviour, QuestBehavior
     {
+        [Tooltip("Stage0 to 1-1转场音乐")]
+        public AudioClip transitionClip;
+
         private Camera cam;
         private Renderer doorRenderer;
         private Renderer m_windowRenderer;
@@ -64,6 +67,8 @@ namespace MiniGame
                     QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                     this.enabled = false;
                     //GameObject.Find("TransitionStart").GetComponent<TransitionPoint>().Transition(); // External call usage of  transition
+
+                    AudioController.Instance.PushClip(transitionClip);
                     GameController.Instance.TransitionToNextLevel();
                 }
             }

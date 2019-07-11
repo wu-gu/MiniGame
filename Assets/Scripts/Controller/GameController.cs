@@ -15,6 +15,8 @@ namespace MiniGame
 
         protected Scene m_CurrentZoneScene;
         //用于选择关卡时
+        private int defaultLevelProgress = 1;
+        private int defaultStageProgress = 0;
         public List<string> allLevelName = new List<string>();//一关对应一个名字
         public int m_currLevelIndex;
         public int highestProgress;//玩家的最大进度，为allLevelName中的索引，即第几关
@@ -34,10 +36,10 @@ namespace MiniGame
         }
 
 
-        //与画面相关
-        [Tooltip("是否动态加载场景")]
-        //主要用于判断一开始的画面是否是需要动态加载的
-        public bool m_IsSetupDynamicLoad = false;
+        ////与画面相关
+        //[Tooltip("是否动态加载场景")]
+        ////主要用于判断一开始的画面是否是需要动态加载的
+        //public bool m_IsSetupDynamicLoad = false;
         private LinkedList<GameObjectStageContainer> m_stageGameObjectsContainerList = new LinkedList<GameObjectStageContainer>();
         private LinkedListNode<GameObjectStageContainer> m_currStageContainer;
         //private GameObjectStageContainer m_currStageContainer;
@@ -117,6 +119,13 @@ namespace MiniGame
             QuestController.Instance.UnRegisterAllQuest();//注销所有机关
             yield return SceneManager.LoadSceneAsync(newSceneName); //异步加载新场景
             m_CurrentZoneScene = SceneManager.GetActiveScene();
+            //存储游戏最高进度
+            if(m_currLevelIndex > highestProgress)
+            {
+                highestProgress = m_currLevelIndex;
+                WriteLevelProgressToFile();
+            }
+
             if (!m_CurrentZoneScene.name.Equals("Start"))
             {
                 //获取UI脚本
@@ -128,6 +137,7 @@ namespace MiniGame
 
                 //加载非开始关卡的开始画面
                 LoadFirstStageGameObjects();
+
             }
 
             //加载该关卡默认设置
@@ -261,21 +271,26 @@ namespace MiniGame
         /// </summary>
         public void LoadInitSetting()
         {
+            Debug.Log("加载该关卡对应的默认设置");
+
+            InitSetting initSetting = GameObject.Find("InitSetting").GetComponent<InitSetting>();
+
+            InputController.Instance.SetPlayerCanMove(initSetting.isInitPlayerCanMove);
             //加载该关卡对应的背景音乐
             AudioController.Instance.MuteJustBackground();
             AudioController.Instance.MuteJustEnvironment();
-            AudioClip environmentClip = GameObject.Find("InitSetting").GetComponent<InitSetting>().envirnmentClip;
-            AudioClip backgroundClip = GameObject.Find("InitSetting").GetComponent<InitSetting>().backgroundClip;
+            AudioClip environmentClip = initSetting.envirnmentClip;
+            AudioClip backgroundClip = initSetting.backgroundClip;
             if (environmentClip != null)
-            {
-                AudioController.Instance.ChangeBackground(backgroundClip);
-            }
-            if (backgroundClip != null)
             {
                 AudioController.Instance.ChangeEnviroment(environmentClip);
             }
+            if (backgroundClip != null)
+            {
+                AudioController.Instance.ChangeBackground(backgroundClip);
+            }
             AudioController.Instance.PlayJustBackground();
-            AudioController.Instance.UnmuteJustBackground(1.0f);
+            AudioController.Instance.UnmuteJustBackground(3f);
         }
 
 
@@ -284,8 +299,8 @@ namespace MiniGame
         /// </summary>
         public void LoadFirstStageGameObjects()
         {
-            if (m_IsSetupDynamicLoad)
-            {
+            //if (m_IsSetupDynamicLoad)
+            //{
                 //加载该关卡的开始画面
 
                 GameObject startStagePoint = GameObject.Find("StartStagePoint");
@@ -307,7 +322,7 @@ namespace MiniGame
                 {
                     Debug.Log("该关卡不需要动态加载初始界面");
                 }
-            }
+            //}
         }
 
         /// <summary>
@@ -391,10 +406,10 @@ namespace MiniGame
             }
             else
             {
-                highestProgress = 1;
+                highestProgress = defaultLevelProgress;
                 for(int i= 0;i < stageProgress.Length; i++)
                 {
-                    stageProgress[i] = 0;
+                    stageProgress[i] = defaultStageProgress;
                 }
                 WriteLevelProgressToFile();
             }
@@ -441,7 +456,7 @@ namespace MiniGame
                 XmlElement root = xmlDoc.CreateElement("config");
                 //
                 XmlElement levelProgressElement = xmlDoc.CreateElement("levelProgress");
-                levelProgressElement.InnerText = 1.ToString();
+                levelProgressElement.InnerText = defaultLevelProgress.ToString();
                 root.AppendChild(levelProgressElement);
                 //
                 for (int i = 0; i < stageProgress.Length; i++)
@@ -473,8 +488,11 @@ namespace MiniGame
         {
             int level = m_currLevelIndex;
             level = level == 1 ? level - 1 : level - 2;
-            stageProgress[level] = stage;
-            gamingUI.SettipIndexes(stage);
+            if (stageProgress[level] < stage)
+            {
+                stageProgress[level] = stage;
+                gamingUI.SettipIndexes(stage);
+            }
             gamingUI.ShowForTime(4);
             WriteLevelProgressToFile();
         }

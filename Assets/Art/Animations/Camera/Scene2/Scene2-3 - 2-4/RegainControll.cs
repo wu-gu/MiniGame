@@ -21,6 +21,7 @@ namespace MiniGame
                 InputController.Instance.SetPlayerCanMove(true);
                 animator.enabled = false;
                 GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().enabled = true;
+                GameController.Instance.UpdateStageProgress(3);
             }
         }
 

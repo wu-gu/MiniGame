@@ -266,8 +266,8 @@ namespace MiniGame
 
                 m_newOffset = m_originalScale.y + scalespeed * (destscale - m_originalScale.y) * Mathf.Abs((m_originPos.y - currPos.y)) / Mathf.Abs(((m_originPos.y - desty)));
                 m_newalpha = m_originalpha + alphaspeed * (1 - m_originalpha) * (m_originPos.y - currPos.y) / (m_originPos.y - desty);
-                Debug.Log("new alpha" + m_newalpha);
-                Debug.Log("new scale" + m_newOffset);
+                //Debug.Log("new alpha" + m_newalpha);
+                //Debug.Log("new scale" + m_newOffset);
                 //Debug.Log(currPos.y);
                 if (m_originalScale.y <= m_newOffset && m_newOffset <= destscale)
                 {

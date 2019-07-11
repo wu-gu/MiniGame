@@ -66,7 +66,7 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9494d22ebda6dc5429ae663e5a760016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionClip: {fileID: 8300000, guid: f3074520c089308429e92b068fda485a, type: 3}
 --- !u!1102 &6119978720342488888
 AnimatorState:
   serializedVersion: 5

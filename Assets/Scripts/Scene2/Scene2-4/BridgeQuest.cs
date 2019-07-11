@@ -171,6 +171,7 @@ namespace MiniGame
                 m_bridge.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.None;
                 Destroy(m_downEdge.gameObject);
                 Destroy(m_flyingMagpie.gameObject);
+                GameController.Instance.UpdateStageProgress(4);
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
             }
             
@@ -181,12 +182,12 @@ namespace MiniGame
             Vector2 touchPos = (Vector2)(transform.position);
 
             //Android--stable
-            Touch currTouch = Input.GetTouch(0);
-            touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+            //Touch currTouch = Input.GetTouch(0);
+            //touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
 
             // PC --stable
-            //Vector2 currTouch = (Vector2)Input.mousePosition;
-            //touchPos = Camera.main.ScreenToWorldPoint(currTouch);
+            Vector2 currTouch = (Vector2)Input.mousePosition;
+            touchPos = Camera.main.ScreenToWorldPoint(currTouch);
 
             if (m_firstTouch)
             {

@@ -718,7 +718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6113ef725b814d34eb5e5f333f61a1ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingMusic: {fileID: 0}
+  walkingMusic: {fileID: 8300000, guid: f9c3289fa2e786b40809e05e0b54d2b9, type: 3}
   groundedLayerMask:
     serializedVersion: 2
     m_Bits: 256

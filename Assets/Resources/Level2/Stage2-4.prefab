@@ -77,8 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54279599886428b43ae6e0641a59ff92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  magpieChirpClip: {fileID: 8300000, guid: 6eda98eaf0101054abe1cad2a7f840f2, type: 3}
   ping: 2
-  m_magpieAudioClip: {fileID: 0}
 --- !u!1 &886856912649842753
 GameObject:
   m_ObjectHideFlags: 0
@@ -2027,6 +2027,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f93d004a3b7186545b8eb59a5b5c3aba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meetingClip: {fileID: 8300000, guid: 60e8f6a6ce5ccd247a2e5f39c3314e93, type: 3}
 --- !u!95 &2772100775452901861
 Animator:
   serializedVersion: 3

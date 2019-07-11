@@ -6,11 +6,13 @@ namespace MiniGame
 {
     public class StandingMagpieQuest : MonoBehaviour, QuestBehavior
     {
+        [Tooltip("麻雀叫声")]
+        public AudioClip magpieChirpClip;
+
         //业务变量
         private bool m_isSuccess = false;
         private float m_lastTime;
         public float ping;
-        public AudioClip m_magpieAudioClip;
         private GameObject m_flyingMagpie;
         private Collider2D m_collider2D;
         private Animator m_mainCamAnimator;
@@ -36,12 +38,13 @@ namespace MiniGame
             if(m_isSuccess)
             {
                 m_isSuccess = false;
+                AudioController.Instance.PushClip(magpieChirpClip);
                 QuestController.Instance.UnRegisterQuest(gameObject.ToString());
                 Destroy(gameObject);
                 mainCam.GetComponent<CameraController>().enabled = false;
                 mainCam.GetComponent<CameraNaturalTransition>().NaturalTransition2();
                 m_flyingMagpie.GetComponent<Animator>().SetBool("MagpieQuestFired", true);
-                AudioController.Instance.PushClip(m_magpieAudioClip);
+                AudioController.Instance.PushClip(magpieChirpClip);
                 this.enabled = false;
             }
         }

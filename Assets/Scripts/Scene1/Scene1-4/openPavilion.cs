@@ -25,7 +25,9 @@ namespace MiniGame
             if (canopen && isFirst)
             {
                 isFirst = false;
+                AudioController.Instance.PushClip(openDoorAudio);
                 m_animator.enabled = true;
+                StartCoroutine(WaitForOpenDoorMusic());
             }
         }
 
@@ -55,17 +57,24 @@ namespace MiniGame
             {
                 canopen = false;
             }
-            if (animatorInfo.normalizedTime > 1.0f && animatorInfo.IsName("Open"))
-            {
+            //if (animatorInfo.normalizedTime > 1.0f && animatorInfo.IsName("Open"))
+            //{
 
-                QuestController.Instance.UnRegisterQuest(gameObject.ToString());
-                AudioController.Instance.PushClip(openDoorAudio);
-                m_animator.enabled = false;
-                m_collider2D.enabled = false;
-                m_camera.GetComponent<Animator>().enabled = true;
-                m_camera.GetComponent<Animator>().SetTrigger("Stage4To5Trigger");
-                Destroy(this);
-            }
+
+            //}
+        }
+
+        IEnumerator WaitForOpenDoorMusic()
+        {
+            yield return new WaitForSeconds(2);
+
+            QuestController.Instance.UnRegisterQuest(gameObject.ToString());
+            m_animator.enabled = false;
+            m_collider2D.enabled = false;
+            m_camera.GetComponent<Animator>().enabled = true;
+            m_camera.GetComponent<Animator>().SetTrigger("Stage4To5Trigger");
+            Destroy(this);
+
         }
 
         //private void OnTriggerEnter2D(Collider2D collision)

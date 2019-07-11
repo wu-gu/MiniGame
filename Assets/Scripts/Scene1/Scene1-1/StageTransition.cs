@@ -11,6 +11,9 @@ namespace MiniGame
 
         bool isFirst = true;
 
+        [Tooltip("Stage1-1 to 1-2转场音乐")]
+        public AudioClip transitionClip;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -31,6 +34,7 @@ namespace MiniGame
                 Camera.main.clearFlags = CameraClearFlags.Depth;
                 mainCamera.transform.GetChild(0).gameObject.SetActive(true);
 
+                AudioController.Instance.PushClip(transitionClip);
                 //加载Stage1-2
                 GameController.Instance.LoadNextStageGameObjects("Stage1-2");
                 //卸载Stage1-1
@@ -51,7 +55,7 @@ namespace MiniGame
                 boy.transform.SetParent(boy.transform.parent.parent);
                 Destroy(character);
 
-                PlayerController.Instance.enabled = true;
+                InputController.Instance.SetPlayerCanMove(true);
                 GetComponent<Animator>().enabled = false;
 
                 //播放水流环境音
