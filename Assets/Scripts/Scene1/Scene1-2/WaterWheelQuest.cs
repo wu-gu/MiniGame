@@ -39,74 +39,74 @@ namespace MiniGame
 
         // Update is called once per frame
         void Update()
-        {
+        { 
             //#if UNITY_STANDALONE_WIN
-            // PC --stable
-            //if (Input.GetMouseButton(0))
-            //{
-            //    Vector2 touchPos = (Vector2)(transform.position);
-            //    touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //    Vector2 currDirection = touchPos - (Vector2)(transform.position);
-
-            //    Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
-            //    Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
-
-            //    float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
-            //    Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
-
-            //    //计算顺时针还是逆时针
-            //    angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
-            //    transform.Rotate(new Vector3(0, 0, angle));
-            //    m_preDirection = currDirection;
-
-            //    angleCounter += angle;
-            //    int state = (int)(Mathf.Abs(angleCounter) / 360);
-            //    if (state != currState)
-            //    {
-            //        currState = state;
-            //        changeShadows.SetUpNewShadowState(state);
-            //    }
-
-            //}
-            //#endif
-
-#if UNITY_ANDROID
-            // Android --stable
-            if (Input.touchCount > 0)
+            //PC --stable
+            if (Input.GetMouseButton(0))
             {
-                Touch currTouch = Input.GetTouch(0);
                 Vector2 touchPos = (Vector2)(transform.position);
-                touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+                touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 currDirection = touchPos - (Vector2)(transform.position);
 
-                if (currTouch.phase == TouchPhase.Moved)
+                Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
+                Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
+
+                float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
+                Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
+
+                //计算顺时针还是逆时针
+                angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
+                transform.Rotate(new Vector3(0, 0, angle));
+                m_preDirection = currDirection;
+
+                angleCounter += angle;
+                int state = (int)(Mathf.Abs(angleCounter) / 360);
+                if (state != currState)
                 {
-                    Debug.Log("Moved");
-                    Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
-                    Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
-
-                    Debug.Log("PreDirection" + preDirectionVec3);
-                    Debug.Log("CurrDirection" + currDirectionVec3);
-
-                    float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
-                    Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
-
-                    //计算顺时针还是逆时针
-                    angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
-                    Debug.Log(angle);
-                    transform.Rotate(new Vector3(0, 0, angle));
-                    m_preDirection = currDirection;
-
-                    angleCounter += angle;
-                    int state = (int)(Mathf.Abs(angleCounter) / 360);
-                    if (state != currState)
-                    {
-                        currState = state;
-                        changeShadows.SetUpNewShadowState(state);
-                    }
+                    currState = state;
+                    changeShadows.SetUpNewShadowState(state);
                 }
+
             }
-#endif
+            //#endif
+
+            //#if UNITY_ANDROID
+            //// Android --stable
+            //if (Input.touchCount > 0)
+            //{
+            //    Touch currTouch = Input.GetTouch(0);
+            //    Vector2 touchPos = (Vector2)(transform.position);
+            //    touchPos = Camera.main.ScreenToWorldPoint(currTouch.position);
+            //    Vector2 currDirection = touchPos - (Vector2)(transform.position);
+
+            //    if (currTouch.phase == TouchPhase.Moved)
+            //    {
+            //        Debug.Log("Moved");
+            //        Vector3 preDirectionVec3 = new Vector3(m_preDirection.x, m_preDirection.y, transform.position.z).normalized;
+            //        Vector3 currDirectionVec3 = new Vector3(currDirection.x, currDirection.y, transform.position.z).normalized;
+
+            //        Debug.Log("PreDirection" + preDirectionVec3);
+            //        Debug.Log("CurrDirection" + currDirectionVec3);
+
+            //        float angle = Vector3.Angle(preDirectionVec3, currDirectionVec3);
+            //        Vector3 normal = Vector3.Cross(preDirectionVec3, currDirectionVec3);
+
+            //        //计算顺时针还是逆时针
+            //        angle *= Mathf.Sign(Vector3.Dot(normal, transform.forward));
+            //        Debug.Log(angle);
+            //        transform.Rotate(new Vector3(0, 0, angle));
+            //        m_preDirection = currDirection;
+
+            //        angleCounter += angle;
+            //        int state = (int)(Mathf.Abs(angleCounter) / 360);
+            //        if (state != currState)
+            //        {
+            //            currState = state;
+            //            changeShadows.SetUpNewShadowState(state);
+            //        }
+            //    }
+            //}
+            //#endif
             //common
             else
             {
@@ -125,6 +125,7 @@ namespace MiniGame
                 this.enabled = false;
             }
         }
+    
 
         public void OnUpdate()
         {
