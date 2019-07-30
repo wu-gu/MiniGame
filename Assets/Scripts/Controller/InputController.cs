@@ -29,27 +29,27 @@ namespace MiniGame
         public void OnUpdate()
         {
             //此处PC端输入在Android端会干扰输入，导出Android的时候需要注释掉
-            //if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
-            //{
-            //    GameController.Instance.HideGamingUI();
-            //    //先判断是否触摸某个机关
-            //    Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //    RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero, questRaycastDistance, questLayerMask.value);
-            //    if (hit.collider != null)
-            //    {
-            //        Debug.Log("点击机关: " + hit.collider.gameObject.ToString());
-            //        QuestController.Instance.FireQuestBehavior(hit.collider.gameObject.ToString());
-            //    }
-            //    else
-            //    {
-            //        Debug.Log("没有点击机关");
-            //        //没有点击机关，则进入人物行走判断
-            //        if (m_canMovePlayer)
-            //        {
-            //            PlayerController.Instance.OnUpdate();
-            //        }
-            //    }
-            //}
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                GameController.Instance.HideGamingUI();
+                //先判断是否触摸某个机关
+                Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.zero, questRaycastDistance, questLayerMask.value);
+                if (hit.collider != null)
+                {
+                    Debug.Log("点击机关: " + hit.collider.gameObject.ToString());
+                    QuestController.Instance.FireQuestBehavior(hit.collider.gameObject.ToString());
+                }
+                else
+                {
+                    Debug.Log("没有点击机关");
+                    //没有点击机关，则进入人物行走判断
+                    if (m_canMovePlayer)
+                    {
+                        PlayerController.Instance.OnUpdate();
+                    }
+                }
+            }
 
 #if UNITY_ANDROID
             if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began&& !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
