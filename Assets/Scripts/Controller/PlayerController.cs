@@ -32,8 +32,24 @@ namespace MiniGame
 
         private WalkSakura sakura;//点击反馈
 
+        //女主控制
+        public GameObject girl;
+        private Rigidbody2D m_girlRigidbody2D;
+        private Animator m_girlAnimator;
+        private float m_girlCenterHeight;
+        private SpriteRenderer m_girlRenderer;
+        private CapsuleCollider2D m_girlCapsuleCollider2D;
+
+
+        //当前控制的是谁
+        public int m_whoInControl;//0为男主，1为女主
+        private float m_followDistance;
+        private bool m_canAnotherFollow = true;
+
+
         void Awake()
         {
+
             if (Instance != this)
             {
                 Destroy(gameObject);
@@ -56,8 +72,18 @@ namespace MiniGame
             m_contactFilter.useTriggers = true;
             sakura = GameObject.Find("OnClickSakura").GetComponent<WalkSakura>();
 
+
             m_destPos = m_rigidbody2D.position;
-            touchThreshold = m_capsule.bounds.max.y- m_capsule.bounds.min.y + 0.8f;
+            touchThreshold = m_capsule.bounds.max.y - m_capsule.bounds.min.y + 0.8f;
+
+            //女主获取
+            m_girlRigidbody2D = girl.GetComponent<Rigidbody2D>();
+            m_girlAnimator = girl.GetComponent<Animator>();
+            m_girlRenderer = girl.GetComponent<SpriteRenderer>();
+            m_girlCapsuleCollider2D = girl.GetComponent<CapsuleCollider2D>();
+
+            m_followDistance = m_rigidbody2D.position.x - m_girlRigidbody2D.position.x;
+
             //Debug.Log("touchThreold" + touchThreshold);
 
             //因为人的包围盒的中心与Transform的中心不一样
@@ -75,14 +101,32 @@ namespace MiniGame
         private void OnDisable()
         {
             m_animator.SetBool(IsWalking, false);
+            m_girlAnimator.SetBool("isWalking", false);
         }
 
+        //此处也分流，分为人物点击判断与人物行走点击判断
+        //暂时先不在InitSetting中设置双人模式与单人模式而调用不同的单例，看第3关要不要整合先
+        
         public void OnUpdate()
         {
             //PC端鼠标左键点击
             if (Input.GetMouseButtonDown(0))
             {
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+
+                //点人的话就返回
+                if (m_capsule.bounds.Contains(touchPos))
+                {
+                    setWhoInControl(0);
+                    return;
+                }
+                else if(m_girlCapsuleCollider2D.bounds.Contains(touchPos))
+                {
+                    setWhoInControl(1);
+                    return;
+                }
+
                 RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.down, touchThreshold, groundedLayerMask.value);
                 if (hit.collider != null)
                 {
@@ -92,20 +136,19 @@ namespace MiniGame
                     if (m_destPos.x < m_rigidbody2D.position.x)
                     {
                         Debug.Log("左转");
-                       
-                        if(this.gameObject.CompareTag("Boy"))
+                        if (m_whoInControl == 0)
                             m_renderer.flipX = true;
-                        if (this.gameObject.CompareTag("Girl"))
-                            m_renderer.flipX = false;
+                        if (m_whoInControl == 1)
+                            m_girlRenderer.flipX = false;
                     }
                     else
                     {
                         Debug.Log("右转");
 
-                        if (this.gameObject.CompareTag("Boy"))
+                        if (m_whoInControl == 0)
                             m_renderer.flipX = false;
-                        if (this.gameObject.CompareTag("Girl"))
-                            m_renderer.flipX = true;
+                        if (m_whoInControl == 1)
+                            m_girlRenderer.flipX = true;
                     }
                 }
             }
@@ -117,6 +160,19 @@ namespace MiniGame
                 if (touch.phase == TouchPhase.Ended)
                 {
                     Vector2 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+
+                    if (m_capsule.bounds.Contains(touchPos))
+                    {
+                        m_whoInControl = 0;
+                        return;
+                    }
+                    else if (m_girlCapsuleCollider2D.bounds.Contains(touchPos))
+                    {
+                        m_whoInControl = 1;
+                        return;
+                    }
+
+
                     RaycastHit2D hit = Physics2D.Raycast(touchPos, Vector2.down, touchThreshold, groundedLayerMask.value);
                     if (hit.collider != null)
                     {
@@ -126,20 +182,19 @@ namespace MiniGame
                         if (m_destPos.x < m_rigidbody2D.position.x)
                         {
                             Debug.Log("左转");
-
-                            if (this.gameObject.CompareTag("Boy"))
+                            if (m_whoInControl == 0)
                                 m_renderer.flipX = true;
-                            if (this.gameObject.CompareTag("Girl"))
-                                m_renderer.flipX = false;
+                            if (m_whoInControl == 1)
+                                m_girlRenderer.flipX = false;
                         }
                         else
                         {
                             Debug.Log("右转");
 
-                            if (this.gameObject.CompareTag("Boy"))
+                            if (m_whoInControl == 0)
                                 m_renderer.flipX = false;
-                            if (this.gameObject.CompareTag("Girl"))
-                                m_renderer.flipX = true;
+                            if (m_whoInControl == 1)
+                                m_girlRenderer.flipX = true;
                         }
                     }
                 }
@@ -151,35 +206,132 @@ namespace MiniGame
 
         void FixedUpdate()
         {
+            Debug.Log("另一个人是否能跟随"+m_canAnotherFollow);
             //Debug.Log("刚体位置"+m_rigidbody2D.position.ToString("f9"));
             //Debug.Log("目的地"+m_destPos.ToString("f9"));
             //Debug.Log(Mathf.Abs(m_rigidbody2D.position.x - m_destPos.x) < 0.1f);
             //Debug.Log((m_destPos.x > m_rigidbody2D.position.x && !forwardable));
-            if (Mathf.Abs(m_rigidbody2D.position.x - m_destPos.x) < 0.1f || (m_destPos.x > m_rigidbody2D.position.x && !forwardable))
-            {
-                Debug.Log("走不动了");
-                m_animator.SetBool(IsWalking, false);
-                m_destPos = m_rigidbody2D.position;
-                return;
-            }
-            //人物不设重力，手动控制人物与地形之间的关系
-            Vector2 nextPos = Vector2.MoveTowards(m_rigidbody2D.position, m_destPos, speed * Time.deltaTime);
-            RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
-   
-            //地面检测
-            if (Physics2D.Raycast(nextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
-            {
-                //修正y方向位置
-                //Debug.Log("地面"+hitBuffer[0].collider.gameObject.name);
 
-                Vector2 hitPos = hitBuffer[0].point;
-                Debug.DrawLine(nextPos, hitPos, Color.red);
-                nextPos.y = hitPos.y + m_centerHeight;
-                //设置人物行走动画与音乐
-                m_animator.SetBool(IsWalking, true);
+            //控制男主
+            if (m_whoInControl == 0)
+            {
+                if (Mathf.Abs(m_rigidbody2D.position.x - m_destPos.x) < 0.1f || (m_destPos.x > m_rigidbody2D.position.x && !forwardable))
+                {
+                    Debug.Log("走不动了");
+                    m_animator.SetBool(IsWalking, false);
+                    m_girlAnimator.SetBool("isWalking", false);
+                    m_destPos = m_rigidbody2D.position;
+                    return;
+                }
 
-                m_rigidbody2D.MovePosition(nextPos);
+                /*人物不设重力，手动控制人物与地形之间的关系*/
+                //男主移动
+                Vector2 nextPos = Vector2.MoveTowards(m_rigidbody2D.position, m_destPos, speed * Time.deltaTime);
+                RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
+                //地面检测
+                if (Physics2D.Raycast(nextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
+                {
+                    //修正y方向位置
+                    //Debug.Log("地面"+hitBuffer[0].collider.gameObject.name);
+
+                    Vector2 hitPos = hitBuffer[0].point;
+                    Debug.DrawLine(nextPos, hitPos, Color.red);
+                    nextPos.y = hitPos.y + m_centerHeight;
+                    //设置人物行走动画与音乐
+                    m_animator.SetBool(IsWalking, true);
+                    m_rigidbody2D.MovePosition(nextPos);
+                }
+
+                //女主转身
+                m_girlRenderer.flipX = m_rigidbody2D.position.x > m_girlRigidbody2D.position.x;
+                m_followDistance = Mathf.Sign(m_rigidbody2D.position.x - m_girlRigidbody2D.position.x) * Mathf.Abs(m_followDistance);
+                if (Mathf.Abs(m_rigidbody2D.position.x - m_girlRigidbody2D.position.x) - Mathf.Abs(m_followDistance) > 0)
+                {
+                    m_canAnotherFollow = true;
+                }
+                else
+                {
+                    m_canAnotherFollow = false;
+                }
+                //女主移动
+                if (m_canAnotherFollow)
+                {
+                    Vector2 girlNextPos = new Vector2(nextPos.x - m_followDistance, m_girlRigidbody2D.position.y);
+                    if (Physics2D.Raycast(girlNextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
+                    {
+                        //修正y方向位置
+                        //Debug.Log("地面"+hitBuffer[0].collider.gameObject.name);
+
+                        Vector2 hitPos = hitBuffer[0].point;
+                        Debug.DrawLine(girlNextPos, hitPos, Color.red);
+                        girlNextPos.y = hitPos.y + m_girlCenterHeight;
+                        //设置人物行走动画与音乐
+                        m_girlAnimator.SetBool("isWalking", true);
+                        m_girlRigidbody2D.MovePosition(girlNextPos);
+                    }
+                }
             }
+            //控制女主
+            else
+            {
+                if (Mathf.Abs(m_girlRigidbody2D.position.x - m_destPos.x) < 0.1f || (m_destPos.x > m_girlRigidbody2D.position.x && !forwardable))
+                {
+                    Debug.Log("走不动了");
+                    m_animator.SetBool(IsWalking, false);
+                    m_girlAnimator.SetBool("isWalking", false);
+                    m_destPos = m_girlRigidbody2D.position;
+                    return;
+                }
+
+                /*人物不设重力，手动控制人物与地形之间的关系*/
+                //男主移动
+                Vector2 nextPos = Vector2.MoveTowards(m_girlRigidbody2D.position, m_destPos, speed * Time.deltaTime);
+                RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
+                //地面检测
+                if (Physics2D.Raycast(nextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
+                {
+                    //修正y方向位置
+                    //Debug.Log("地面"+hitBuffer[0].collider.gameObject.name);
+
+                    Vector2 hitPos = hitBuffer[0].point;
+                    Debug.DrawLine(nextPos, hitPos, Color.red);
+                    nextPos.y = hitPos.y + m_girlCenterHeight;
+                    //设置人物行走动画与音乐
+                    m_girlAnimator.SetBool("isWalking", true);
+                    m_girlRigidbody2D.MovePosition(nextPos);
+                }
+
+                //男主转身
+                m_renderer.flipX = m_rigidbody2D.position.x > m_girlRigidbody2D.position.x;
+                m_followDistance = Mathf.Sign(m_rigidbody2D.position.x - m_girlRigidbody2D.position.x) * Mathf.Abs(m_followDistance);
+                //因为被跟随者先移动，所以被跟随者转身时另一个人不能移动
+                if (Mathf.Abs(m_rigidbody2D.position.x - m_girlRigidbody2D.position.x) - Mathf.Abs(m_followDistance) > 0)
+                {
+                    m_canAnotherFollow = true;
+                }
+                else
+                {
+                    m_canAnotherFollow = false;
+                }
+                //男主移动
+                if (m_canAnotherFollow)
+                {
+                    Vector2 anotherNextPos = new Vector2(nextPos.x + m_followDistance, m_rigidbody2D.position.y);
+                    if (Physics2D.Raycast(anotherNextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
+                    {
+                        //修正y方向位置
+                        //Debug.Log("地面"+hitBuffer[0].collider.gameObject.name);
+
+                        Vector2 hitPos = hitBuffer[0].point;
+                        Debug.DrawLine(anotherNextPos, hitPos, Color.red);
+                        anotherNextPos.y = hitPos.y + m_centerHeight;
+                        //设置人物行走动画与音乐
+                        m_animator.SetBool("isWalking", true);
+                        m_rigidbody2D.MovePosition(anotherNextPos);
+                    }
+                }
+            }
+
         }
 
         public void OnCollisionEnter2D(Collision2D collision)
@@ -213,6 +365,12 @@ namespace MiniGame
                 Vector2 hitPos = hitBuffer[0].point;
                 m_centerHeight = (m_rigidbody2D.position - hitPos).y;
             }
+            //女主高度初始化
+            if (Physics2D.Raycast(m_girlRigidbody2D.position, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
+            {
+                Vector2 hitPos = hitBuffer[0].point;
+                m_girlCenterHeight = (m_girlRigidbody2D.position - hitPos).y;
+            }
         }
 
         /// <summary>
@@ -236,6 +394,14 @@ namespace MiniGame
         public void StopWalkingMusic()
         {
             m_audioSource.Stop();
+        }
+
+        //为true时为男主
+        public void setWhoInControl(int who)
+        {
+            if (m_whoInControl != who)
+                m_destPos = who == 0 ? m_rigidbody2D.position : m_girlRigidbody2D.position;
+            m_whoInControl = who;
         }
     }
 }

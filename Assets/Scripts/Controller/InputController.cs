@@ -15,8 +15,6 @@ namespace MiniGame
         private bool m_canMovePlayer = true;//是否可以手动控制人物
 
         
-
-
         void Awake()
         {
             if (Instance != this)
