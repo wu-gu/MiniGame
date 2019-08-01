@@ -63,6 +63,7 @@ namespace MiniGame
             allLevelName.Add("Level1");//2
             allLevelName.Add("Level2");//3
             allLevelName.Add("Level3");//4
+            allLevelName.Add("End");//5
             //highestProgress = 1;
 
 
@@ -78,7 +79,7 @@ namespace MiniGame
         private void Start()
         {
             //关卡初始化设置
-            if (!m_CurrentZoneScene.name.Equals("Start"))
+            if (!m_CurrentZoneScene.name.Equals("Start")&& !m_CurrentZoneScene.name.Equals("End"))
             {
                 //获取UI脚本
                 gamingUI = GameObject.Find("GameUI").GetComponent<GamingUI>();
@@ -98,7 +99,7 @@ namespace MiniGame
         void Update()
         {
             //update时序控制
-            if (!m_CurrentZoneScene.name.Equals("Start"))
+            if (!m_CurrentZoneScene.name.Equals("Start")&& !m_CurrentZoneScene.name.Equals("End"))
             {
                 {
                     InputController.Instance.OnUpdate();
@@ -126,7 +127,7 @@ namespace MiniGame
                 WriteLevelProgressToFile();
             }
 
-            if (!m_CurrentZoneScene.name.Equals("Start"))
+            if (!m_CurrentZoneScene.name.Equals("Start") && !m_CurrentZoneScene.name.Equals("End"))
             {
                 //获取UI脚本
                 gamingUI = GameObject.Find("GameUI").GetComponent<GamingUI>();
@@ -275,7 +276,10 @@ namespace MiniGame
 
             InitSetting initSetting = GameObject.Find("InitSetting").GetComponent<InitSetting>();
 
+            //人物默认是否能移动，该关卡默认单人还是双人
             InputController.Instance.SetPlayerCanMove(initSetting.isInitPlayerCanMove);
+            InputController.Instance.m_isOneCharacter = initSetting.isOneCharacter;
+
             //加载该关卡对应的背景音乐
             AudioController.Instance.MuteJustBackground();
             AudioController.Instance.MuteJustEnvironment();

@@ -13,7 +13,7 @@ public class KiteQuest : MonoBehaviour,QuestBehavior
 
     private Vector2 m_cameraOriginPos;
     private float m_cameraOrthoSize;
-    private int cameraMode = 0;//0为默认，1为放大，2为返回
+    public int cameraMode = 0;//0为默认，1为放大过程，2中间态，3为返回过程
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +42,18 @@ public class KiteQuest : MonoBehaviour,QuestBehavior
     {
         if (m_currTime > animationTime)
         {
-            cameraMode = 0;
+            switch (cameraMode)
+            {
+                case 1:
+                    cameraMode = 2;
+                    this.enabled = false;
+                    break;
+                case 3:
+                    cameraMode = 0;
+                    this.enabled = false;
+                    break;
+            }
+            m_currTime = 0;
             return;
         }
         if (cameraMode == 1)
@@ -55,7 +66,7 @@ public class KiteQuest : MonoBehaviour,QuestBehavior
             m_camera.transform.position = new Vector3(nextPos.x, nextPos.y, m_camera.transform.position.z);
             m_camera.GetComponent<Camera>().orthographicSize = nextSize;
         }
-        else if(cameraMode == 2)
+        else if(cameraMode == 3)
         {
             m_currTime += Time.deltaTime;
             //Vector2 nextPos = Vector2.MoveTowards(m_camera.transform.position, transform.position, 0.2f);
@@ -72,14 +83,19 @@ public class KiteQuest : MonoBehaviour,QuestBehavior
     {
         if (Input.GetMouseButton(0))
         {
-            this.enabled = true;
-            m_cameraOriginPos = m_camera.transform.position;
-            m_cameraOrthoSize = m_camera.GetComponent<Camera>().orthographicSize;
             m_currTime = 0;
-            if(cameraMode==0)
-                cameraMode = 1;
-            if (cameraMode == 1)
-                cameraMode = 2;
+            switch (cameraMode)
+            {
+                case 0:
+                    cameraMode = 1;
+                    m_cameraOriginPos = m_camera.transform.position;
+                    m_cameraOrthoSize = m_camera.GetComponent<Camera>().orthographicSize;
+                    break;
+                case 2:
+                    cameraMode = 3;
+                    break;
+            }
+            this.enabled = true;
         }
     }
 

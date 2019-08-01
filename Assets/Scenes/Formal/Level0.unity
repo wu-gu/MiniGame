@@ -1970,6 +1970,7 @@ MonoBehaviour:
   backgroundClip: {fileID: 8300000, guid: dfc26304b48921043bf7ddc17883e576, type: 3}
   envirnmentClip: {fileID: 0}
   isInitPlayerCanMove: 1
+  isOneCharacter: 1
 --- !u!4 &1437101686
 Transform:
   m_ObjectHideFlags: 0
@@ -2307,7 +2308,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u73B0\u5728 \u8BA9\u6211\u4EEC\u7F29\u653E\u8FD9\u6247\u7A97\u6765\u5F00\u59CB\u6E38\u620F"
+  m_Text: "\u73B0\u5728 \u8BA9\u6211\u4EEC\u8D70\u5230\u7A97\u524D\uFF0C\u7F29\u653E\u8FD9\u6247\u7A97\u6765\u5F00\u59CB\u6E38\u620F"
 --- !u!222 &2078583790
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2328,6 +2329,11 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 516223509214401824, guid: 1c3f2ed407ed0ea47b632fec371276d7,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 791553942}
     - target: {fileID: 5915012518376852329, guid: 1c3f2ed407ed0ea47b632fec371276d7,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2483,11 +2489,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 516223509214401824, guid: 1c3f2ed407ed0ea47b632fec371276d7,
-        type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 791553942}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c3f2ed407ed0ea47b632fec371276d7, type: 3}
 --- !u!1 &2117112524

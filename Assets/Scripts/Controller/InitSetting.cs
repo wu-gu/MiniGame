@@ -11,4 +11,5 @@ public class InitSetting : MonoBehaviour
     public AudioClip envirnmentClip;
 
     public bool isInitPlayerCanMove;
+    public bool isOneCharacter;
 }

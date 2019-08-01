@@ -12,7 +12,9 @@ namespace MiniGame
         {
             //if (stateInfo.IsName("GirlWalk"))
             //{
+            if(InputController.Instance.m_isOneCharacter)
                 PlayerController.Instance.PlayWalkingMusic();
+            else PlayerController2.Instance.PlayWalkingMusic();
             //}
         }
 
@@ -27,7 +29,9 @@ namespace MiniGame
         {
             //if (stateInfo.IsName("GirlWalk"))
             //{
+            if (InputController.Instance.m_isOneCharacter)
                 PlayerController.Instance.StopWalkingMusic();
+            else PlayerController2.Instance.StopWalkingMusic();
             //}
         }
 

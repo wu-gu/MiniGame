@@ -26,7 +26,7 @@ namespace MiniGame
             //if (stateInfo.normalizedTime > 1.0f && stateInfo.IsName("Stage1To2")&&isFirst)
             if (stateInfo.normalizedTime > 1.0f && stateInfo.IsName("GirlShy"))
             {
-                StartCoroutine(TransitionToStart());
+                StartCoroutine(TransitionToEnd());
                 this.enabled=false;
             }
         }
@@ -42,10 +42,10 @@ namespace MiniGame
             m_girl.GetComponent<Animator>().SetBool("MeetingTriggerFired", true);
         }
 
-        IEnumerator TransitionToStart()
+        IEnumerator TransitionToEnd()
         {
             yield return new WaitForSeconds(6);
-            GameController.Instance.TransitionToNewLevel("Start");
+            GameController.Instance.TransitionToNewLevel("End");
         }
     }
 }
