@@ -181,6 +181,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundClip: {fileID: 8300000, guid: 2d16d4b257a343e41a3d15ff1d92871c, type: 3}
   envirnmentClip: {fileID: 8300000, guid: 92e98e776bfb8ba4c84d316ba06c08c3, type: 3}
+  isInitPlayerCanMove: 0
+  isOneCharacter: 1
 --- !u!4 &286846740
 Transform:
   m_ObjectHideFlags: 0

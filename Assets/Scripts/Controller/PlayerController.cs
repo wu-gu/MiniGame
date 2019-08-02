@@ -57,7 +57,7 @@ namespace MiniGame
             sakura = GameObject.Find("OnClickSakura").GetComponent<WalkSakura>();
 
             m_destPos = m_rigidbody2D.position;
-            touchThreshold = m_capsule.bounds.max.y- m_capsule.bounds.min.y + 0.8f;
+            touchThreshold = m_capsule.bounds.max.y - m_capsule.bounds.min.y + 0.8f;
             //Debug.Log("touchThreold" + touchThreshold);
 
             //因为人的包围盒的中心与Transform的中心不一样
@@ -66,7 +66,7 @@ namespace MiniGame
 
         private void OnEnable()
         {
-            SelfDestination();UpdateCenterHeight();
+            SelfDestination(); UpdateCenterHeight();
         }
 
         /// <summary>
@@ -92,8 +92,8 @@ namespace MiniGame
                     if (m_destPos.x < m_rigidbody2D.position.x)
                     {
                         Debug.Log("左转");
-                       
-                        if(this.gameObject.CompareTag("Boy"))
+
+                        if (this.gameObject.CompareTag("Boy"))
                             m_renderer.flipX = true;
                         if (this.gameObject.CompareTag("Girl"))
                             m_renderer.flipX = false;
@@ -165,7 +165,7 @@ namespace MiniGame
             //人物不设重力，手动控制人物与地形之间的关系
             Vector2 nextPos = Vector2.MoveTowards(m_rigidbody2D.position, m_destPos, speed * Time.deltaTime);
             RaycastHit2D[] hitBuffer = new RaycastHit2D[1];
-   
+
             //地面检测
             if (Physics2D.Raycast(nextPos, Vector2.down, m_contactFilter, hitBuffer, groundedRaycastDistance) > 0)
             {
@@ -198,7 +198,7 @@ namespace MiniGame
         {
             // 离开quest层物体：往回走/机关完成（机关完成取消collider的情况），恢复前进判定
 
-            if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Quest"))
+            if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Quest"))
                 forwardable = true;
         }
 

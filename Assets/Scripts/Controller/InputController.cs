@@ -14,9 +14,9 @@ namespace MiniGame
 
         private bool m_canMovePlayer = true;//是否可以手动控制人物
 
+        public bool m_isOneCharacter { get; set; } = true;//单人还是双人
+
         
-
-
         void Awake()
         {
             if (Instance != this)
@@ -46,7 +46,9 @@ namespace MiniGame
                     //没有点击机关，则进入人物行走判断
                     if (m_canMovePlayer)
                     {
-                        PlayerController.Instance.OnUpdate();
+                        if (m_isOneCharacter)
+                            PlayerController.Instance.OnUpdate();
+                        else  PlayerController2.Instance.OnUpdate();
                     }
                 }
             }
@@ -68,10 +70,9 @@ namespace MiniGame
                     {
                         //Debug.Log("没有点击机关");
                         //没有点击机关，则进入人物行走判断
-                        if (m_canMovePlayer)
-                        {
+                        if (m_isOneCharacter)
                             PlayerController.Instance.OnUpdate();
-                        }
+                        else  PlayerController2.Instance.OnUpdate();
                     }
                 }
 #endif
@@ -94,6 +95,7 @@ namespace MiniGame
             if(PlayerController.Instance!=null)
                 PlayerController.Instance.enabled = canMove;
         }
+
     }
 }
 
