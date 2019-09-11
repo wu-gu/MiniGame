@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
     private float minX, maxX;//摄像机的左边框与右边框的限定
     float orthoHorizontal;
     private Camera m_mainCam;
-    private GameObject m_player;
+    private GameObject m_followed;
 
     public float followSpeed = 2.5f;
 
@@ -29,9 +29,9 @@ public class CameraController : MonoBehaviour
         }
         m_mainCam = Camera.main;
         orthoHorizontal = m_mainCam.aspect * m_mainCam.orthographicSize;
-        m_player = GameObject.FindGameObjectWithTag("Boy");
-        if (m_player == null)
-            m_player = GameObject.FindGameObjectWithTag("Girl");
+        m_followed = GameObject.FindGameObjectWithTag("Boy");
+        if (m_followed == null)
+            m_followed = GameObject.FindGameObjectWithTag("Girl");
     }
 
     /*
@@ -50,17 +50,22 @@ public class CameraController : MonoBehaviour
             Debug.DrawRay(new Vector3(maxX, m_mainCam.transform.position.y, m_mainCam.transform.position.z), Vector3.down, Color.green);
 
             //镜头随着人慢慢移动，看人的速度与followSpeed
-            float nextX = Mathf.MoveTowards(m_mainCam.transform.position.x, m_player.transform.position.x, followSpeed*Time.deltaTime);
+            float nextX = Mathf.MoveTowards(m_mainCam.transform.position.x, m_followed.transform.position.x, followSpeed*Time.deltaTime);
             //重新计算相机左右边界
             //float destMinX = nextX - orthoHorizontal;
             //float destMaxX = nextX + orthoHorizontal;
             //Debug.DrawRay(new Vector3(destMinX, m_mainCam.transform.position.y, m_mainCam.transform.position.z), Vector3.down, Color.black);
             //Debug.DrawRay(new Vector3(destMaxX, m_mainCam.transform.position.y, m_mainCam.transform.position.z), Vector3.down, Color.cyan);
             //if (destMinX > minX && destMaxX < maxX)
-            if (m_player.transform.position.x - orthoHorizontal > minX && m_player.transform.position.x + orthoHorizontal < maxX)
+            if (m_followed.transform.position.x - orthoHorizontal > minX && m_followed.transform.position.x + orthoHorizontal < maxX)
             {
                 m_mainCam.transform.position = new Vector3(nextX, m_mainCam.transform.position.y, m_mainCam.transform.position.z);
             }
+        }
+        else
+        {
+            float nextX = Mathf.MoveTowards(m_mainCam.transform.position.x, m_followed.transform.position.x, followSpeed*Time.deltaTime);
+            m_mainCam.transform.position = new Vector3(nextX, m_mainCam.transform.position.y, m_mainCam.transform.position.z);
         }
     }
     //void LateUpdate()
@@ -70,7 +75,7 @@ public class CameraController : MonoBehaviour
     //        Debug.DrawRay(new Vector3(minX, m_mainCam.transform.position.y, m_mainCam.transform.position.z), Vector3.down,Color.blue);
     //        Debug.DrawRay(new Vector3(maxX, m_mainCam.transform.position.y, m_mainCam.transform.position.z), Vector3.down,Color.green);
     //        //重新计算相机目标位置
-    //        float destX = Mathf.Clamp(m_player.transform.position.x, minX, maxX);
+    //        float destX = Mathf.Clamp(m_followed.transform.position.x, minX, maxX);
     //        //镜头随着人慢慢移动，看人的速度与followSpeed
     //        float nextX = Mathf.MoveTowards(m_mainCam.transform.position.x, destX, followSpeed);
     //        m_mainCam.transform.position = new Vector3(nextX, m_mainCam.transform.position.y, m_mainCam.transform.position.z);
@@ -116,4 +121,9 @@ public class CameraController : MonoBehaviour
     //        maxX = backgroundR.transform.position.x - orthoHorizontal;
     //        Debug.Log("更新相机右边界:" + maxX);
     //}
+
+    public void updateFollowed(GameObject followed)
+    {
+        m_followed = followed;
+    }
 }

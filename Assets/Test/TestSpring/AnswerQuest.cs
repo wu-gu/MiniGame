@@ -61,8 +61,8 @@ public class AnswerQuest : MonoBehaviour,QuestBehavior
         if (m_isSuccess)
         {
             Debug.Log("机关成功");
-            destGameobject.GetComponent<Animator>().enabled = true;
-            GameObject.Find("Kites").GetComponent<KitesController>().AddSuccess();
+            gameObject.GetComponent<Animator>().enabled = true;
+            GameObject.Find("Kites").GetComponent<KitesController>().AddSuccess(destGameobject);
             QuestController.Instance.UnRegisterQuest(gameObject.ToString());
             this.enabled = false;
         }

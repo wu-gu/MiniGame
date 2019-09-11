@@ -19,12 +19,19 @@ public class KitesController : MonoBehaviour
         
     }
 
-    public void AddSuccess()
+    public void AddSuccess(GameObject kite)
     {
         m_currSuccess++;
+        // 风筝飞走
+        kite.GetComponent<Animator>().SetTrigger("FlyOut");
         if (m_currSuccess == targetSuccess)
         {
-            //机关成功了
+            Debug.Log("两个谜语都已经猜出来");
+            //摄像机跟随风筝，可以做摄像机动画或者使用CameraController
+            CameraController cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
+            cameraController.updateFollowed(kite);
+            cameraController.enabled = true;
+            //人物位置变动
         }
     }
 
